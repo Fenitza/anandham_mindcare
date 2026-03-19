@@ -9,15 +9,15 @@
 <div class="absolute inset-0 hero-gradient-overlay"></div>
 </div>
 <div class="relative z-10 max-w-screen-2xl mx-auto px-6 w-full text-white">
-<div class="max-w-4xl space-y-8 reveal active">
-<h1 class="font-headline text-5xl md:text-7xl lg:text-8xl leading-tight">
+<div class="max-w-4xl space-y-8 reveal hero-animate">
+<h1 class="font-headline text-4xl md:text-6xl lg:text-7xl leading-tight">
                     We are here. <br/>
 <span class="italic text-tertiary-fixed-dim">Anandham Mind Care</span> Foundation.
                 </h1>
 <p class="text-xl md:text-2xl font-light opacity-90 max-w-2xl leading-relaxed">
                     We provide special care for child &amp; Adolescent Mental Health. A sanctuary for healing and cognitive restoration.
                 </p>
-<div class="flex flex-wrap gap-6 pt-4">
+<div class="flex flex-wrap gap-6 pt-4 reveal stagger-2">
 <button class="bg-tertiary-fixed-dim text-on-tertiary-fixed px-8 py-4 rounded-xl font-semibold flex items-center gap-3 hover:scale-105 transition-transform shadow-lg">
                         Book Consultation
                         <span class="material-symbols-outlined">calendar_month</span>
@@ -29,20 +29,23 @@
 </div>
 </div>
 <!-- Floating Stats: Perfectly fits bottom right -->
-<div class="absolute bottom-12 right-6 hidden xl:flex gap-8 reveal active stagger-2">
-<div class="bg-white/10 backdrop-blur-xl p-6 rounded-2xl border border-white/10 min-w-[160px] hover:bg-white/15 transition-colors cursor-default">
-<div class="text-3xl font-headline font-bold text-tertiary-fixed-dim">100+</div>
-<div class="text-sm uppercase tracking-widest font-label opacity-70">Happy Patients</div>
+<div class="absolute bottom-12 right-6 hidden xl:flex gap-8 stats-wrapper">
+
+<div class="stat-card reveal">
+    <div class="stat-number" data-target="100">100+</div>
+    <div class="stat-label">Happy Patients</div>
 </div>
-<div class="bg-white/10 backdrop-blur-xl p-6 rounded-2xl border border-white/10 min-w-[160px] hover:bg-white/15 transition-colors cursor-default">
-<div class="text-3xl font-headline font-bold text-tertiary-fixed-dim">15+</div>
-<div class="text-sm uppercase tracking-widest font-label opacity-70">Years Exp.</div>
+
+<div class="stat-card reveal">
+    <div class="stat-number" data-target="15">15+</div>
+    <div class="stat-label">Years Exp.</div>
 </div>
-<div class="bg-white/10 backdrop-blur-xl p-6 rounded-2xl border border-white/10 min-w-[160px] hover:bg-white/15 transition-colors cursor-default">
-<div class="text-3xl font-headline font-bold text-tertiary-fixed-dim">24/7</div>
-<div class="text-sm uppercase tracking-widest font-label opacity-70">Support</div>
+
+<div class="stat-card reveal">
+    <div class="stat-number">24/7</div>
+    <div class="stat-label">Support</div>
 </div>
-</div>
+
 </div>
 </section>
 <!-- About Section: Editorial Layout -->
@@ -51,7 +54,7 @@
 <div class="lg:col-span-5 relative reveal">
 <div class="absolute -top-12 -left-12 w-64 h-64 bg-secondary-container/20 rounded-full blur-3xl -z-10"></div>
 <div class="rounded-2xl overflow-hidden editorial-shadow transform -rotate-2 hover:rotate-0 transition-transform duration-700">
-<img alt="Portrait of Dr. M. Helena Selvakodi in a professional clinical setting" class="w-full h-[600px] object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRP_R7JF-6L324ZBLexIJdz4DCVzwt48Q3yv0jHmu17AeVyljZfF4b4LMe-EUbQv0C6g45HDnw5LkKce4hjiDsz478vI6sJJV2I3chRGbpJ76PWe-Y3HnRa7VLO0HxF9wzapXuJXyqAjdevJ92bkyngMx4a70WXaQuOhio4qOsi1TNan2aIgXvqTNY8LoL5pRJZffj5FWs70RfFGqFo4F869BNFC7xKKqllmMiovaCN4xpwU-LIuQBWbDzM50toVObjtnhwm6YW3nh"/>
+<img alt="Portrait of Dr. M. Helena Selvakodi in a professional clinical setting" class="w-full h-[600px] object-cover" src="{{ asset('assets/images/doctor.jpeg') }}"/>
 </div>
 <div class="absolute -bottom-8 -right-8 bg-primary p-8 text-white rounded-2xl editorial-shadow max-w-xs reveal stagger-2">
 <p class="font-headline italic text-lg leading-relaxed">
@@ -198,7 +201,7 @@
 </div>
 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 <article class="bg-surface-container-low rounded-3xl overflow-hidden hover:bg-white transition-colors duration-300 border border-transparent hover:border-outline-variant/10 reveal stagger-1">
-<img alt="Meditation practice" class="w-full h-56 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwusdCrXa__YA-Aci6r7CQVEAjSuu_-Z-pIgbQgOH3Rn-Z2-1A35YmIehHSLAAE5vFBuEIfR8qt0-L-munm9ZOczxv-VLHZpM-sGZdH4RtrawxYkRh0adTHDgzrJa5UZOh640silxd5XEZ9PNQWs5LyBBACdeBDCEJ11oOiy4npJ0R1zJhIpVaISSuUmfIUZvJRojKqJcZBRW5K_h6KfGZOhD4QAlc3lSayFeU32z4F-ChcfaDUpUAwrQ-ep2Kn7RgbOIEIAxj6LRq"/>
+<img alt="Meditation practice" class="w-full h-56 object-cover" src="{{ asset('assets/bg/hosp_hero.png') }}"/>
 <div class="p-8">
 <time class="text-sm opacity-50 block mb-3 uppercase tracking-widest font-label">Oct 24, 2024</time>
 <h3 class="font-headline text-2xl mb-4 text-primary leading-tight">Mindfulness in Modern Childhood</h3>

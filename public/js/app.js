@@ -169,3 +169,14 @@ tl.to(".intro-logo img", {
     }
 });
 
+window.addEventListener("load", () => {
+    setTimeout(() => {
+        const loader = document.getElementById("intro-loader");
+        loader.classList.add("loader-hide");
+
+        setTimeout(() => {
+            loader.style.display = "none";
+        }, 800);
+    }, 2500); // duration of intro
+});
+

@@ -44,7 +44,7 @@
 </div>
 </div>
 <div class="max-w-7xl mx-auto px-6 md:px-12 mt-16 pt-8 border-t border-outline-variant/20 flex flex-col md:flex-row justify-between items-center gap-6">
-<p class="text-on-surface-variant text-xs font-body">© 2024 Anandham Mindcare Hospital &amp; Academy. An Institutional Sanctuary of Healing.</p>
+<p class="text-on-surface-variant text-xs font-body">© 2024 Anandham Mindcare Foundation &amp; Academy. An Institutional Sanctuary of Healing.</p>
 <div class="flex gap-8">
 <a class="text-xs text-on-surface-variant hover:text-primary" href="#">Privacy Policy</a>
 <a class="text-xs text-on-surface-variant hover:text-primary" href="#">Terms of Service</a>

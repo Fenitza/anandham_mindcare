@@ -6,7 +6,7 @@
   alt="Anandham Mindcare Logo"
   src="{{ asset('assets/logo/hosp_logo.jpeg') }}"
   class="w-16 md:w-20 h-16 md:h-20 object-contain rounded-xl bg-white/80 backdrop-blur-md p-2 shadow-lg border border-white/30"/>
-<div class="text-xl md:text-2xl font-serif italic text-primary font-headline tracking-tight">Anandham Mindcare Hospital</div>
+<div class="text-xl md:text-2xl font-serif italic text-primary font-headline tracking-tight">Anandham Mindcare Foundation</div>
 </div>
 <div class="hidden lg:flex items-center gap-x-8">
 <a class="text-primary font-bold border-b-2 border-secondary pb-1 text-sm tracking-wide transition-colors" href="#">Our Approach</a>

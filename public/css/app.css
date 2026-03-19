@@ -153,6 +153,26 @@ html, body {
   margin-top: 25px;
 }
 
+/* RESET BOTH */
+.btn-primary,
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 12px 24px;
+    border-radius: 10px;
+
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1;
+
+    text-decoration: none;
+    border: none;
+
+    cursor: pointer;
+}
+
 .btn-primary {
   background: #fff;
   color: #111;
@@ -902,4 +922,155 @@ button {
   .cursor-glow {
     display: block;
   }
+}
+
+/* ===== BASE ===== */
+#intro-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ===== GRADIENT BG ===== */
+.intro-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 30%, #1e293b, #020617 70%);
+    animation: gradientMove 12s ease infinite alternate;
+}
+
+@keyframes gradientMove {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
+}
+
+/* ===== NOISE TEXTURE ===== */
+.noise {
+    position: absolute;
+    inset: 0;
+    background: url('https://grainy-gradients.vercel.app/noise.svg');
+    opacity: 0.05;
+}
+
+/* ===== PARTICLES ===== */
+.particles::before,
+.particles::after {
+    content: "";
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background-image: radial-gradient(white 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.08;
+    animation: moveParticles 30s linear infinite;
+}
+
+.particles::after {
+    animation-direction: reverse;
+}
+
+@keyframes moveParticles {
+    from { transform: translateY(0); }
+    to { transform: translateY(-200px); }
+}
+
+/* ===== TEXT ===== */
+.intro-text {
+    font-size: 52px;
+    font-weight: 600;
+    letter-spacing: 10px;
+    color: white;
+}
+
+/* LETTER ANIMATION (blur → sharp) */
+.intro-text span {
+    display: inline-block;
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(30px);
+    animation: revealText 1s ease forwards;
+}
+
+/* STAGGER */
+.intro-text span:nth-child(n) {
+    animation-delay: calc(0.05s * var(--i));
+}
+
+/* assign index manually */
+.intro-text span:nth-child(1) { --i: 1; }
+.intro-text span:nth-child(2) { --i: 2; }
+.intro-text span:nth-child(3) { --i: 3; }
+.intro-text span:nth-child(4) { --i: 4; }
+.intro-text span:nth-child(5) { --i: 5; }
+.intro-text span:nth-child(6) { --i: 6; }
+.intro-text span:nth-child(7) { --i: 7; }
+.intro-text span:nth-child(8) { --i: 8; }
+
+.intro-text span:nth-child(10) { --i: 10; }
+.intro-text span:nth-child(11) { --i: 11; }
+.intro-text span:nth-child(12) { --i: 12; }
+.intro-text span:nth-child(13) { --i: 13; }
+.intro-text span:nth-child(14) { --i: 14; }
+.intro-text span:nth-child(15) { --i: 15; }
+.intro-text span:nth-child(16) { --i: 16; }
+
+@keyframes revealText {
+    to {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0);
+    }
+}
+
+/* SUBTEXT */
+.intro-sub {
+    margin-top: 20px;
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.6);
+    opacity: 0;
+    animation: fadeIn 1s ease forwards;
+    animation-delay: 1.2s;
+}
+
+/* ===== LIGHT SWEEPS ===== */
+.light-sweep {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: sweep 2.5s ease forwards;
+}
+
+.light-sweep.second {
+    animation-delay: 1.2s;
+    opacity: 0.6;
+}
+
+@keyframes sweep {
+    to { left: 120%; }
+}
+
+/* ===== EXIT ===== */
+.loader-hide {
+    animation: exitLoader 1s cubic-bezier(0.83, 0, 0.17, 1) forwards;
+}
+
+@keyframes exitLoader {
+    to {
+        opacity: 0;
+        transform: scale(1.05);
+        visibility: hidden;
+    }
+}
+
+/* ===== FADE ===== */
+@keyframes fadeIn {
+    to { opacity: 1; }
 }

@@ -31,10 +31,10 @@
         </p>
 
         <div class="btn-group">
-            <a href="{{ route('hospital') }}" class="btn-primary magnetic">
+            <a href="{{ route('hospital') }}" class="btn-secondary magnetic">
                 Learn More
             </a>
-            <button class="btn-outline magnetic">Contact Us</button>
+            <a href="{{ route('hospital') }}" class="btn-primary magnetic">Contact Us</a>
         </div>
 
     </div>
@@ -75,8 +75,8 @@
         </p>
 
         <div class="btn-group">
-            <button class="btn-secondary magnetic">Explore Courses</button>
-            <button class="btn-outline magnetic">Admissions</button>
+            <a href="{{ route('courses') }}" class="btn-secondary magnetic">Explore Courses</a>
+            <a href="{{ route('courses') }}" class="btn-primary magnetic">Admissions</a>
         </div>
 
     </div>

@@ -7,6 +7,7 @@ Route::get('/', function () {
 });
 
 Route::view('/hospital', 'pages.hospital.home')->name('hospital');
+Route::view('/courses', 'pages.courses.home')->name('courses');
 
 
 
