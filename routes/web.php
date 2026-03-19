@@ -6,6 +6,7 @@ Route::get('/', function () {
     return view('pages.home');
 });
 
+Route::view('/hospital', 'pages.hospital.home')->name('hospital');
 
 
 

@@ -31,7 +31,9 @@
         </p>
 
         <div class="btn-group">
-            <button class="btn-primary magnetic">Learn More</button>
+            <a href="{{ route('hospital') }}" class="btn-primary magnetic">
+                Learn More
+            </a>
             <button class="btn-outline magnetic">Contact Us</button>
         </div>
 
