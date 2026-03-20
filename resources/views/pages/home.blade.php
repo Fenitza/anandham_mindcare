@@ -9,7 +9,7 @@
 
     <div class="overlay left-overlay"></div>
 
-    <img class="bg-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmwNCf3YecUCIM4zj17Kuh8YBAqIeID9rXEPqepkx7SlvhSrKSWYcGGIHYjEQB8_W_ChJQ03rYQuuzujHd5CBX0s9VRdZulKyuWsvQ7VDHUzEVjhm1jLrJA3DpH7XE7oYN8pPIQLCuPhgtvKkg7q3iGUiE4VZIGKhubO0WK5LvTzeT4Roc8SJMkYq8M0hM8f7E2h3LvYVKU15ZByIRUwjjH76Juvsn41-S-tr7mh2vEHr0Lq5fEij7ILqv3oPmSxeKr5KvyZ8u-4Ix"/>
+    <img class="bg-img" src="{{ asset('assets/bg/slide1.png') }}"/>
 
     <div class="content parallax-content">
 
@@ -53,7 +53,7 @@
 
     <div class="overlay right-overlay"></div>
 
-    <img class="bg-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfi9ada7-8snaSzgUzP9zm-IFaE_bJO-tcVoidEaHR4l-l4fg2CL0PIOnzBq26kmdTrEppEnPcM0IvuOGkx_NV0bkkCWIlMKyqezv39UF4xiQGQyIvCixSRUhnJuA74AQKW8wMUCl7ZUeWZcEs4Kl2u1redI_XPRnhB3I-cMuN7B1k4RlQtztfZIEw3qOCslzRByPS_0k5Ujbyra4URsxacTdWG-ZTZYJidtacr3ZQgJ2DaZRkeEkAQyyfbf7OqO9U18xcZ8V0fCjQ"/>
+    <img class="bg-img" src="{{ asset('assets/bg/slide2.png') }}"/>
 
     <div class="content parallax-content">
 

@@ -431,212 +431,190 @@ html, body {
 }
 
 /* =========================
-   RESPONSIVE SYSTEM (MOBILE FIRST)
+   CLEAN IMAGE-FIRST HERO (MOBILE + TABLET)
 ========================= */
+@media (max-width: 1023px) {
 
-/* =========================
-   BASE MOBILE (DEFAULT)
-========================= */
-.ultra-hero {
-  display: block;
-  height: max-content;
-}
+  /* STACK WITH BREATHING SPACE */
+  .ultra-hero {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding: 20px 16px 40px;
+  }
 
-.hero-panel {
-  min-height: 100vh;
-  padding: 30px 20px 90px;
-  position: relative;
-}
+  /* PANEL = FULL IMAGE BLOCK */
+  .hero-panel {
+    position: relative;
+    min-height: 420px;
+    border-radius: 16px;
+    overflow: hidden;
+    padding: 0;
+  }
 
-/* CONTENT CARD (Premium mobile feel) */
-.content {
-  transform: none !important;
-  text-align: center;
-  background: rgba(0,0,0,0.35);
-  backdrop-filter: blur(12px);
-  padding: 24px 18px;
-  border-radius: 18px;
-  width: 100%;
-  max-width: 420px;
-  margin: auto;
-}
+  /* IMAGE */
+  .bg-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.08);
+    transition: transform 6s ease;
+  }
 
-/* TYPOGRAPHY */
-.title {
-  font-size: 22px;
-  line-height: 1.3;
-}
+  /* SOFT OVERLAY (LIGHT, NOT HEAVY) */
+  .overlay {
+    background: linear-gradient(
+      to top,
+      rgba(0,0,0,0.55),
+      rgba(0,0,0,0.25),
+      transparent
+    ) !important;
+  }
 
-.subtitle {
-  font-size: 13px;
-  margin-bottom: 10px;
-}
+  /* CONTENT — NO BOX, JUST SPACING */
+  .content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
 
-.desc {
-  font-size: 12px;
-  line-height: 1.6;
-  max-width: 100%;
-}
+    padding: 22px 18px 26px;
+    margin: 0;
 
-/* BUTTONS */
-.btn-group {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;
-}
+    background: none !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+    border-radius: 0;
 
-.btn-group button {
-  width: 100%;
-  padding: 12px;
-  font-size: 14px;
-  border-radius: 12px;
-}
+    text-align: left;
+  }
 
-/* LOGO */
-.logo-glass-wrap {
-  width: 80px;
-  height: 80px;
-  margin: 15px auto;
-}
-
-.logo-glass-ring.outer {
-  width: 80px;
-  height: 80px;
-}
-
-.logo-glass-ring.inner {
-  width: 60px;
-  height: 60px;
-}
-
-.logo-core {
-  width: 50px;
-  height: 50px;
-}
-
-/* OVERLAY IMPROVEMENT */
-.overlay {
-  background: linear-gradient(
-    to bottom,
-    rgba(0,0,0,0.65),
-    rgba(0,0,0,0.4),
-    rgba(0,0,0,0.8)
-  );
-}
-
-/* DISABLE HEAVY EFFECTS ON MOBILE */
-.cursor-glow,
-.mini-logo {
-  display: none;
-}
-
-.parallax-content,
-.hero-panel:hover .bg-img,
-.hero-panel:hover .logo-glass-ring.outer,
-.hero-panel:hover .logo-glass-ring.inner {
-  transform: none !important;
-  box-shadow: none;
-}
-
-/* TOUCH IMPROVEMENTS */
-button:active {
-  transform: scale(0.97);
-}
-
-button {
-  touch-action: manipulation;
-}
-
-/* =========================
-   SMALL MOBILE (≤480px)
-========================= */
-@media (max-width: 480px) {
-
+  /* TYPOGRAPHY (SPACED + CLEAN) */
   .title {
-    font-size: 20px;
+    font-size: clamp(20px, 5vw, 26px);
+    font-weight: 700;
+    margin-bottom: 8px;
+    line-height: 1.3;
   }
 
   .subtitle {
     font-size: 12px;
+    opacity: 0.8;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
   }
 
   .desc {
-    font-size: 11px;
-  }
-
-  .btn-group button {
     font-size: 13px;
-    padding: 10px;
+    line-height: 1.65;
+    opacity: 0.9;
+    margin-bottom: 14px;
+    max-width: 90%;
   }
 
+  /* LOGO — CLEAN FLOAT */
   .logo-glass-wrap {
-    width: 70px;
-    height: 70px;
+    position: absolute;
+    top: 14px;
+    right: 14px;
+
+    width: 58px;
+    height: 58px;
+
+    opacity: 0.9;
   }
 
   .logo-core {
-    width: 45px;
-    height: 45px;
+    width: 44px;
+    height: 44px;
+  }
+
+  /* BUTTONS — LIGHTWEIGHT */
+  .btn-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .btn-group a {
+    flex: 1;
+    padding: 10px;
+    font-size: 13px;
+    border-radius: 10px;
+    text-align: center;
+  }
+
+  /* BUTTON STYLES (NO HEAVY SHADOW) */
+  .btn-primary {
+    background: rgba(255,255,255,0.9);
+    color: #000;
+  }
+
+  .btn-secondary {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+  }
+
+  /* REMOVE HEAVY ELEMENTS */
+  .mini-logo,
+  .cursor-glow,
+  .logo-glass-ring {
+    display: none !important;
   }
 }
 
 
 /* =========================
-   TABLET (≥768px)
+   SMALL MOBILE POLISH
 ========================= */
-@media (min-width: 768px) {
+@media (max-width: 480px) {
 
   .hero-panel {
-    min-height: 80vh;
-    padding: 40px 30px;
-  }
-
-  .content {
-    background: transparent;
-    backdrop-filter: none;
-    padding: 0;
+    min-height: 360px;
   }
 
   .title {
-    font-size: 28px;
-  }
-
-  .subtitle {
-    font-size: 15px;
+    font-size: 19px;
   }
 
   .desc {
-    font-size: 14px;
-    max-width: 420px;
+    font-size: 12px;
   }
 
   .btn-group {
-    flex-direction: row;
-    justify-content: center;
+    flex-direction: column;
   }
 
-  .logo-glass-wrap {
-    width: 110px;
-    height: 110px;
-  }
-
-  .logo-glass-ring.outer {
-    width: 110px;
-    height: 110px;
-  }
-
-  .logo-glass-ring.inner {
-    width: 85px;
-    height: 85px;
-  }
-
-  .logo-core {
-    width: 75px;
-    height: 75px;
+  .btn-group a {
+    width: 100%;
   }
 }
 
+
+/* =========================
+   SUBTLE MOTION (PREMIUM FEEL)
+========================= */
+@media (max-width: 1023px) {
+
+  .hero-panel {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.8s ease forwards;
+  }
+
+  .hero-panel:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  @keyframes fadeUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
 
 /* =========================
    DESKTOP (≥1024px)
@@ -687,6 +665,7 @@ button {
 
   .hero-panel {
     padding: 70px 20px;
+    height: fit-content ;
   }
 
   /* GLASS CARD UPGRADE */

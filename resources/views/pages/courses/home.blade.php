@@ -9,7 +9,7 @@
 <span class="w-8 h-[1px] bg-secondary"></span>
                     Excellence in Mental Health Education
                 </div>
-<h1 class="serif-text text-6xl md:text-7xl lg:text-8xl text-primary leading-tight mb-8 reveal">
+<h1 class="serif-text text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl  text-primary leading-tight mb-8 reveal">
                     Empowering the Next Generation.
                 </h1>
 <p class="text-xl md:text-2xl text-on-surface-variant font-light max-w-xl mb-10 leading-relaxed reveal">
