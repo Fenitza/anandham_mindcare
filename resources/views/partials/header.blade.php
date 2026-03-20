@@ -9,10 +9,10 @@
 <div class="text-xl md:text-2xl font-serif italic text-primary font-headline tracking-tight">Anandham Mindcare Foundation</div>
 </div>
 <div class="hidden lg:flex items-center gap-x-8">
-<a class="text-primary font-bold border-b-2 border-secondary pb-1 text-sm tracking-wide transition-colors" href="#">Our Approach</a>
-<a class="text-on-surface-variant font-medium text-sm tracking-wide hover:text-primary transition-colors" href="#">Hospitals</a>
-<a class="text-on-surface-variant font-medium text-sm tracking-wide hover:text-primary transition-colors" href="#">Academy</a>
-<a class="text-on-surface-variant font-medium text-sm tracking-wide hover:text-primary transition-colors" href="#">Resources</a>
+<a class="text-primary font-bold border-b-2 border-secondary pb-1 text-sm tracking-wide transition-colors" href="#">About Us</a>
+<a class="text-on-surface-variant font-medium text-sm tracking-wide hover:text-primary transition-colors" href="#">Services</a>
+<a class="text-on-surface-variant font-medium text-sm tracking-wide hover:text-primary transition-colors" href="{{ route('courses') }}" >Courses</a>
+<a class="text-on-surface-variant font-medium text-sm tracking-wide hover:text-primary transition-colors" href="#">Contact Us</a>
 </div>
 <button class="flex items-center gap-2 bg-primary text-white px-5 py-2 rounded-lg font-medium transition-all active:scale-95 hover:bg-opacity-90">
 <span class="material-symbols-outlined text-lg">login</span>
