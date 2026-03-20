@@ -17,11 +17,11 @@
                 </p>
 <div class="flex flex-wrap gap-4 reveal">
 <button class="bg-primary text-white px-8 py-4 rounded-lg font-medium hover:bg-primary-container transition-colors shadow-lg shadow-primary/10">
-                        Explore Our Faculty
+                        Explore More
                     </button>
-<button class="px-8 py-4 rounded-lg font-medium text-primary hover:bg-surface-container-low transition-colors border border-outline-variant/30">
+<!-- <button class="px-8 py-4 rounded-lg font-medium text-primary hover:bg-surface-container-low transition-colors border border-outline-variant/30">
                         Download Prospectus
-                    </button>
+                    </button> -->
 </div>
 </div>
 <div class="lg:col-span-5 relative z-10 reveal">
@@ -30,14 +30,69 @@
 <div class="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent"></div>
 </div>
 <div class="absolute -bottom-8 -left-8 bg-white/90 backdrop-blur-md p-8 rounded-xl shadow-xl max-w-xs z-20 border-l-4 border-tertiary-fixed-dim reveal">
-<p class="serif-text text-xl italic text-primary">"The curriculum is designed to bridge the gap between academic theory and clinical mastery."</p>
-<p class="mt-4 text-sm font-bold text-on-surface-variant uppercase tracking-widest">— Dr. Anandham, Director</p>
+<p class="serif-text text-xl italic text-primary">“Healing begins when you allow yourself to be heard.”</p>
+<p class="mt-4 text-sm font-bold text-on-surface-variant uppercase tracking-widest">— Director</p>
 </div>
 </div>
 </div>
 <!-- Decorative Element -->
 <div class="absolute right-0 top-0 w-1/3 h-full bg-surface-container-low -z-10 opacity-50"></div>
 </header>
+
+<!-- Upcoming Webinars & Workshops -->
+<section class="py-24 px-8 bg-surface-container-low">
+<div class="max-w-7xl mx-auto">
+<div class="text-center max-w-2xl mx-auto mb-20 reveal">
+<h2 class="serif-text text-4xl text-primary mb-4">Upcoming Webinars &amp; Workshops</h2>
+<p class="text-on-surface-variant">Stay updated with the latest clinical trends and research breakthroughs through our live interactive sessions.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<!-- Webinar 1 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl flex gap-8 items-start hover:bg-white transition-colors border-l-4 border-secondary shadow-sm reveal">
+<div class="hidden sm:flex flex-col items-center bg-surface-container p-4 rounded-lg min-w-[100px]">
+<span class="text-secondary font-bold text-2xl">24</span>
+<span class="text-on-surface-variant text-xs uppercase font-semibold">Oct 2024</span>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-secondary text-lg">videocam</span>
+<span class="text-xs font-bold text-secondary uppercase tracking-widest">Live Free Webinar</span>
+</div>
+<h4 class="serif-text text-2xl text-primary mb-3">Neuroscience of Trauma Recovery</h4>
+<p class="text-on-surface-variant text-sm mb-6 leading-relaxed">Exploring new neural pathway therapies for long-term PTSD patients. Led by Dr. Elena Vance.</p>
+<div class="flex items-center gap-6">
+<span class="text-xs font-semibold text-on-surface flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">schedule</span> 18:00 - 20:00 IST
+                            </span>
+<a class="text-secondary text-sm font-bold underline" href="#">Reserve Seat</a>
+</div>
+</div>
+</div>
+<!-- Webinar 2 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl flex gap-8 items-start hover:bg-white transition-colors border-l-4 border-tertiary-fixed-dim shadow-sm reveal">
+<div class="hidden sm:flex flex-col items-center bg-surface-container p-4 rounded-lg min-w-[100px]">
+<span class="text-tertiary-fixed-dim font-bold text-2xl">08</span>
+<span class="text-on-surface-variant text-xs uppercase font-semibold">Nov 2024</span>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-lg">groups</span>
+<span class="text-xs font-bold text-tertiary-fixed-dim uppercase tracking-widest">Premium Workshop</span>
+</div>
+<h4 class="serif-text text-2xl text-primary mb-3">Advanced Psychometric Assessment</h4>
+<p class="text-on-surface-variant text-sm mb-6 leading-relaxed">Hands-on training session on the latest standardized clinical assessment tools.</p>
+<div class="flex items-center gap-6">
+<span class="text-xs font-semibold text-on-surface flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">schedule</span> 10:00 - 16:00 IST
+                            </span>
+<a class="text-secondary text-sm font-bold underline" href="#">Join Waitlist</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
 <!-- Featured Programs - Bento Style -->
 <section class="py-24 px-8 max-w-7xl mx-auto">
 <div class="flex justify-between items-end mb-16 reveal">
@@ -148,59 +203,7 @@
 </div>
 </div>
 </section>
-<!-- Upcoming Webinars & Workshops -->
-<section class="py-24 px-8 bg-surface-container-low">
-<div class="max-w-7xl mx-auto">
-<div class="text-center max-w-2xl mx-auto mb-20 reveal">
-<h2 class="serif-text text-4xl text-primary mb-4">Upcoming Webinars &amp; Workshops</h2>
-<p class="text-on-surface-variant">Stay updated with the latest clinical trends and research breakthroughs through our live interactive sessions.</p>
-</div>
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-<!-- Webinar 1 -->
-<div class="bg-surface-container-lowest p-8 rounded-xl flex gap-8 items-start hover:bg-white transition-colors border-l-4 border-secondary shadow-sm reveal">
-<div class="hidden sm:flex flex-col items-center bg-surface-container p-4 rounded-lg min-w-[100px]">
-<span class="text-secondary font-bold text-2xl">24</span>
-<span class="text-on-surface-variant text-xs uppercase font-semibold">Oct 2024</span>
-</div>
-<div>
-<div class="flex items-center gap-2 mb-2">
-<span class="material-symbols-outlined text-secondary text-lg">videocam</span>
-<span class="text-xs font-bold text-secondary uppercase tracking-widest">Live Webinar</span>
-</div>
-<h4 class="serif-text text-2xl text-primary mb-3">Neuroscience of Trauma Recovery</h4>
-<p class="text-on-surface-variant text-sm mb-6 leading-relaxed">Exploring new neural pathway therapies for long-term PTSD patients. Led by Dr. Elena Vance.</p>
-<div class="flex items-center gap-6">
-<span class="text-xs font-semibold text-on-surface flex items-center gap-1">
-<span class="material-symbols-outlined text-sm">schedule</span> 18:00 - 20:00 IST
-                            </span>
-<a class="text-secondary text-sm font-bold underline" href="#">Reserve Seat</a>
-</div>
-</div>
-</div>
-<!-- Webinar 2 -->
-<div class="bg-surface-container-lowest p-8 rounded-xl flex gap-8 items-start hover:bg-white transition-colors border-l-4 border-tertiary-fixed-dim shadow-sm reveal">
-<div class="hidden sm:flex flex-col items-center bg-surface-container p-4 rounded-lg min-w-[100px]">
-<span class="text-tertiary-fixed-dim font-bold text-2xl">08</span>
-<span class="text-on-surface-variant text-xs uppercase font-semibold">Nov 2024</span>
-</div>
-<div>
-<div class="flex items-center gap-2 mb-2">
-<span class="material-symbols-outlined text-tertiary-fixed-dim text-lg">groups</span>
-<span class="text-xs font-bold text-tertiary-fixed-dim uppercase tracking-widest">In-Person Workshop</span>
-</div>
-<h4 class="serif-text text-2xl text-primary mb-3">Advanced Psychometric Assessment</h4>
-<p class="text-on-surface-variant text-sm mb-6 leading-relaxed">Hands-on training session on the latest standardized clinical assessment tools.</p>
-<div class="flex items-center gap-6">
-<span class="text-xs font-semibold text-on-surface flex items-center gap-1">
-<span class="material-symbols-outlined text-sm">schedule</span> 10:00 - 16:00 IST
-                            </span>
-<a class="text-secondary text-sm font-bold underline" href="#">Join Waitlist</a>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
+
 <!-- Latest Insights / Academic Journal -->
 <section class="py-24 px-8 max-w-7xl mx-auto">
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">

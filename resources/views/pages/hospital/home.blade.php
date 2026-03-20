@@ -53,7 +53,7 @@
 <div class="max-w-screen-2xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
 <div class="lg:col-span-5 relative reveal">
 <div class="absolute -top-12 -left-12 w-64 h-64 bg-secondary-container/20 rounded-full blur-3xl -z-10"></div>
-<div class="rounded-2xl overflow-hidden editorial-shadow transform -rotate-2 hover:rotate-0 transition-transform duration-700">
+<div class="rounded-2xl overflow-hidden editorial-shadow transform -rotate-0 hover:rotate-2 transition-transform duration-700">
 <img alt="Portrait of Dr. M. Helena Selvakodi in a professional clinical setting" class="w-full h-[600px] object-cover" src="{{ asset('assets/images/doctor.jpeg') }}"/>
 </div>
 <div class="absolute -bottom-8 -right-8 bg-primary p-8 text-white rounded-2xl editorial-shadow max-w-xs reveal stagger-2">

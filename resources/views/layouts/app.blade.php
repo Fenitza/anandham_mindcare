@@ -91,20 +91,16 @@
 
 <body class="bg-background text-on-surface font-body">
 
-    @include('partials.header')
+    
 
     <main>
         <!-- ✅ INTRO LOADER (HERE) -->
-    <div id="intro-loader">
+   <div id="intro-loader">
 
-    <!-- BACKGROUND -->
     <div class="intro-bg"></div>
     <div class="noise"></div>
-
-    <!-- PARTICLES -->
     <div class="particles"></div>
 
-    <!-- CONTENT -->
     <div class="intro-inner">
 
         <h1 class="intro-text">
@@ -117,16 +113,8 @@
 
     </div>
 
-    <!-- LIGHT EFFECTS -->
     <div class="light-sweep"></div>
     <div class="light-sweep second"></div>
-
-</div>
-
-    <!-- LIGHT -->
-    <div class="light-sweep"></div>
-
-</div>
 
 </div>
         @yield('content')

@@ -51,7 +51,7 @@ html, body {
 
 /* EXPAND EFFECT */
 .ultra-hero:hover .hero-panel {
-  flex: 0.7;
+  flex: 1.0;
   /* margin-bottom: 60px; */
 }
 
@@ -439,6 +439,7 @@ html, body {
 ========================= */
 .ultra-hero {
   display: block;
+  height: max-content;
 }
 
 .hero-panel {
@@ -644,7 +645,7 @@ button {
 
   .ultra-hero {
     display: flex;
-    height: 90vh;
+    height: 100vh;
   }
 
   .hero-panel {
@@ -680,124 +681,126 @@ button {
 ========================= */
 
 /* =========================
-   BASE MOBILE (DEFAULT)
+   MOBILE IMPROVEMENTS (≤768px)
 ========================= */
-.ultra-hero {
-  display: block;
+@media (max-width: 768px) {
+
+  .hero-panel {
+    padding: 70px 20px;
+  }
+
+  /* GLASS CARD UPGRADE */
+  .content {
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    padding: 28px 22px;
+    border-radius: 20px;
+    max-width: 460px;
+  }
+  .hero-panel .overlay {
+    background: linear-gradient(
+      to bottom,
+      rgba(2,6,23,0.65),
+      rgba(2,6,23,0.45),
+      rgba(2,6,23,0.75)
+    ) !important;
+  }
+
+  /* TITLE IMPROVED */
+  .title {
+    font-size: clamp(22px, 5vw, 26px);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    opacity: 0.85;
+  }
+
+  .desc {
+    font-size: 13px;
+    line-height: 1.7;
+    opacity: 0.9;
+    margin-top: 10px;
+  }
+
+  /* LOGO PREMIUM LOOK */
+  .logo-glass-wrap {
+    width: 90px;
+    height: 90px;
+    margin: 18px auto;
+  }
+
+  .logo-glass-ring.outer {
+    width: 90px;
+    height: 90px;
+  }
+
+  .logo-glass-ring.inner {
+    width: 70px;
+    height: 70px;
+  }
+
+  .logo-core {
+    width: 60px;
+    height: 60px;
+  }
+
+  /* BUTTONS – MODERN STACK */
+  .btn-group {
+    margin-top: 18px;
+    gap: 12px;
+  }
+
+  .btn-group a {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 12px;
+    font-size: 14px;
+    border-radius: 12px;
+  }
+
+  /* PRIMARY BUTTON POP */
+  .btn-primary {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    box-shadow: 0 10px 25px rgba(99,102,241,0.4);
+  }
+
+  /* SECONDARY BUTTON */
+  .btn-secondary {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+
+  /* OVERLAY BALANCE */
+  .overlay {
+    background: linear-gradient(
+      to bottom,
+      rgba(2,6,23,0.7),
+      rgba(2,6,23,0.4),
+      rgba(2,6,23,0.85)
+    );
+  }
 }
 
-.hero-panel {
-  
-  height: auto;
-  min-height: unset;
-  padding: 60px 20px;
-  position: relative;
-}
-
-/* CONTENT CARD (Premium mobile feel) */
-.content {
-  transform: none !important;
-  text-align: center;
-  background: rgba(0,0,0,0.35);
-  backdrop-filter: blur(12px);
-  padding: 24px 18px;
-  border-radius: 18px;
-  width: 100%;
-  max-width: 420px;
-  margin: auto;
-}
-
-/* TYPOGRAPHY */
-.title {
-  font-size: 22px;
-  line-height: 1.3;
-}
-
-.subtitle {
-  font-size: 13px;
-  margin-bottom: 10px;
-}
-
-.desc {
-  font-size: 12px;
-  line-height: 1.6;
-  max-width: 100%;
-}
-
-/* BUTTONS */
-.btn-group {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;
-}
-
-.btn-group button {
-  width: 100%;
-  padding: 12px;
-  font-size: 14px;
-  border-radius: 12px;
-}
-
-/* LOGO */
-.logo-glass-wrap {
-  width: 80px;
-  height: 80px;
-  margin: 15px auto;
-}
-
-.logo-glass-ring.outer {
-  width: 80px;
-  height: 80px;
-}
-
-.logo-glass-ring.inner {
-  width: 60px;
-  height: 60px;
-}
-
-.logo-core {
-  width: 50px;
-  height: 50px;
-}
-
-/* OVERLAY IMPROVEMENT */
-.overlay {
-  background: linear-gradient(
-    to bottom,
-    rgba(0,0,0,0.65),
-    rgba(0,0,0,0.4),
-    rgba(0,0,0,0.8)
-  );
-}
-
-/* DISABLE HEAVY EFFECTS ON MOBILE */
-.cursor-glow,
-.mini-logo {
-  display: none;
-}
-
-.parallax-content,
-.hero-panel:hover .bg-img,
-.hero-panel:hover .logo-glass-ring.outer,
-.hero-panel:hover .logo-glass-ring.inner {
-  transform: none !important;
-  box-shadow: none;
-}
-
-/* TOUCH IMPROVEMENTS */
-button:active {
-  transform: scale(0.97);
-}
-
-button {
-  touch-action: manipulation;
-}
 
 /* =========================
    SMALL MOBILE (≤480px)
 ========================= */
 @media (max-width: 480px) {
+
+  .hero-panel {
+    padding: 60px 16px;
+  }
+
+  .content {
+    padding: 22px 16px;
+    border-radius: 16px;
+  }
 
   .title {
     font-size: 20px;
@@ -808,53 +811,45 @@ button {
   }
 
   .desc {
-    font-size: 11px;
-  }
-
-  .btn-group button {
-    font-size: 13px;
-    padding: 10px;
+    font-size: 12px;
   }
 
   .logo-glass-wrap {
-    width: 70px;
-    height: 70px;
+    width: 75px;
+    height: 75px;
   }
 
   .logo-core {
-    width: 45px;
-    height: 45px;
+    width: 50px;
+    height: 50px;
   }
 }
 
 
 /* =========================
-   TABLET (≥768px)
+   TABLET ENHANCEMENT (768–1023px)
 ========================= */
-@media (min-width: 768px) {
+@media (min-width: 768px) and (max-width: 1023px) {
+
+  .ultra-hero {
+    display: block; /* stacked but premium */
+  }
 
   .hero-panel {
-    min-height: 80vh;
-    padding: 40px 30px;
+    min-height: 60vh;
   }
 
   .content {
-    background: transparent;
-    backdrop-filter: none;
-    padding: 0; 
+    max-width: 520px;
+    margin: auto;
   }
 
   .title {
-    font-size: 28px;
-  }
-
-  .subtitle {
-    font-size: 15px;
+    font-size: 30px;
   }
 
   .desc {
-    font-size: 14px;
-    max-width: 420px;
+    font-size: 15px;
   }
 
   .btn-group {
@@ -862,28 +857,11 @@ button {
     justify-content: center;
   }
 
-  .logo-glass-wrap {
-    width: 110px;
-    height: 110px;
-  }
-
-  .logo-glass-ring.outer {
-    width: 110px;
-    height: 110px;
-  }
-
-  .logo-glass-ring.inner {
-    width: 85px;
-    height: 85px;
-  }
-
-  .logo-core {
-    width: 75px;
-    height: 75px;
+  .btn-group a {
+    width: auto;
+    padding: 12px 20px;
   }
 }
-
-
 /* =========================
    DESKTOP (≥1024px)
 ========================= */
@@ -891,12 +869,12 @@ button {
 
   .ultra-hero {
     display: flex;
-    height: 90vh;
+    height: 100vh;
   }
 
   .hero-panel {
     flex: 1;
-    height: auto;
+    height: 100%;
     padding: 0;
     cursor: pointer;
   }
@@ -924,83 +902,118 @@ button {
   }
 }
 
-/* ===== BASE ===== */
-#intro-loader {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* ===== RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* ===== GRADIENT BG ===== */
+/* ===== MAIN CONTAINER ===== */
+#intro-loader {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* ===== BACKGROUND ===== */
 .intro-bg {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 20% 30%, #1e293b, #020617 70%);
-    animation: gradientMove 12s ease infinite alternate;
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 30%, #1e293b, #020617 70%);
+  animation: gradientMove 12s ease infinite alternate;
+  z-index: 1;
 }
 
 @keyframes gradientMove {
-    0% { transform: scale(1); }
-    100% { transform: scale(1.1); }
+  0% { transform: scale(1); }
+  100% { transform: scale(1.1); }
 }
 
-/* ===== NOISE TEXTURE ===== */
+/* ===== NOISE ===== */
 .noise {
-    position: absolute;
-    inset: 0;
-    background: url('https://grainy-gradients.vercel.app/noise.svg');
-    opacity: 0.05;
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background: url('https://grainy-gradients.vercel.app/noise.svg');
+  z-index: 2;
 }
 
 /* ===== PARTICLES ===== */
+.particles {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
 .particles::before,
 .particles::after {
-    content: "";
-    position: absolute;
-    width: 200%;
-    height: 200%;
-    background-image: radial-gradient(white 1px, transparent 1px);
-    background-size: 40px 40px;
-    opacity: 0.08;
-    animation: moveParticles 30s linear infinite;
+  content: "";
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background-image: radial-gradient(white 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.08;
+  animation: moveParticles 30s linear infinite;
 }
 
 .particles::after {
-    animation-direction: reverse;
+  animation-direction: reverse;
 }
 
 @keyframes moveParticles {
-    from { transform: translateY(0); }
-    to { transform: translateY(-200px); }
+  from { transform: translateY(0); }
+  to { transform: translateY(-200px); }
 }
 
-/* ===== TEXT ===== */
+/* ===== CONTENT ===== */
+.intro-inner {
+  position: relative;
+  z-index: 5;
+  text-align: center;
+  padding: 0 16px;
+}
+
+/* ===== TITLE ===== */
 .intro-text {
-    font-size: 52px;
-    font-weight: 600;
-    letter-spacing: 10px;
-    color: white;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-weight: 700;
+  letter-spacing: clamp(2px, 1vw, 10px);
+  color: #fff;
 }
 
-/* LETTER ANIMATION (blur → sharp) */
+/* LETTERS */
 .intro-text span {
-    display: inline-block;
-    opacity: 0;
-    filter: blur(10px);
-    transform: translateY(30px);
-    animation: revealText 1s ease forwards;
+  display: inline-block;
+  font-size: clamp(24px, 5vw, 64px);
+  opacity: 0;
+  filter: blur(10px);
+  transform: translateY(30px);
+  animation: revealText 1s ease forwards;
 }
 
-/* STAGGER */
+/* GAP */
+.intro-text .gap {
+  width: clamp(10px, 2vw, 20px);
+}
+
+/* STAGGER ANIMATION */
 .intro-text span:nth-child(n) {
-    animation-delay: calc(0.05s * var(--i));
+  animation-delay: calc(0.05s * var(--i));
 }
 
-/* assign index manually */
+/* MANUAL INDEX */
 .intro-text span:nth-child(1) { --i: 1; }
 .intro-text span:nth-child(2) { --i: 2; }
 .intro-text span:nth-child(3) { --i: 3; }
@@ -1009,7 +1022,6 @@ button {
 .intro-text span:nth-child(6) { --i: 6; }
 .intro-text span:nth-child(7) { --i: 7; }
 .intro-text span:nth-child(8) { --i: 8; }
-
 .intro-text span:nth-child(10) { --i: 10; }
 .intro-text span:nth-child(11) { --i: 11; }
 .intro-text span:nth-child(12) { --i: 12; }
@@ -1018,59 +1030,84 @@ button {
 .intro-text span:nth-child(15) { --i: 15; }
 .intro-text span:nth-child(16) { --i: 16; }
 
+/* TEXT ANIMATION */
 @keyframes revealText {
-    to {
-        opacity: 1;
-        filter: blur(0);
-        transform: translateY(0);
-    }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
 }
 
-/* SUBTEXT */
+/* ===== SUBTEXT ===== */
 .intro-sub {
-    margin-top: 20px;
-    font-size: 14px;
-    letter-spacing: 3px;
-    color: rgba(255,255,255,0.6);
-    opacity: 0;
-    animation: fadeIn 1s ease forwards;
-    animation-delay: 1.2s;
+  margin-top: 16px;
+  font-size: clamp(12px, 2.5vw, 18px);
+  letter-spacing: clamp(1px, 0.5vw, 3px);
+  color: rgba(255,255,255,0.7);
+  opacity: 0;
+  animation: fadeIn 1s ease forwards;
+  animation-delay: 1.2s;
 }
 
-/* ===== LIGHT SWEEPS ===== */
+/* ===== LIGHT SWEEP ===== */
 .light-sweep {
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.2), transparent);
-    animation: sweep 2.5s ease forwards;
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,0.15),
+    transparent
+  );
+  animation: sweep 3s infinite;
+  z-index: 3;
 }
 
 .light-sweep.second {
-    animation-delay: 1.2s;
-    opacity: 0.6;
+  animation-delay: 1.5s;
 }
 
+/* SWEEP ANIMATION */
 @keyframes sweep {
-    to { left: 120%; }
+  0% { left: -100%; }
+  100% { left: 120%; }
 }
 
 /* ===== EXIT ===== */
 .loader-hide {
-    animation: exitLoader 1s cubic-bezier(0.83, 0, 0.17, 1) forwards;
+  animation: exitLoader 1s cubic-bezier(0.83, 0, 0.17, 1) forwards;
 }
 
 @keyframes exitLoader {
-    to {
-        opacity: 0;
-        transform: scale(1.05);
-        visibility: hidden;
-    }
+  to {
+    opacity: 0;
+    transform: scale(1.05);
+    visibility: hidden;
+  }
 }
 
 /* ===== FADE ===== */
 @keyframes fadeIn {
-    to { opacity: 1; }
+  to { opacity: 1; }
+}
+
+/* ===== RESPONSIVE TWEAKS ===== */
+@media (max-width: 480px) {
+  .intro-text {
+    letter-spacing: 1px;
+  }
+
+  .intro-sub {
+    letter-spacing: 1px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .intro-text span {
+    font-size: 72px;
+  }
 }
