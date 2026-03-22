@@ -117,9 +117,7 @@ html, body {
   transition: all 0.4s ease;
 }
 
-.parallax-content {
-  transition: transform 0.2s ease-out;
-}
+
 
 /* =========================
    TYPOGRAPHY
@@ -429,7 +427,114 @@ html, body {
   background: linear-gradient(120deg, transparent, rgba(255,255,255,0.1), transparent);
   transform: translateX(-100%);
 }
+/* =========================
+   CENTER LOGO FOR TAB + MOBILE
+========================= */
+@media (max-width: 1023px) {
 
+  /* CONTENT FLOW FIX */
+  .content {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* LOGO CENTERED AFTER HEADING */
+  .logo-glass-wrap {
+    position: static !important;
+
+    margin: 12px auto 14px;
+    order: 2;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 70px;
+    height: 70px;
+  }
+
+  /* ORDERING ELEMENTS */
+  .title {
+    order: 0;
+  }
+
+  .subtitle {
+    order: 1;
+  }
+
+  .desc {
+    order: 3;
+  }
+
+  .btn-group {
+    order: 4;
+  }
+
+  /* CENTER ALIGN FOR BETTER LOOK */
+  .content {
+    text-align: center;
+    align-items: center;
+  }
+
+  .desc {
+    max-width: 95%;
+  }
+  .parallax-content {
+  transition: none;
+}
+}
+/* =========================
+   MOBILE TEXT CENTER + BIGGER LOGO
+========================= */
+@media (max-width: 480px) {
+
+  /* CENTER EVERYTHING */
+  .content {
+    text-align: center !important;
+    align-items: center !important;
+  }
+
+  .title,
+  .subtitle,
+  .desc {
+    text-align: center;
+  }
+
+  .desc {
+    max-width: 100%;
+  }
+
+  /* BIGGER LOGO */
+  .logo-glass-wrap {
+    width: 100px;
+    height: 100px;
+    margin: 14px auto 16px;
+  }
+
+  .logo-core {
+    width: 65px;
+    height: 65px;
+  }
+
+  /* OPTIONAL: Slight spacing improvement */
+  .title {
+    margin-bottom: 6px;
+  }
+
+  .subtitle {
+    margin-bottom: 12px;
+  }
+
+  .btn-group {
+    margin-top: 14px;
+  }
+}
 /* =========================
    CLEAN IMAGE-FIRST HERO (MOBILE + TABLET)
 ========================= */
@@ -475,7 +580,7 @@ html, body {
 
   /* CONTENT — NO BOX, JUST SPACING */
   .content {
-    position: absolute;
+    position: relative;
     bottom: 0;
     left: 0;
     right: 0;
@@ -527,8 +632,8 @@ html, body {
   }
 
   .logo-core {
-    width: 44px;
-    height: 44px;
+    width: 60px;
+    height: 60px;
   }
 
   /* BUTTONS — LIGHTWEIGHT */
@@ -651,6 +756,10 @@ html, body {
     display: flex;
   }
 
+  .parallax-content {
+  transition: transform 0.2s ease-out;
+}
+
   .cursor-glow {
     display: block;
   }
@@ -677,6 +786,7 @@ html, body {
     padding: 28px 22px;
     border-radius: 20px;
     max-width: 460px;
+    
   }
   .hero-panel .overlay {
     background: linear-gradient(
@@ -714,13 +824,15 @@ html, body {
   }
 
   .logo-glass-ring.outer {
-    width: 90px;
-    height: 90px;
+    width: 120px;
+    height: 120px;
+    background: rgb(255, 255, 255);
   }
 
   .logo-glass-ring.inner {
-    width: 70px;
-    height: 70px;
+    width: 100px;
+    height: 100px;
+    background: rgb(255, 255, 255);
   }
 
   .logo-core {
@@ -799,8 +911,8 @@ html, body {
   }
 
   .logo-core {
-    width: 50px;
-    height: 50px;
+    width: 90px;
+    height: 90px;
   }
 }
 

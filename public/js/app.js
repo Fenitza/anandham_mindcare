@@ -180,3 +180,5 @@ window.addEventListener("load", () => {
     }, 2500); // duration of intro
 });
 
+
+

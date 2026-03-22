@@ -83,7 +83,7 @@
 
 
     <!-- ✅ LOCAL CSS -->
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css?v1.0') }}">
     <link rel="stylesheet" href="{{ asset('css/hospital.css') }}">
 
     <title>Anandham Mindcare Foundation</title>
