@@ -10,7 +10,15 @@ html, body {
   padding: 0;
   overflow-x: hidden;
 }
-
+.serif-quote::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: #755b00;
+        }
 /* =========================
    ANIMATIONS
 ========================= */
@@ -327,10 +335,7 @@ html, body {
   opacity: 1;
 }
 
-.ultra-hero:hover .hero-panel:not(:hover) .content {
-  opacity: 0;
-  transform: scale(0.85);
-}
+
 
 .mini-logo img {
   height: 80px;
@@ -444,7 +449,7 @@ html, body {
     align-items: flex-start;
   }
 
-  /* LOGO CENTERED AFTER HEADING */
+  /* LOGO CENTERED AFTER HEADING
   .logo-glass-wrap {
     position: static !important;
 
@@ -457,7 +462,7 @@ html, body {
 
     width: 70px;
     height: 70px;
-  }
+  } */
 
   /* ORDERING ELEMENTS */
   .title {
@@ -510,7 +515,7 @@ html, body {
     max-width: 100%;
   }
 
-  /* BIGGER LOGO */
+  /* BIGGER LOGO
   .logo-glass-wrap {
     width: 100px;
     height: 100px;
@@ -520,7 +525,7 @@ html, body {
   .logo-core {
     width: 65px;
     height: 65px;
-  }
+  } */
 
   /* OPTIONAL: Slight spacing improvement */
   .title {
@@ -568,7 +573,7 @@ html, body {
     transition: transform 6s ease;
   }
 
-  /* SOFT OVERLAY (LIGHT, NOT HEAVY) */
+  /* SOFT OVERLAY (LIGHT, NOT HEAVY)
   .overlay {
     background: linear-gradient(
       to top,
@@ -576,7 +581,7 @@ html, body {
       rgba(0,0,0,0.25),
       transparent
     ) !important;
-  }
+  } */
 
   /* CONTENT — NO BOX, JUST SPACING */
   .content {
@@ -620,7 +625,7 @@ html, body {
   }
 
   /* LOGO — CLEAN FLOAT */
-  .logo-glass-wrap {
+  /* .logo-glass-wrap {
     position: absolute;
     top: 14px;
     right: 14px;
@@ -634,7 +639,7 @@ html, body {
   .logo-core {
     width: 60px;
     height: 60px;
-  }
+  } */
 
   /* BUTTONS — LIGHTWEIGHT */
   .btn-group {
@@ -664,8 +669,7 @@ html, body {
 
   /* REMOVE HEAVY ELEMENTS */
   .mini-logo,
-  .cursor-glow,
-  .logo-glass-ring {
+  .cursor-glow {
     display: none !important;
   }
 }
@@ -776,6 +780,10 @@ html, body {
     padding: 70px 20px;
     height: fit-content ;
   }
+  .ultra-hero:hover .hero-panel:not(:hover) {
+    filter:none;
+    transform: none;
+  }
 
   /* GLASS CARD UPGRADE */
   .content {
@@ -817,7 +825,7 @@ html, body {
   }
 
   /* LOGO PREMIUM LOOK */
-  .logo-glass-wrap {
+  /* .logo-glass-wrap {
     width: 90px;
     height: 90px;
     margin: 18px auto;
@@ -838,7 +846,7 @@ html, body {
   .logo-core {
     width: 60px;
     height: 60px;
-  }
+  } */
 
   /* BUTTONS – MODERN STACK */
   .btn-group {
@@ -905,7 +913,7 @@ html, body {
     font-size: 12px;
   }
 
-  .logo-glass-wrap {
+  /* .logo-glass-wrap {
     width: 75px;
     height: 75px;
   }
@@ -913,6 +921,10 @@ html, body {
   .logo-core {
     width: 90px;
     height: 90px;
+  } */
+  .ultra-hero:hover .hero-panel:not(:hover) {
+    filter:none;
+    transform: none;
   }
 }
 
@@ -952,6 +964,10 @@ html, body {
     width: auto;
     padding: 12px 20px;
   }
+  .ultra-hero:hover .hero-panel:not(:hover) {
+    filter:none;
+    transform: none;
+  }
 }
 /* =========================
    DESKTOP (≥1024px)
@@ -983,6 +999,11 @@ html, body {
     filter: blur(4px) brightness(0.6);
     transform: scale(0.98);
   }
+
+  .ultra-hero:hover .hero-panel:not(:hover) .content {
+  opacity: 0;
+  transform: scale(0.85);
+}
 
   .mini-logo {
     display: flex;
@@ -1201,4 +1222,5 @@ html, body {
   .intro-text span {
     font-size: 72px;
   }
+  
 }

@@ -9,7 +9,7 @@
 
     <div class="overlay left-overlay"></div>
 
-    <img class="bg-img" src="{{ asset('assets/bg/slide1.png') }}"/>
+    <img class="bg-img" src="{{ asset('assets/bg/bg4.png') }}"/>
 
     <div class="content parallax-content">
 
@@ -22,7 +22,7 @@
             <div class="logo-glass-ring inner"></div>
 
             <div class="logo-core">
-                <img src="{{ asset('assets/logo/hosp_logo.jpeg') }}">
+                <img src="{{ asset('assets/logo/academy_logo.jpeg') }}">
             </div>
         </div>
 
@@ -43,7 +43,7 @@
         <div class="ripple r1"></div>
         <div class="ripple r2"></div>
         <div class="ripple r3"></div>
-        <img src="{{ asset('assets/logo/hosp_logo.jpeg') }}">
+        <img src="{{ asset('assets/logo/academy_logo.jpeg') }}">
     </div>
 
 </div>
@@ -53,7 +53,7 @@
 
     <div class="overlay right-overlay"></div>
 
-    <img class="bg-img" src="{{ asset('assets/bg/slide2.png') }}"/>
+    <img class="bg-img" src="{{ asset('assets/bg/bg3.png') }}"/>
 
     <div class="content parallax-content">
 
@@ -66,7 +66,7 @@
             <div class="logo-glass-ring inner"></div>
 
             <div class="logo-core">
-                <img src="{{ asset('assets/logo/academy_logo.jpeg') }}">
+                <img src="{{ asset('assets/logo/hosp_logo.jpeg') }}">
             </div>
         </div>
 
@@ -85,7 +85,7 @@
         <div class="ripple r1"></div>
         <div class="ripple r2"></div>
         <div class="ripple r3"></div>
-        <img src="{{ asset('assets/logo/academy_logo.jpeg') }}">
+        <img src="{{ asset('assets/logo/hosp_logo.jpeg') }}">
     </div>
 
 </div>

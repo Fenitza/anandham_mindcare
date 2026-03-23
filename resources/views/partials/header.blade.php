@@ -10,16 +10,36 @@
         class="w-12 md:w-16 h-12 md:h-16 object-contain rounded-xl bg-white/80 p-1 shadow border border-white/30"
       />
       <div class="text-lg md:text-2xl font-serif italic text-primary font-headline tracking-tight">
-        Anandham Mindcare
+        Anandham Mindcare Foundation
       </div>
     </div>
 
     <!-- DESKTOP MENU -->
     <div class="hidden lg:flex items-center gap-x-8">
-      <a class="text-primary font-bold border-b-2 border-secondary pb-1 text-sm tracking-wide" href="#">About Us</a>
-      <a class="text-on-surface-variant text-sm hover:text-primary">Services</a>
-      <a class="text-on-surface-variant text-sm hover:text-primary" href="{{ route('courses') }}">Courses</a>
-      <a class="text-on-surface-variant text-sm hover:text-primary">Contact Us</a>
+      <a class="{{ request()->routeIs('hospital') ? 'text-primary font-bold border-b-2 border-secondary pb-1 text-sm tracking-wide' : 'text-on-surface-variant text-sm hover:text-primary' }}" 
+        href="{{ route('hospital') }}">
+        Home
+      </a>
+
+      <a class="{{ request()->routeIs('about-us') ? 'text-primary font-bold border-b-2 border-secondary pb-1 text-sm tracking-wide' : 'text-on-surface-variant text-sm hover:text-primary' }}" 
+        href="{{ route('about-us') }}">
+        About Us
+      </a>
+
+      <a class="{{ request()->routeIs('services') ? 'text-primary font-bold border-b-2 border-secondary pb-1 text-sm tracking-wide' : 'text-on-surface-variant text-sm hover:text-primary' }}" 
+        href="{{ route('services') }}">
+        Services
+      </a>
+
+      <a class="{{ request()->routeIs('courses') ? 'text-primary font-bold border-b-2 border-secondary pb-1 text-sm tracking-wide' : 'text-on-surface-variant text-sm hover:text-primary' }}" 
+        href="{{ route('courses') }}">
+        Courses
+      </a>
+
+      <a class="{{ request()->routeIs('contact-us') ? 'text-primary font-bold border-b-2 border-secondary pb-1 text-sm tracking-wide' : 'text-on-surface-variant text-sm hover:text-primary' }}" 
+        href="{{ route('contact-us') }}">
+        Contact Us
+      </a>
     </div>
 
     <!-- RIGHT -->
@@ -44,11 +64,11 @@
   <div id="mobileMenu" class="hidden lg:hidden px-6 pb-6">
 
     <div class="flex flex-col gap-4 pt-4 border-t">
-
-      <a class="text-primary font-semibold">About Us</a>
-      <a class="text-on-surface-variant">Services</a>
+      <a class="text-primary font-semibold" href="{{ route('hospital') }}">Home</a>
+      <a class="text-primary font-semibold" href="{{ route('about-us') }}">About Us</a>
+      <a class="text-on-surface-variant" href="{{ route('services') }}">Services</a>
       <a class="text-on-surface-variant" href="{{ route('courses') }}">Courses</a>
-      <a class="text-on-surface-variant">Contact Us</a>
+      <a class="text-on-surface-variant" href="{{ route('contact-us') }}">Contact Us</a>
 
       <button class="mt-4 bg-primary text-white py-2 rounded-lg text-sm">
         Sign In
