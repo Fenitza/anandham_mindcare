@@ -86,24 +86,30 @@
 <div class="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-primary/20"></div>
 </div>
 <!-- Brand Header -->
-<div class="relative z-10">
+<!-- <div class="relative z-10">
 <div class="flex items-center gap-4">
 <img alt="Anandham Mindcare Logo" class="h-16 w-16 rounded-full border-2 border-secondary-fixed/30 bg-white p-1" data-alt="Elegant hospital logo with a minimalist caduceus symbol integrated into a circular crest in deep navy and gold" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZVgNDVxLF-hnNdatfpIuYiL6PDzI7q3LWN8Z3mV4ZM2NDxEeWF4hdS8sKiWvXqNwULvDHT9QHHmgHMte25oh6DEFIkik8HWdz0DjlTTqjnjYTMvD5DOK3ze2_xtUoz89Mc33AJHGTclEeYIreBxvK9e4t1ECz_Rafi6nOWZOkIfR9weI6Xu4QQB2ZpqCDjH20N5vJ7MlajlKal3WJCIbNPcGbUsL0pfv6Q0UTcIxCaviSslCxa8Bel7pr2jDCAACaYeFvZAzeBwSf"/>
 <h1 class="font-headline text-3xl font-bold tracking-tight text-white italic">Anandham Mindcare</h1>
 </div>
-</div>
+</div> -->
 <!-- Academic Sanctuary Quote -->
-<div class="relative z-10 max-w-lg mb-12">
-<div class="bg-surface-container-lowest/10 backdrop-blur-md p-8 rounded-xl perspective-quote border-l-4 border-secondary shadow-2xl">
-<p class="font-headline text-3xl text-white leading-snug mb-4">
-                        "Healing is not merely the absence of illness, but the active pursuit of mental harmony and academic excellence."
-                    </p>
-<p class="font-label text-sm uppercase tracking-widest text-secondary-fixed-dim font-semibold">
-                        Clinical Philosophy • Est. 1994
-                    </p>
+ <div class="flex items-center justify-center min-h-screen">
+<div class="relative z-10 max-w-lg mb-12 mx-auto text-center">
+  <div class="bg-surface-container-lowest/10 backdrop-blur-md p-8 rounded-xl perspective-quote border-l-4 border-secondary shadow-2xl">
+    
+    <p class="font-headline text-3xl text-white leading-snug mb-4">
+      "Healing is not merely the absence of illness, but the active pursuit of mental harmony and academic excellence."
+    </p>
+
+    <p class="font-label text-sm uppercase tracking-widest text-secondary-fixed-dim font-semibold">
+      Clinical Philosophy • Est. 1994
+    </p>
+
+  </div>
 </div>
 </div>
 <!-- Footer Meta -->
+ 
 <div class="relative z-10 flex justify-between items-end text-white/70 font-label text-xs uppercase tracking-tighter">
 <span>Accredited Clinical Research Institution</span>
 <span>Mind &amp; Soul Integration</span>
@@ -165,14 +171,14 @@
 <!-- Submit Button -->
 <div class="pt-4">
 <button class="w-full py-3.5 bg-primary text-white font-label text-xs font-bold uppercase tracking-[0.2em] rounded-lg hover:bg-primary-container transition-all duration-300 shadow-md" type="submit">
-                            Register Clinical Profile
+                            Register Profile
                         </button>
 </div>
 <!-- Alternative Action -->
 <div class="text-center pt-6">
 <p class="text-sm text-on-surface-variant font-body">
-                            Already have a clinical account? 
-                            <a class="text-primary font-bold hover:text-secondary transition-colors underline decoration-outline-variant/30 underline-offset-4 ml-1" href="#">Log In</a>
+                            Already have an account? 
+                            <a class="text-primary font-bold hover:text-secondary transition-colors underline decoration-outline-variant/30 underline-offset-4 ml-1" href="{{ route('signin') }}">Log In</a>
 </p>
 </div></form>
 <!-- Academic Certification Badges -->

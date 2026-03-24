@@ -95,7 +95,7 @@
 <div class="glass-panel editorial-shadow rounded-xl border border-outline-variant/15 overflow-hidden flex flex-col">
 <!-- Branding Header -->
 <div class="pt-12 pb-8 px-10 text-center">
-<img alt="Anandham Mindcare Logo" class="h-20 mx-auto mb-6" data-alt="Elegant medical crest logo featuring academic and healing symbols in deep navy and gold metallic tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKgvLjpOUphkUbJmQc9vjlD1DacaDXRGVy_KD70IiUavbjvzwJ6YtlIbxCVJ2RX2-vJJXRwTGqHnq3YSsSB5n2MXCs0wJGDQA0rsFB1381xUeqeQb0-WFHIMT5Qst9YE_rgiCrQsHbUxun7_3kE1QhoAx_z2iWBaadXcpwal0MyOaKV6qoUAjfPivi0xdfqrtxdM0C_NGCKjT4IzNNwqmPaw8WmJMZfOkAOHaULQHacTUmXN0ee9u78mjqNYZwwDgWWJjha6ZbvWfs"/>
+<img alt="Anandham Mindcare Logo" class="h-20 mx-auto mb-6" data-alt="Elegant medical crest logo featuring academic and healing symbols in deep navy and gold metallic tones" src="{{ asset('assets/logo/academy_logo.jpeg') }}"/>
 <h1 class="font-headline text-4xl font-semibold text-primary tracking-tight leading-tight">
                         Welcome to Anandham
                     </h1>
