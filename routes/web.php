@@ -17,3 +17,14 @@ Route::view('/contact-us', 'pages.hospital.contact')->name('contact-us');
 Route::view('/signin', 'pages.auth.signin')->name('signin');
 Route::view('/register', 'pages.auth.register')->name('register');
 
+// Admin Dashboard Routes (updated paths)
+Route::prefix('admin')->group(function () {
+    Route::view('/dashboard', 'pages.dasboard.admin.dashboard')->name('admin.dashboard');
+    Route::view('/users', 'pages.dasboard.admin.users')->name('admin.users');
+    Route::view('/courses', 'pages.dasboard.admin.courses')->name('admin.courses');
+    Route::view('/attendance', 'pages.dasboard.admin.attendance')->name('admin.attendance');
+    Route::view('/payments', 'pages.dasboard.admin.payments')->name('admin.payments');
+    Route::view('/grant-access', 'pages.dasboard.admin.grant-access')->name('admin.grant-access');
+    Route::view('/quote', 'pages.dasboard.admin.quote')->name('admin.quote');
+});
+
