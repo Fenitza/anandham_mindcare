@@ -46,10 +46,11 @@
     <div class="flex items-center gap-3">
 
       <!-- SIGN IN (HIDE SMALL) -->
-      <button class="hidden sm:flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm">
+      <a href="{{ route('signin') }}" 
+        class="hidden sm:flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm">
         <span class="material-symbols-outlined text-lg">login</span>
         Sign In
-      </button>
+      </a>
 
       <!-- HAMBURGER -->
       <button id="menuBtn" class="lg:hidden flex items-center justify-center w-10 h-10 rounded-lg border">

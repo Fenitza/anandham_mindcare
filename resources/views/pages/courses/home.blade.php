@@ -93,6 +93,8 @@
 </div>
 </section>
 
+@include('pages.courses.catalog')
+
 <!-- Featured Programs - Bento Style -->
 <section class="py-24 px-8 max-w-7xl mx-auto">
 <div class="flex justify-between items-end mb-16 reveal">
