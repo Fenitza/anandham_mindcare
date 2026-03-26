@@ -64,7 +64,7 @@
 <span class="text-xs font-semibold text-on-surface flex items-center gap-1">
 <span class="material-symbols-outlined text-sm">schedule</span> 18:00 - 20:00 IST
                             </span>
-<a class="text-secondary text-sm font-bold underline" href="#">Reserve Seat</a>
+<a class="text-secondary text-sm font-bold underline" href="{{ route('courses.detail') }}">Reserve Seat</a>
 </div>
 </div>
 </div>
@@ -85,7 +85,7 @@
 <span class="text-xs font-semibold text-on-surface flex items-center gap-1">
 <span class="material-symbols-outlined text-sm">schedule</span> 10:00 - 16:00 IST
                             </span>
-<a class="text-secondary text-sm font-bold underline" href="#">Join Waitlist</a>
+<a class="text-secondary text-sm font-bold underline" href="{{ route('courses.detail') }}">Join Waitlist</a>
 </div>
 </div>
 </div>
@@ -93,7 +93,7 @@
 </div>
 </section>
 
-@include('pages.courses.catalog')
+
 
 <!-- Featured Programs - Bento Style -->
 <section class="py-24 px-8 max-w-7xl mx-auto">
@@ -102,7 +102,7 @@
 <h2 class="serif-text text-4xl md:text-5xl text-primary mb-4">Featured Programs</h2>
 <div class="h-1.5 w-24 bg-tertiary-fixed-dim"></div>
 </div>
-<a class="text-secondary font-semibold flex items-center gap-2 hover:underline" href="#">
+<a class="text-secondary font-semibold flex items-center gap-2 hover:underline" href="{{ route('courses.list') }}">
                 View All Courses <span class="material-symbols-outlined">arrow_forward</span>
 </a>
 </div>
@@ -111,9 +111,9 @@
 <div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col reveal">
 <div class="relative h-64 overflow-hidden">
 <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Child and adolescent psychology therapy session illustration" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2oce5KHqmcWjaTFM8TJeru5ZEhlV0-w-ny4-H9VWFBrfXHLDC5ZRlk_cPdnqouwH_RRjsk6EjdV4rKp3hhO_-mv2DPTjgrjIf82cEBG-sobubeWatHDniOCXDZUrWBicPZceY2mdOyjsXX9IRllPz5MbFGTnladHfs7bMC2s5cOnaQrt1MromjqPRGMOxk-G_yOaccZJHJICUgByKmMkbjdJkIVvxJ9TEU-naBIC-lZ6H1tmRPdLDxqnZvTWZL839IVYup2iP6KTq"/>
-<div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded text-xs font-bold text-primary uppercase tracking-tighter">
-                        Enrolling Now
-                    </div>
+<a href="{{ route('courses.detail') }}" class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded text-xs font-bold text-primary uppercase tracking-tighter hover:bg-secondary/10 transition-colors">
+    Enrolling Now
+</a>
 </div>
 <div class="p-8 flex flex-col flex-grow">
 <div class="flex items-center gap-4 text-xs font-semibold text-secondary mb-4 uppercase tracking-widest">
@@ -125,9 +125,9 @@
 <p class="text-on-surface-variant text-sm leading-relaxed mb-8">A comprehensive specialization focusing on developmental psychopathology and early intervention strategies.</p>
 <div class="mt-auto flex items-center justify-between pt-6 border-t border-surface-container">
 <span class="text-sm font-medium text-on-surface/60">Duration: 1 Year</span>
-<button class="text-primary font-bold text-sm uppercase tracking-widest hover:text-secondary flex items-center gap-1 group/btn">
+<a href="{{ route('courses.detail') }}" class="text-primary font-bold text-sm uppercase tracking-widest hover:text-secondary flex items-center gap-1 group/btn">
                             Register <span class="material-symbols-outlined text-sm group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
-</button>
+</a>
 </div>
 </div>
 </div>
@@ -146,9 +146,9 @@
 <p class="text-on-surface-variant text-sm leading-relaxed mb-8">Advanced diagnostic training and therapeutic techniques for practicing psychologists seeking refinement.</p>
 <div class="mt-auto flex items-center justify-between pt-6 border-t border-surface-container">
 <span class="text-sm font-medium text-on-surface/60">Duration: 6 Months</span>
-<button class="text-primary font-bold text-sm uppercase tracking-widest hover:text-secondary flex items-center gap-1 group/btn">
+<a href="{{ route('courses.detail') }}" class="text-primary font-bold text-sm uppercase tracking-widest hover:text-secondary flex items-center gap-1 group/btn">
                             Register <span class="material-symbols-outlined text-sm group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
-</button>
+</a>
 </div>
 </div>
 </div>

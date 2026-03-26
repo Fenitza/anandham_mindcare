@@ -10,9 +10,14 @@ Route::get('/', function () {
 Route::view('/hospital', 'pages.hospital.home')->name('hospital');
 Route::view('/courses', 'pages.courses.home')->name('courses');
 Route::view('/courses/catalog', 'pages.courses.catalog')->name('courses.catalog');
+Route::view('/courses/list', 'pages.courses.course_list')->name('courses.list');
+Route::view('/courses/detail', 'pages.courses.course_detail')->name('courses.detail');
+Route::view('/courses/enroll', 'pages.courses.course_enroll')->name('courses.enroll');
+Route::view('/courses/syllabus', 'pages.courses.course_syllabus')->name('courses.syllabus');
 Route::view('/services', 'pages.hospital.services')->name('services');
 Route::view('/about-us', 'pages.hospital.about')->name('about-us');
 Route::view('/contact-us', 'pages.hospital.contact')->name('contact-us');
+Route::view('/courses/list', 'pages.courses.course_list')->name('courses.list');
 
 //sign in and sign up
 Route::view('/signin', 'pages.auth.signin')->name('signin');

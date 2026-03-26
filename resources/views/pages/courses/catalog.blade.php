@@ -8,7 +8,7 @@
               "primary-fixed-dim": "#acc7ff",
               "surface-container-low": "#f2f4f7",
               "secondary-fixed": "#ffdf90",
-              "inverse-surface": "#2d3133",
+              "inverse-surface": "#225c79",
               "background": "#f7f9fc",
               "on-error": "#ffffff",
               "surface-container-high": "#e6e8eb",
@@ -112,86 +112,121 @@
             scroll-behavior: smooth;
         }
     </style>
+<section class="py-6 sm:py-14 md:py-20 px-1 sm:px-4 md:px-8 bg-surface-container-low">
+  <div class="max-w-7xl mx-auto">
+    <!-- Heading -->
+    <div class="text-center max-w-2xl mx-auto mb-6 sm:mb-12 md:mb-20 reveal px-1 sm:px-2">
+      <h2 class="serif-text text-xl sm:text-2xl md:text-4xl text-primary mb-2 sm:mb-3 md:mb-4">
+        Our Exclusive Courses
+      </h2>
+      <p class="text-on-surface-variant text-xs sm:text-sm md:text-base">
+        Explore our comprehensive range of mental health courses designed for professionals and enthusiasts alike.
+      </p>
+    </div>
 
-<!-- Carousel Wrapper -->
- <section class="py-24 px-8 bg-surface-container-low">
-<div class="flex overflow-x-auto hide-scrollbar gap-8 pb-8 snap-x scroll-smooth" id="carousel">
-<!-- Category: Free -->
-<div class="reveal-card min-w-[320px] md:min-w-[400px] snap-start bg-surface-container-lowest rounded-xl p-8 border border-outline-variant/15 course-card-hover group">
-<div class="flex justify-between items-start mb-6">
-<div class="p-4 bg-tertiary-fixed rounded-lg text-on-tertiary-fixed-variant transition-transform group-hover:scale-110">
-<span class="material-symbols-outlined">school</span>
-</div>
-<span class="px-3 py-1 bg-surface-container-high rounded-full text-xs font-bold uppercase tracking-wider">Free Access</span>
-</div>
-<h3 class="font-headline text-2xl text-primary mb-2">Introductory Webinars</h3>
-<p class="text-on-surface-variant mb-6 text-sm leading-relaxed">Essential foundations of mental health awareness and basic clinical vocabulary for newcomers.</p>
-<div class="space-y-3 mb-8">
-<div class="flex items-center gap-2 text-sm transition-all group-hover:translate-x-1">
-<span class="material-symbols-outlined text-secondary text-lg">check_circle</span>
-<span>Mental Health Literacy 101</span>
-</div>
-<div class="flex items-center gap-2 text-sm transition-all group-hover:translate-x-1 delay-75">
-<span class="material-symbols-outlined text-secondary text-lg">check_circle</span>
-<span>Basics of Self-Regulation</span>
-</div>
-</div>
-<button class="w-full py-3 text-secondary font-semibold border border-secondary/20 rounded-md group-hover:bg-secondary group-hover:text-white transition-all">
-                        Enroll Free
-                    </button>
-</div>
-<!-- Category: Premium -->
-<div class="reveal-card min-w-[320px] md:min-w-[400px] snap-start bg-primary text-white rounded-xl p-8 shadow-xl relative overflow-hidden course-card-hover group">
-<div class="absolute top-0 right-0 p-12 bg-secondary/10 rounded-full -mr-6 -mt-6 transition-transform duration-700 group-hover:scale-150 group-hover:opacity-20"></div>
-<div class="relative z-10">
-<div class="flex justify-between items-start mb-6">
-<div class="p-4 bg-white/10 backdrop-blur rounded-lg transition-transform group-hover:rotate-6">
-<span class="material-symbols-outlined text-secondary-fixed">workspace_premium</span>
-</div>
-<span class="px-3 py-1 bg-secondary-fixed text-on-secondary-fixed rounded-full text-xs font-bold uppercase tracking-wider">Most Popular</span>
-</div>
-<h3 class="font-headline text-2xl mb-2">CBT Mastery Certification</h3>
-<p class="text-primary-fixed-dim mb-6 text-sm leading-relaxed">Advanced clinical techniques and cognitive restructuring frameworks for practicing psychologists.</p>
-<div class="space-y-3 mb-8">
-<div class="flex items-center gap-2 text-sm transition-all group-hover:translate-x-2">
-<span class="material-symbols-outlined text-secondary-fixed-dim text-lg" data-weight="fill">verified</span>
-<span>Accredited clinical credits</span>
-</div>
-<div class="flex items-center gap-2 text-sm transition-all group-hover:translate-x-2 delay-75">
-<span class="material-symbols-outlined text-secondary-fixed-dim text-lg" data-weight="fill">verified</span>
-<span>1-on-1 Mentorship sessions</span>
-</div>
-</div>
-<button class="w-full py-3 bg-secondary-fixed text-on-secondary-fixed font-semibold rounded-md hover:brightness-110 active:scale-95 transition-all">
-                            View Premium Path
-                        </button>
-</div>
-</div>
-<!-- Category: Special -->
-<div class="reveal-card min-w-[320px] md:min-w-[400px] snap-start bg-surface-container-lowest rounded-xl p-8 border border-outline-variant/15 course-card-hover group">
-<div class="flex justify-between items-start mb-6">
-<div class="p-4 bg-secondary-fixed rounded-lg text-on-secondary-fixed transition-transform group-hover:-rotate-6">
-<span class="material-symbols-outlined">diversity_3</span>
-</div>
-<span class="px-3 py-1 bg-surface-container-high rounded-full text-xs font-bold uppercase tracking-wider">Institutional</span>
-</div>
-<h3 class="font-headline text-2xl text-primary mb-2">Corporate Mindfulness</h3>
-<p class="text-on-surface-variant mb-6 text-sm leading-relaxed">Tailored workshops designed for organizational leaders and high-stress professional domains.</p>
-<div class="space-y-3 mb-8">
-<div class="flex items-center gap-2 text-sm transition-all group-hover:translate-x-1">
-<span class="material-symbols-outlined text-secondary text-lg">settings_suggest</span>
-<span>Customized Curriculum</span>
-</div>
-<div class="flex items-center gap-2 text-sm transition-all group-hover:translate-x-1 delay-75">
-<span class="material-symbols-outlined text-secondary text-lg">settings_suggest</span>
-<span>On-site Clinical Support</span>
-</div>
-</div>
-<button class="w-full py-3 text-primary font-semibold border border-primary/20 rounded-md group-hover:bg-primary group-hover:text-white transition-all">
-                        Request Quote
-                    </button>
-</div>
-</div>
-</div>
-</section>
+    <!-- Carousel Wrapper -->
+    <section class="py-2 sm:py-8 md:py-16 px-0 sm:px-2 md:px-4 bg-surface-container-low">
+      <div class="w-full">
+        <!-- Scroll Container -->
+        <div class="flex overflow-x-auto hide-scrollbar gap-3 sm:gap-5 md:gap-8 pb-4 snap-x snap-mandatory scroll-smooth -mx-1 sm:mx-0">
+          <!-- Free -->
+          <div class="reveal-card w-[90vw] xs:w-[85vw] sm:w-[70vw] md:w-[360px] lg:w-[380px] max-w-[95vw] sm:max-w-[70vw] md:max-w-[360px] lg:max-w-[380px] snap-start bg-surface-container-lowest rounded-xl p-3 xs:p-4 sm:p-6 md:p-8 border border-outline-variant/15 course-card-hover group flex-shrink-0 min-w-0">
+            <div class="flex justify-between items-start mb-3 xs:mb-4 sm:mb-6">
+              <div class="p-2 xs:p-3 sm:p-4 bg-tertiary-fixed rounded-lg text-on-tertiary-fixed-variant transition-transform group-hover:scale-110">
+                <span class="material-symbols-outlined">school</span>
+              </div>
+              <span class="px-2 py-1 sm:px-3 sm:py-1 bg-surface-container-high rounded-full text-xs font-bold uppercase tracking-wider">
+                Free Access
+              </span>
+            </div>
+            <h3 class="font-headline text-base xs:text-lg sm:text-xl md:text-2xl text-primary mb-1 xs:mb-2">
+              Introductory Webinars
+            </h3>
+            <p class="text-on-surface-variant mb-3 xs:mb-4 sm:mb-6 text-xs xs:text-sm leading-relaxed">
+              Essential foundations of mental health awareness and basic clinical vocabulary for newcomers.
+            </p>
+            <div class="space-y-1 xs:space-y-2 sm:space-y-3 mb-4 xs:mb-6 sm:mb-8">
+              <div class="flex items-center gap-2 text-xs xs:text-sm">
+                <span class="material-symbols-outlined text-secondary text-base xs:text-lg">check_circle</span>
+                <span>Mental Health Literacy 101</span>
+              </div>
+              <div class="flex items-center gap-2 text-xs xs:text-sm">
+                <span class="material-symbols-outlined text-secondary text-base xs:text-lg">check_circle</span>
+                <span>Basics of Self-Regulation</span>
+              </div>
+            </div>
+            <a href="{{ route('courses.list') }}"
+               class="block w-full py-2 xs:py-3 bg-secondary-fixed text-on-secondary-fixed font-semibold rounded-md hover:brightness-110 active:scale-95 transition-all text-center text-xs xs:text-sm sm:text-base">
+              Enroll Free
+            </a>
+          </div>
+          <!-- Premium -->
+          <div class="reveal-card w-[90vw] xs:w-[85vw] sm:w-[70vw] md:w-[360px] lg:w-[380px] max-w-[95vw] sm:max-w-[70vw] md:max-w-[360px] lg:max-w-[380px] snap-start bg-primary text-white rounded-xl p-3 xs:p-4 sm:p-6 md:p-8 shadow-xl relative overflow-hidden course-card-hover group flex-shrink-0 min-w-0">
+            <div class="absolute top-0 right-0 p-8 xs:p-10 bg-secondary/10 rounded-full -mr-4 xs:-mr-6 -mt-4 xs:-mt-6"></div>
+            <div class="relative z-10">
+              <div class="flex justify-between items-start mb-3 xs:mb-4 sm:mb-6">
+                <div class="p-2 xs:p-3 sm:p-4 bg-white/10 backdrop-blur rounded-lg">
+                  <span class="material-symbols-outlined text-secondary-fixed">workspace_premium</span>
+                </div>
+                <span class="px-2 py-1 sm:px-3 sm:py-1 bg-secondary-fixed text-on-secondary-fixed rounded-full text-xs font-bold uppercase tracking-wider">
+                  Most Popular
+                </span>
+              </div>
+              <h3 class="font-headline text-base xs:text-lg sm:text-xl md:text-2xl mb-1 xs:mb-2">
+                CBT Mastery Certification
+              </h3>
+              <p class="text-primary-fixed-dim mb-3 xs:mb-4 sm:mb-6 text-xs xs:text-sm leading-relaxed">
+                Advanced clinical techniques and cognitive restructuring frameworks for practicing psychologists.
+              </p>
+              <div class="space-y-1 xs:space-y-2 sm:space-y-3 mb-4 xs:mb-6 sm:mb-8">
+                <div class="flex items-center gap-2 text-xs xs:text-sm">
+                  <span class="material-symbols-outlined text-secondary-fixed-dim text-base xs:text-lg">verified</span>
+                  <span>Accredited clinical credits</span>
+                </div>
+                <div class="flex items-center gap-2 text-xs xs:text-sm">
+                  <span class="material-symbols-outlined text-secondary-fixed-dim text-base xs:text-lg">verified</span>
+                  <span>1-on-1 Mentorship sessions</span>
+                </div>
+              </div>
+              <a href="{{ route('courses.list') }}"
+                 class="block w-full py-2 xs:py-3 bg-secondary-fixed text-on-secondary-fixed font-semibold rounded-md hover:brightness-110 active:scale-95 transition-all text-center text-xs xs:text-sm sm:text-base">
+                View Premium Path
+              </a>
+            </div>
+          </div>
+          <!-- Special -->
+          <div class="reveal-card w-[90vw] xs:w-[85vw] sm:w-[70vw] md:w-[360px] lg:w-[380px] max-w-[95vw] sm:max-w-[70vw] md:max-w-[360px] lg:max-w-[380px] snap-start bg-surface-container-lowest rounded-xl p-3 xs:p-4 sm:p-6 md:p-8 border border-outline-variant/15 course-card-hover group flex-shrink-0 min-w-0">
+            <div class="flex justify-between items-start mb-3 xs:mb-4 sm:mb-6">
+              <div class="p-2 xs:p-3 sm:p-4 bg-secondary-fixed rounded-lg text-on-secondary-fixed">
+                <span class="material-symbols-outlined">diversity_3</span>
+              </div>
+              <span class="px-2 py-1 sm:px-3 sm:py-1 bg-surface-container-high rounded-full text-xs font-bold uppercase tracking-wider">
+                Institutional
+              </span>
+            </div>
+            <h3 class="font-headline text-base xs:text-lg sm:text-xl md:text-2xl text-primary mb-1 xs:mb-2">
+              Corporate Mindfulness
+            </h3>
+            <p class="text-on-surface-variant mb-3 xs:mb-4 sm:mb-6 text-xs xs:text-sm leading-relaxed">
+              Tailored workshops designed for organizational leaders and high-stress professional domains.
+            </p>
+            <div class="space-y-1 xs:space-y-2 sm:space-y-3 mb-4 xs:mb-6 sm:mb-8">
+              <div class="flex items-center gap-2 text-xs xs:text-sm">
+                <span class="material-symbols-outlined text-secondary text-base xs:text-lg">settings_suggest</span>
+                <span>Customized Curriculum</span>
+              </div>
+              <div class="flex items-center gap-2 text-xs xs:text-sm">
+                <span class="material-symbols-outlined text-secondary text-base xs:text-lg">settings_suggest</span>
+                <span>On-site Clinical Support</span>
+              </div>
+            </div>
+            <a href="{{ route('courses.list') }}"
+               class="block w-full py-2 xs:py-3 text-primary font-semibold border border-primary/20 rounded-md hover:bg-primary hover:text-white transition-all text-center text-xs xs:text-sm sm:text-base">
+              Request Quote
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </section>
