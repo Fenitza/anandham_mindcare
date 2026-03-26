@@ -104,7 +104,8 @@
                     </p>
 </div>
 <!-- Form Section -->
-<form class="px-10 pb-12 space-y-6">
+<form method="POST" action="{{ route('login') }}" class="px-10 pb-12 space-y-6">
+    @csrf
 <!-- Email Field -->
 <div class="space-y-2">
 <label class="block text-xs font-semibold text-on-surface-variant tracking-widest uppercase" for="email">

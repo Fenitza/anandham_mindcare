@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\UserAuthController;
 
 Route::get('/', function () {
     return view('pages.home');
@@ -16,6 +17,19 @@ Route::view('/contact-us', 'pages.hospital.contact')->name('contact-us');
 //sign in and sign up
 Route::view('/signin', 'pages.auth.signin')->name('signin');
 Route::view('/register', 'pages.auth.register')->name('register');
+
+Route::prefix('user')->group(function () {
+    Route::middleware('auth')->group(function () {
+        Route::view('/dashboard', 'pages.dasboard.users.dashboard')->name('user.dashboard');
+    });
+    }); 
+
+Route::post('/login', [UserAuthController::class, 'login'])->name('login');
+
+// OPTIONAL (prevents error if /login opened directly)
+Route::get('/login', function () {
+    return redirect()->route('signin');
+});
 
 // Admin Dashboard Routes (updated paths)
 Route::prefix('admin')->group(function () {
