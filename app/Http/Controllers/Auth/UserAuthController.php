@@ -51,9 +51,15 @@ class UserAuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials)) {
-            return redirect()->route('user.dashboard');
-        }
+        // 🔹 Try Admin Login First
+    if (Auth::guard('admin')->attempt($credentials)) {
+        return redirect()->route('admin.dashboard');
+    }
+
+    // 🔹 Try User Login
+    if (Auth::guard('web')->attempt($credentials)) {
+        return redirect()->route('user.dashboard');
+    }
 
         return back()->with('error', 'Invalid credentials');
     }
@@ -61,7 +67,13 @@ class UserAuthController extends Controller
     // 🔹 Logout
     public function logout()
     {
-        Auth::logout();
+        if (Auth::guard('admin')->check()) {
+            Auth::guard('admin')->logout();
+        }
+
+        if (Auth::check()) {
+            Auth::logout();
+        }
         return redirect()->route('signin');
     }
 }

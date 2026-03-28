@@ -37,7 +37,7 @@ Route::get('/login', function () {
 });
 
 // Admin Dashboard Routes (updated paths)
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::view('/dashboard', 'pages.dasboard.admin.dashboard')->name('admin.dashboard');
     Route::view('/users', 'pages.dasboard.admin.users')->name('admin.users');
     Route::view('/courses', 'pages.dasboard.admin.courses')->name('admin.courses');
