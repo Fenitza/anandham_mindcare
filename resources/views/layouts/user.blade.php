@@ -92,5 +92,7 @@
 <main class="ml-64 pt-28 px-12 pb-20 max-w-7xl">
 @yield('content')
 </main>
+<script src="{{ asset('js/dashboard.js') }}"></script>
+@stack('scripts')
 </body>
 </html>

@@ -65,15 +65,22 @@ class UserAuthController extends Controller
     }
 
     // 🔹 Logout
-    public function logout()
+    public function logout(Request $request)
     {
+        // 🔹 Logout Admin
         if (Auth::guard('admin')->check()) {
             Auth::guard('admin')->logout();
         }
 
-        if (Auth::check()) {
-            Auth::logout();
+        // 🔹 Logout User (web)
+        if (Auth::guard('web')->check()) {
+            Auth::guard('web')->logout();
         }
+
+        // 🔹 Invalidate session (IMPORTANT)
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect()->route('signin');
     }
 }

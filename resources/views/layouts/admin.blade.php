@@ -86,6 +86,7 @@
             @yield('content')
         </div>
     </main>
+    <script src="{{ asset('js/dashboard.js') }}"></script>
     @stack('scripts')
 </body>
 </html>

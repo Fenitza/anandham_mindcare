@@ -10,9 +10,40 @@
             <span class="material-symbols-outlined">notifications</span>
             <span class="absolute top-0 right-0 w-2 h-2 bg-secondary rounded-full border-2 border-white"></span>
         </button>
-        <div class="flex items-center gap-3 pl-6 border-l border-slate-200">
-            <span class="text-sm font-label font-medium text-primary">Administrative Portal</span>
-            <span class="material-symbols-outlined text-primary text-3xl">account_circle</span>
+        <div class="relative flex items-center gap-3 pl-6 border-l border-slate-200">
+    
+            <span class="text-sm font-label font-medium text-primary">
+                Administrative Portal
+            </span>
+
+            <!-- Profile Dropdown -->
+            <div class="relative">
+                <button onclick="toggleDropdown()" class="flex items-center focus:outline-none">
+                    <span class="material-symbols-outlined text-primary text-3xl cursor-pointer">
+                        account_circle
+                    </span>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-44 bg-white rounded-xl shadow-lg border border-slate-200 z-50">
+                    
+                    <a href="#" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">
+                        Profile
+                    </a>
+
+                    <a href="#" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">
+                        Settings
+                    </a>
+
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                            Logout
+                        </button>
+                    </form>
+
+                </div>
+            </div>
         </div>
     </div>
 </header>

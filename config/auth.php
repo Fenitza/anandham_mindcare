@@ -48,17 +48,6 @@ return [
         'driver' => 'session',
         'provider' => 'admins',
     ],
-],'guards' => [
-    'web' => [
-        'driver' => 'session',
-        'provider' => 'users',
-    ],
-
-    // ✅ ADD THIS
-    'admin' => [
-        'driver' => 'session',
-        'provider' => 'admins',
-    ],
 ],
 
     /*
@@ -79,17 +68,6 @@ return [
     */
 
     'providers' => [
-    'users' => [
-        'driver' => 'eloquent',
-        'model' => env('AUTH_MODEL', User::class),
-    ],
-
-    // ✅ ADD THIS
-    'admins' => [
-        'driver' => 'eloquent',
-        'model' => App\Models\Admin::class,
-    ],
-],'providers' => [
     'users' => [
         'driver' => 'eloquent',
         'model' => env('AUTH_MODEL', User::class),

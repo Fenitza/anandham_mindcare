@@ -19,9 +19,20 @@ Route::view('/about-us', 'pages.hospital.about')->name('about-us');
 Route::view('/contact-us', 'pages.hospital.contact')->name('contact-us');
 Route::view('/courses/list', 'pages.courses.course_list')->name('courses.list');
 
-//sign in and sign up
+/*
+|--------------------------------------------------------------------------
+| Auth Pages
+|--------------------------------------------------------------------------
+*/
 Route::view('/signin', 'pages.auth.signin')->name('signin');
 Route::view('/register', 'pages.auth.register')->name('register');
+
+Route::post('/login', [UserAuthController::class, 'login'])->name('login');
+Route::post('/logout', [UserAuthController::class, 'logout'])->name('logout');
+
+// Prevent direct /login access
+Route::get('/login', fn() => redirect()->route('signin'));
+
 
 Route::prefix('user')->group(function () {
     Route::middleware('auth')->group(function () {
