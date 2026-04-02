@@ -41,10 +41,13 @@
 <!-- Action Bar -->
 <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
 <div class="flex items-center gap-3">
-<button class="bg-primary hover:bg-primary-container text-white px-6 py-2.5 rounded-lg flex items-center gap-2 transition-all font-medium text-sm">
-<span class="material-symbols-outlined text-lg" data-icon="person_add">person_add</span>
-                    Add New User
-                </button>
+<a href="{{ route('admin.users.add') }}"
+   class="bg-primary hover:bg-primary-container text-white px-6 py-2.5 rounded-lg flex items-center gap-2 transition-all font-medium text-sm">
+    
+    <span class="material-symbols-outlined text-lg">person_add</span>
+    Add New User
+
+</a>
 <button class="border border-outline-variant/30 hover:bg-surface-container-low px-6 py-2.5 rounded-lg flex items-center gap-2 transition-all font-medium text-sm text-on-surface-variant">
 <span class="material-symbols-outlined text-lg" data-icon="filter_list">filter_list</span>
                     Filter View
