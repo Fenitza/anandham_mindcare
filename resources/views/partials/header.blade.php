@@ -4,7 +4,7 @@
   <div class="flex justify-between items-center max-w-7xl mx-auto px-4 md:px-8 h-20">
 
     <!-- LEFT: LOGO -->
-    <div class="flex items-center gap-3">
+    <a href="{{ route('hospital') }}" class="flex items-center gap-3">
       <img 
         src="{{ asset('assets/logo/hosp_logo.jpeg') }}"
         class="w-12 md:w-16 h-12 md:h-16 object-contain rounded-xl bg-white/80 p-1 shadow border border-white/30"
@@ -12,14 +12,14 @@
       <div class="text-lg md:text-2xl font-serif italic text-primary font-headline tracking-tight">
         Anandham Mindcare Foundation
       </div>
-    </div>
+    </a>
 
     <!-- DESKTOP MENU -->
     <div class="hidden lg:flex items-center gap-x-8">
-      <a class="{{ request()->routeIs('hospital') ? 'text-primary font-bold border-b-2 border-secondary pb-1 text-sm tracking-wide' : 'text-on-surface-variant text-sm hover:text-primary' }}" 
+      <!-- <a class="{{ request()->routeIs('hospital') ? 'text-primary font-bold border-b-2 border-secondary pb-1 text-sm tracking-wide' : 'text-on-surface-variant text-sm hover:text-primary' }}" 
         href="{{ route('hospital') }}">
         Home
-      </a>
+      </a> -->
 
       <a class="{{ request()->routeIs('about-us') ? 'text-primary font-bold border-b-2 border-secondary pb-1 text-sm tracking-wide' : 'text-on-surface-variant text-sm hover:text-primary' }}" 
         href="{{ route('about-us') }}">
@@ -29,6 +29,16 @@
       <a class="{{ request()->routeIs('services') ? 'text-primary font-bold border-b-2 border-secondary pb-1 text-sm tracking-wide' : 'text-on-surface-variant text-sm hover:text-primary' }}" 
         href="{{ route('services') }}">
         Services
+      </a>
+
+      <a class="{{ request()->routeIs('gallery') ? 'text-primary font-bold border-b-2 border-secondary pb-1 text-sm tracking-wide' : 'text-on-surface-variant text-sm hover:text-primary' }}" 
+        href="{{ route('gallery') }}">
+        Gallery
+      </a>
+
+      <a class="{{ request()->routeIs('blogs') ? 'text-primary font-bold border-b-2 border-secondary pb-1 text-sm tracking-wide' : 'text-on-surface-variant text-sm hover:text-primary' }}" 
+        href="{{ route('blogs') }}">
+        Blogs
       </a>
 
       <a class="{{ request()->routeIs('courses') ? 'text-primary font-bold border-b-2 border-secondary pb-1 text-sm tracking-wide' : 'text-on-surface-variant text-sm hover:text-primary' }}" 

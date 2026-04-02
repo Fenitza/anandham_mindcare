@@ -15,6 +15,8 @@ Route::view('/courses/detail', 'pages.courses.course_detail')->name('courses.det
 Route::view('/courses/enroll', 'pages.courses.course_enroll')->name('courses.enroll');
 Route::view('/courses/syllabus', 'pages.courses.course_syllabus')->name('courses.syllabus');
 Route::view('/services', 'pages.hospital.services')->name('services');
+Route::view('/gallery', 'pages.hospital.gallery')->name('gallery');
+Route::view('/blogs', 'pages.hospital.blogs')->name('blogs');
 Route::view('/about-us', 'pages.hospital.about')->name('about-us');
 Route::view('/contact-us', 'pages.hospital.contact')->name('contact-us');
 Route::view('/courses/list', 'pages.courses.course_list')->name('courses.list');

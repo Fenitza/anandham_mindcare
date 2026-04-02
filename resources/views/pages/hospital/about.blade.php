@@ -2,7 +2,7 @@
 
 @section('content')
 
-<main class="pt-16">
+
 <!-- Hero Banner Section -->
 <section class="relative h-[450px] md:h-[550px] flex items-center overflow-hidden animate-fadeInUp">
 <div class="absolute inset-0 z-0 scale-105 animate-[scaleIn_1.5s_ease-out_forwards]">
@@ -11,6 +11,7 @@
 </div>
 <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-8 w-full">
 <div class="max-w-2xl">
+
 <span class="text-secondary font-medium tracking-[0.2em] uppercase text-xs mb-3 md:mb-4 block animate-fadeInUp stagger-1">Foundations of Healing</span>
 <h1 class="text-5xl md:text-7xl font-serif text-white italic leading-tight animate-fadeInUp stagger-2">About Us</h1>
 <p class="text-white/90 text-base md:text-lg mt-4 md:mt-6 font-light max-w-lg leading-relaxed animate-fadeInUp stagger-3">
