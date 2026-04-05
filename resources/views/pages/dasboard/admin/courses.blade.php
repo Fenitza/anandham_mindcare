@@ -6,10 +6,11 @@
 <section class="mb-16">
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-4">
         <h2 class="text-5xl font-bold text-primary leading-tight">Curriculum Management</h2>
-        <button class="flex flex-row items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-primary-container text-white rounded-xl text-sm font-medium shadow-lg shadow-primary/10 hover:scale-[1.02] transition-all active:opacity-80">
+        <a href="{{ route('admin.courses.add') }}"
+         class="flex flex-row items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-primary-container text-white rounded-xl text-sm font-medium shadow-lg shadow-primary/10 hover:scale-[1.02] transition-all active:opacity-80">
             <span class="material-symbols-outlined text-sm" data-icon="add">add</span>
             <span>Create New Course</span>
-        </button>
+        </a>
     </div>
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
         <p class="text-on-surface-variant text-lg leading-relaxed font-body mb-2 md:mb-0">

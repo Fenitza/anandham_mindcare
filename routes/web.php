@@ -55,6 +55,7 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::view('/users', 'pages.dasboard.admin.users')->name('admin.users');
     Route::view('/users/add', 'pages.dasboard.admin.add_user')->name('admin.users.add');
     Route::view('/courses', 'pages.dasboard.admin.courses')->name('admin.courses');
+    Route::view('/courses/add', 'pages.dasboard.admin.add_course')->name('admin.courses.add');
     Route::view('/attendance', 'pages.dasboard.admin.attendance')->name('admin.attendance');
     Route::view('/payments', 'pages.dasboard.admin.payments')->name('admin.payments');
     Route::view('/grant-access', 'pages.dasboard.admin.grant-access')->name('admin.grant-access');
