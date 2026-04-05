@@ -12,10 +12,10 @@ class UserAuthController extends Controller
     // 🔹 Register
     public function register(Request $request)
 {
-    $request->merge([
-        'password' => trim($request->password),
-        'password_confirmation' => trim($request->password_confirmation),
-    ]);
+    // $request->merge([
+    //     'password' => trim($request->password),
+    //     'password_confirmation' => trim($request->password_confirmation),
+    // ]);
     
 
     $request->validate([
@@ -63,6 +63,38 @@ class UserAuthController extends Controller
 
         return back()->with('error', 'Invalid credentials');
     }
+
+    public function storeUser(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email',
+    ]);
+
+    $defaultPassword = 'Welcome@123'; // 🔐 default password
+
+    User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'phone' => $request->phone,
+
+        // 👇 default password used
+        'password' => Hash::make($defaultPassword),
+
+        'role' => $request->role,
+        'specialization' => $request->specialization,
+        'license_number' => $request->license_number,
+
+        'address' => $request->address,
+        'city' => $request->city,
+        'state' => $request->state,
+        'zip' => $request->zip,
+
+        'status' => $request->status ?? 1,
+    ]);
+
+    return back()->with('success', 'User created with default password: '.$defaultPassword);
+}
 
     // 🔹 Logout
     public function logout(Request $request)

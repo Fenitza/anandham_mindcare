@@ -27,7 +27,14 @@ Route::view('/courses/list', 'pages.courses.course_list')->name('courses.list');
 |--------------------------------------------------------------------------
 */
 Route::view('/signin', 'pages.auth.signin')->name('signin');
-Route::view('/register', 'pages.auth.register')->name('register');
+// Show register page
+Route::get('/register', function () {
+    return view('pages.auth.register');
+})->name('register');
+
+// Handle form submit
+Route::post('/register', [UserAuthController::class, 'register'])
+    ->name('register.store');
 
 Route::post('/login', [UserAuthController::class, 'login'])->name('login');
 Route::post('/logout', [UserAuthController::class, 'logout'])->name('logout');
@@ -54,6 +61,13 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::view('/dashboard', 'pages.dasboard.admin.dashboard')->name('admin.dashboard');
     Route::view('/users', 'pages.dasboard.admin.users')->name('admin.users');
     Route::view('/users/add', 'pages.dasboard.admin.add_user')->name('admin.users.add');
+    Route::post('/
+    
+    
+    
+    
+    users/store', [UserAuthController::class, 'storeUser'])
+    ->name('users.store');
     Route::view('/courses', 'pages.dasboard.admin.courses')->name('admin.courses');
     Route::view('/courses/add', 'pages.dasboard.admin.add_course')->name('admin.courses.add');
     Route::view('/attendance', 'pages.dasboard.admin.attendance')->name('admin.attendance');

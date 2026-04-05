@@ -126,12 +126,16 @@
 <header class="text-center md:text-left mb-8">
 <h2 class="font-headline text-4xl text-primary font-semibold mb-2">Create Account</h2>
 <p class="font-body text-on-surface-variant">Join our clinical community for expert mental healthcare.</p>
+@include('partials.alerts')
 </header>
-<form class="space-y-6"><!-- Full Name -->
+
+  <form class="space-y-6" method="POST" action="{{ route('register.store') }}">
+    @csrf
+  <!-- Full Name -->
 <div class="space-y-1">
 <label class="block font-label text-[10px] font-bold text-primary uppercase tracking-widest ml-1" for="name">Full Name</label>
 <div class="relative">
-<input class="w-full px-0 py-2.5 bg-transparent border-0 border-b-2 border-outline-variant focus:border-secondary focus:ring-0 transition-all placeholder:text-outline/30 font-body text-on-surface" id="name" placeholder="Dr. Jane Smith" type="text"/>
+<input class="w-full px-0 py-2.5 bg-transparent border-0 border-b-2 border-outline-variant focus:border-secondary focus:ring-0 transition-all placeholder:text-outline/30 font-body text-on-surface" id="name" name="name" placeholder="Dr. Jane Smith" type="text"/>
 <span class="absolute right-0 top-2.5 text-outline/40 material-symbols-outlined text-xl">person</span>
 </div>
 </div>
@@ -139,7 +143,7 @@
 <div class="space-y-1">
 <label class="block font-label text-[10px] font-bold text-primary uppercase tracking-widest ml-1" for="email">Email Address</label>
 <div class="relative">
-<input class="w-full px-0 py-2.5 bg-transparent border-0 border-b-2 border-outline-variant focus:border-secondary focus:ring-0 transition-all placeholder:text-outline/30 font-body text-on-surface" id="email" placeholder="clinical@anandham.com" type="email"/>
+<input class="w-full px-0 py-2.5 bg-transparent border-0 border-b-2 border-outline-variant focus:border-secondary focus:ring-0 transition-all placeholder:text-outline/30 font-body text-on-surface" id="email" name="email" placeholder="clinical@anandham.com" type="email"/>
 <span class="absolute right-0 top-2.5 text-outline/40 material-symbols-outlined text-xl">mail</span>
 </div>
 </div>
@@ -147,7 +151,7 @@
 <div class="space-y-1">
 <label class="block font-label text-[10px] font-bold text-primary uppercase tracking-widest ml-1" for="phone">Phone Number</label>
 <div class="relative">
-<input class="w-full px-0 py-2.5 bg-transparent border-0 border-b-2 border-outline-variant focus:border-secondary focus:ring-0 transition-all placeholder:text-outline/30 font-body text-on-surface" id="phone" placeholder="+91 00000 00000" type="tel"/>
+<input class="w-full px-0 py-2.5 bg-transparent border-0 border-b-2 border-outline-variant focus:border-secondary focus:ring-0 transition-all placeholder:text-outline/30 font-body text-on-surface" id="phone" name="phone" placeholder="+91 00000 00000" type="tel"/>
 <span class="absolute right-0 top-2.5 text-outline/40 material-symbols-outlined text-xl">call</span>
 </div>
 </div>
@@ -155,14 +159,32 @@
 <div class="space-y-1">
 <label class="block font-label text-[10px] font-bold text-primary uppercase tracking-widest ml-1" for="password">Password</label>
 <div class="relative">
-<input class="w-full px-0 py-2.5 bg-transparent border-0 border-b-2 border-outline-variant focus:border-secondary focus:ring-0 transition-all placeholder:text-outline/30 font-body text-on-surface" id="password" placeholder="••••••••••••" type="password"/>
+<input class="w-full px-0 py-2.5 bg-transparent border-0 border-b-2 border-outline-variant focus:border-secondary focus:ring-0 transition-all placeholder:text-outline/30 font-body text-on-surface" id="password" name="password" placeholder="••••••••••••" type="password"/>
 <span class="absolute right-0 top-2.5 text-outline/40 material-symbols-outlined text-xl">lock</span>
 </div>
+</div>
+
+<!-- Passwod Confirmation -->
+ <div class="space-y-1">
+    <label class="block font-label text-[10px] font-bold text-primary uppercase tracking-widest ml-1" for="password_confirmation">
+        Confirm Password
+    </label>
+    <div class="relative">
+        <input 
+            id="password_confirmation"
+            name="password_confirmation"
+            type="password"
+            required
+            class="w-full px-0 py-2.5 bg-transparent border-0 border-b-2 border-outline-variant focus:border-secondary focus:ring-0"
+            placeholder="Re-enter password"
+        />
+        <span class="absolute right-0 top-2.5 text-outline/40 material-symbols-outlined text-xl">lock</span>
+    </div>
 </div>
 <!-- Terms of Service -->
 <div class="flex items-start gap-3 py-2">
 <div class="flex items-center h-5">
-<input class="w-4 h-4 border-2 border-outline-variant rounded text-secondary focus:ring-secondary/20 focus:ring-offset-0 transition-all" id="terms" type="checkbox"/>
+<input class="w-4 h-4 border-2 border-outline-variant rounded text-secondary focus:ring-secondary/20 focus:ring-offset-0 transition-all" id="terms" name="terms" type="checkbox"/>
 </div>
 <label class="text-xs text-on-surface-variant font-body leading-normal" for="terms">
                             I agree to the <a class="text-primary font-semibold hover:underline decoration-primary/30" href="#">Terms of Service</a> and <a class="text-primary font-semibold hover:underline decoration-primary/30" href="#">Clinical Privacy Policy</a>.
@@ -170,7 +192,7 @@
 </div>
 <!-- Submit Button -->
 <div class="pt-4">
-<button class="w-full py-3.5 bg-primary text-white font-label text-xs font-bold uppercase tracking-[0.2em] rounded-lg hover:bg-primary-container transition-all duration-300 shadow-md" type="submit">
+<button class="w-full py-3.5 bg-primary text-white font-label text-xs font-bold uppercase tracking-[0.2em] rounded-lg hover:bg-primary-container transition-all duration-300 shadow-md" type="submit" >
                             Register Profile
                         </button>
 </div>

@@ -113,92 +113,175 @@
 </div>
 </div>
 </div>
-<!-- Create User Card -->
-<div class="bg-white rounded-2xl border border-outline-variant/30 shadow-sm overflow-hidden opacity-0 animate-fade-in-up stagger-1">
-<div class="p-12">
-<form class="space-y-14">
-<!-- Grouping: Identity & Access -->
+
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant/15 overflow-hidden transition-all duration-300">
+<div class="p-10">
+<form class="space-y-12" method="POST" action="{{ route('users.store') }}">
+    @csrf
+<!-- Form Section: Identity -->
 <div class="space-y-8">
-<div class="flex items-center gap-4 pb-2 border-b border-surface-container">
-<span class="material-symbols-outlined text-primary text-xl">person_outline</span>
-<h3 class="font-headline text-xl font-bold text-primary">Identity &amp; Access</h3>
+<div class="border-l-4 border-primary/20 pl-4">
+<h3 class="font-headline text-xl font-bold text-primary">Identity</h3>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
-<div class="premium-input-group space-y-2">
-<label class="block font-label text-[10px] font-bold text-on-surface-variant tracking-[0.15em] transition-colors" for="full_name">LEGAL FULL NAME</label>
-<input class="w-full bg-surface-container-low border-0 border-b border-surface-container-highest focus:border-primary focus:ring-0 transition-all font-body text-lg py-3 px-4 rounded-t-lg" id="full_name" placeholder="e.g. Dr. Sarah Jenkins" type="text"/>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+<div class="space-y-1">
+<label class="block font-label text-xs font-bold text-primary tracking-wide" for="full_name">FULL NAME</label>
+<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="full_name" name="name" placeholder="e.g. Dr. Sarah Jenkins" type="text"/>
 </div>
-<div class="premium-input-group space-y-2">
-<label class="block font-label text-[10px] font-bold text-on-surface-variant tracking-[0.15em] transition-colors" for="email">INSTITUTIONAL EMAIL</label>
-<input class="w-full bg-surface-container-low border-0 border-b border-surface-container-highest focus:border-primary focus:ring-0 transition-all font-body text-lg py-3 px-4 rounded-t-lg" id="email" placeholder="sarah.j@anandham.com" type="email"/>
-</div>
+<div class="space-y-1">
+<label class="block font-label text-xs font-bold text-primary tracking-wide" for="email">EMAIL ADDRESS</label>
+<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="email" name="email" placeholder="sarah.j@anandham.com" type="email"/>
 </div>
 </div>
-<!-- Grouping: Clinical Designation -->
-<div class="space-y-8 stagger-2 opacity-0 animate-fade-in-up">
-<div class="flex items-center gap-4 pb-2 border-b border-surface-container">
-<span class="material-symbols-outlined text-primary text-xl">badge</span>
+</div>
+<!-- Form Section: Clinical Designation -->
+<div class="space-y-8">
+<div class="border-l-4 border-primary/20 pl-4">
 <h3 class="font-headline text-xl font-bold text-primary">Clinical Designation</h3>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
-<div class="premium-input-group space-y-2">
-<label class="block font-label text-[10px] font-bold text-on-surface-variant tracking-[0.15em] transition-colors" for="role">ORGANIZATIONAL ROLE</label>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+<div class="space-y-1">
+<label class="block font-label text-xs font-bold text-primary tracking-wide" for="role">USER ROLE</label>
 <div class="relative">
-<select class="w-full bg-surface-container-low border-0 border-b border-surface-container-highest focus:border-primary focus:ring-0 appearance-none transition-all font-body text-lg py-3 px-4 pr-10 cursor-pointer rounded-t-lg" id="role">
-<option value="doctor">Consulting Physician</option>
-<option value="student">Clinical Resident</option>
-<option value="professional">Mental Health Professional</option>
+<select class="w-full bg-surface-container-low border-0 border-b border-surface-container-highest focus:border-primary focus:ring-0 appearance-none transition-all font-body text-lg py-3 px-4 pr-10 cursor-pointer rounded-t-lg" id="role" name="role">
+<option value="doctor">Doctor</option>
+<option value="student">Student</option>
+<option value="professional">Professional</option>
 </select>
-<span class="material-symbols-outlined absolute right-3 top-3.5 pointer-events-none text-slate-400">unfold_more</span>
+<span class="material-symbols-outlined absolute right-0 top-4 pointer-events-none text-slate-400">expand_more</span>
 </div>
 </div>
-<div class="premium-input-group space-y-2">
-<label class="block font-label text-[10px] font-bold text-on-surface-variant tracking-[0.15em] transition-colors" for="specialization">CORE SPECIALIZATION</label>
-<input class="w-full bg-surface-container-low border-0 border-b border-surface-container-highest focus:border-primary focus:ring-0 transition-all font-body text-lg py-3 px-4 rounded-t-lg" id="specialization" placeholder="e.g. Clinical Psychology" type="text"/>
+<div class="space-y-1">
+<label class="block font-label text-xs font-bold text-primary tracking-wide" for="specialization">CLINICAL SPECIALIZATION</label>
+<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="specialization" name="specialization" placeholder="e.g. Cognitive Behavioral Therapy" type="text"/>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-10">
+<div class="space-y-1">
+<label class="block font-label text-xs font-bold text-primary tracking-wide" for="license_number">PROFESSIONAL LICENSE NUMBER</label>
+<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="license_number" name="license_number" placeholder="e.g. LIC-9876543210" type="text"/>
 </div>
 </div>
 </div>
-<!-- Status Toggle Section -->
-<div class="bg-surface-container-lowest border border-outline-variant/20 p-8 rounded-2xl flex items-center justify-between shadow-sm stagger-3 opacity-0 animate-fade-in-up">
-<div class="flex items-center gap-5">
-<div class="p-3.5 bg-primary/5 rounded-xl text-primary">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<!-- Form Section: Contact Details -->
+<div class="space-y-8">
+<div class="border-l-4 border-primary/20 pl-4">
+<h3 class="font-headline text-xl font-bold text-primary">Contact Details</h3>
 </div>
-<div>
-<h4 class="font-headline text-xl font-bold text-primary">Registry Status</h4>
-<p class="font-body text-sm text-on-surface-variant mt-1">Activate user to enable clinical data access and patient assignment.</p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+<div class="space-y-1">
+<label class="block font-label text-xs font-bold text-primary tracking-wide" for="phone">PHONE NUMBER</label> 
+<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="phone" name="phone" placeholder=" 98765 43210
+" type="tel"/>
+</div>
+<div class="space-y-1">
+<label class="block font-label text-xs font-bold text-primary tracking-wide" for="address">STREET ADDRESS</label>
+<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="address" name="address" placeholder="123 Clinical Way" type="text"/>
 </div>
 </div>
-<div class="flex items-center bg-surface p-1.5 rounded-full ring-1 ring-black/5">
-<button class="px-5 py-2 rounded-full text-xs font-bold font-label transition-all duration-300 text-on-surface-variant" type="button">INACTIVE</button>
-<button class="px-5 py-2 rounded-full text-xs font-bold font-label bg-primary text-white shadow-lg shadow-primary/20 transition-all duration-300" type="button">ACTIVE</button>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+<div class="space-y-1">
+<label class="block font-label text-xs font-bold text-primary tracking-wide" for="city">CITY</label>
+<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="city" name="city" placeholder="Healthcare City" type="text"/>
 </div>
+<div class="space-y-1">
+<label class="block font-label text-xs font-bold text-primary tracking-wide" for="state">STATE</label>
+<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="state" name="state" placeholder="State" type="text"/>
+</div>
+<div class="space-y-1">
+<label class="block font-label text-xs font-bold text-primary tracking-wide" for="zip">ZIP CODE</label>
+<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="zip" name="zip" placeholder="00000" type="text"/>
+</div>
+</div>
+</div>
+<!-- Form Section: Status & Toggle -->
+
+<!-- Hidden input (this goes to backend) -->
+<input type="hidden" name="status" id="status" value="{{ $user->status ?? 1 }}">
+
+<div class="bg-surface-container-low p-6 rounded-lg flex items-center justify-between">
+    
+    <div class="flex items-center gap-4">
+        <div class="p-3 bg-white rounded-full text-secondary">
+            <span class="material-symbols-outlined">verified_user</span>
+        </div>
+        <div>
+            <h4 class="font-headline text-xl font-semibold text-primary">Account Status</h4>
+            <p class="font-body text-sm text-on-surface-variant">
+                Active users can access patient records immediately
+            </p>
+        </div>
+    </div>
+
+    <div class="flex items-center">
+        <span class="mr-3 font-label text-sm text-on-surface-variant">Inactive</span>
+
+        <!-- Toggle Button -->
+        <button 
+            id="statusToggle"
+            aria-checked="true"
+            type="button"
+            class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full transition duration-200 ease-in-out bg-primary">
+
+            <span id="toggleCircle"
+                class="translate-x-5 inline-block h-5 w-5 transform rounded-full bg-white shadow transition duration-200 ease-in-out">
+            </span>
+        </button>
+
+        <span class="ml-3 font-label text-sm font-semibold text-primary">Active</span>
+    </div>
 </div>
 <!-- Footer Actions -->
-<div class="flex flex-col sm:flex-row items-center justify-end gap-6 pt-10 border-t border-surface-container stagger-4 opacity-0 animate-fade-in-up">
-<button class="w-full sm:w-auto px-8 py-3 text-on-surface-variant hover:text-primary font-label text-sm font-semibold transition-colors duration-200" type="button">
-                                Discard Changes
+<div class="flex flex-col sm:flex-row items-center justify-end gap-6 pt-8 border-t border-outline-variant/10">
+<button class="w-full sm:w-auto px-8 py-3 text-on-surface-variant hover:text-primary font-label text-sm font-semibold transition-colors" type="button">
+                                Cancel
                             </button>
-<button class="w-full sm:w-auto px-12 py-4 bg-primary text-white rounded-xl shadow-xl shadow-primary/20 font-label text-sm font-bold hover:bg-primary/90 hover:-translate-y-0.5 active:translate-y-0 transition-all" type="submit">
-                                Finalize Registration
+<button class="w-full sm:w-auto px-10 py-3 bg-gradient-to-r from-primary to-primary-container text-white rounded-xl shadow-lg shadow-primary/15 font-label text-sm font-semibold hover:scale-[1.02] active:scale-95 transition-all" type="submit">
+                                Save User
                             </button>
 </div>
 </form>
 </div>
 </div>
-<!-- Perspective Quote -->
-<div class="mt-16 bg-white/40 p-10 rounded-2xl border-l-4 border-primary/20 flex items-center gap-10 opacity-0 animate-fade-in-up stagger-4">
+<!-- Perspective Quote (Design System Component) -->
+<div class="mt-16 bg-surface-container-lowest p-8 rounded-lg border-l-4 border-secondary/50 shadow-sm flex items-center gap-8">
 <div class="flex-grow">
-<p class="font-headline text-2xl italic text-primary/80 leading-relaxed max-w-2xl">"The digital architecture of care must mirror the precision of our clinical protocols. Security and accessibility are the twin pillars of modern restoration."</p>
-<div class="mt-6 flex items-center gap-3">
-<span class="h-px w-8 bg-primary/20"></span>
-<p class="font-label text-xs font-bold tracking-widest text-on-surface-variant uppercase">Clinical Review Board — 2024</p>
+<p class="font-headline text-2xl italic text-primary leading-relaxed">"The transition to digital records must be handled with clinical precision and human compassion. Every account represents a key to restorative care."</p>
+<p class="font-label text-sm mt-4 text-on-surface-variant">— Institutional Stewardship Board</p>
 </div>
-</div>
-<div class="hidden sm:block opacity-10 text-primary">
-<span class="material-symbols-outlined text-8xl" style="font-variation-settings: 'FILL' 1;">health_metrics</span>
+<div class="hidden sm:block opacity-20 text-blue-900">
+<span class="material-symbols-outlined text-6xl" style="font-variation-settings: 'FILL' 1;">medical_information</span>
 </div>
 </div>
 </div>
 
+<script>
+    const toggle = document.getElementById('statusToggle');
+    const circle = document.getElementById('toggleCircle');
+    const statusInput = document.getElementById('status');
+
+    let isActive = true; // default ON
+
+    toggle.addEventListener('click', () => {
+        isActive = !isActive;
+
+        // Update backend value
+        statusInput.value = isActive ? 1 : 0;
+
+        // Update UI
+        toggle.setAttribute('aria-checked', isActive);
+
+        if (isActive) {
+            toggle.classList.remove('bg-gray-300');
+            toggle.classList.add('bg-primary');
+            circle.classList.remove('translate-x-0');
+            circle.classList.add('translate-x-5');
+        } else {
+            toggle.classList.remove('bg-primary');
+            toggle.classList.add('bg-gray-300');
+            circle.classList.remove('translate-x-5');
+            circle.classList.add('translate-x-0');
+        }
+    });
+</script>
 @endsection
