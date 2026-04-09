@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Add User Directory - Anandham Mindcare')
+@section('title', 'Add Course Directory - Anandham Mindcare')
 @section('content')
 
 
@@ -102,119 +102,24 @@
         .rotate-180 {
             transform: rotate(180deg);
         }
-    </style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            "colors": {
-                    "tertiary-fixed": "#cae7f6",
-                    "secondary-container": "#fccc38",
-                    "outline-variant": "#c4c6d1",
-                    "on-tertiary": "#ffffff",
-                    "on-secondary-container": "#6f5600",
-                    "background": "#f7f9fc",
-                    "surface-container-lowest": "#ffffff",
-                    "secondary-fixed": "#ffdf90",
-                    "surface-container-high": "#e6e8eb",
-                    "error": "#ba1a1a",
-                    "on-primary": "#ffffff",
-                    "outline": "#747780",
-                    "surface-container-low": "#f2f4f7",
-                    "on-tertiary-fixed-variant": "#2f4a57",
-                    "surface-container": "#eceef1",
-                    "primary-fixed": "#d8e2ff",
-                    "on-secondary": "#ffffff",
-                    "on-primary-container": "#8aa7e1",
-                    "surface-variant": "#e0e3e6",
-                    "secondary-fixed-dim": "#f0c12c",
-                    "primary-fixed-dim": "#acc7ff",
-                    "on-error-container": "#93000a",
-                    "surface-container-highest": "#e0e3e6",
-                    "on-error": "#ffffff",
-                    "surface-tint": "#415e94",
-                    "tertiary-fixed-dim": "#aecbda",
-                    "on-primary-fixed": "#001a41",
-                    "surface-bright": "#f7f9fc",
-                    "surface-dim": "#d8dadd",
-                    "tertiary-container": "#25404c",
-                    "on-surface": "#191c1e",
-                    "inverse-surface": "#2d3133",
-                    "primary": "#002555",
-                    "on-background": "#191c1e",
-                    "surface": "#f7f9fc",
-                    "secondary": "#755b00",
-                    "on-secondary-fixed-variant": "#584400",
-                    "inverse-primary": "#acc7ff",
-                    "on-tertiary-fixed": "#001f2a",
-                    "on-primary-fixed-variant": "#28467b",
-                    "on-surface-variant": "#43474f",
-                    "on-tertiary-container": "#8fabba",
-                    "on-secondary-fixed": "#241a00",
-                    "tertiary": "#0c2a35",
-                    "primary-container": "#1b3b6f",
-                    "inverse-on-surface": "#eff1f4",
-                    "error-container": "#ffdad6"
-            },
-            "borderRadius": {
-                    "DEFAULT": "0.125rem",
-                    "lg": "0.25rem",
-                    "xl": "0.5rem",
-                    "full": "0.75rem"
-            },
-            "fontFamily": {
-                    "headline": ["Newsreader", "serif"],
-                    "body": ["Work Sans", "sans-serif"],
-                    "label": ["Work Sans", "sans-serif"]
-            }
-          },
-        }
-      }
-    </script>
-<style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-            display: inline-block;
-            vertical-align: middle;
-        }
-        .editorial-shadow {
-            box-shadow: 0 24px 40px -10px rgba(25, 28, 30, 0.05);
-        }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .input-focus-ring:focus-within {
-            box-shadow: 0 0 0 2px rgba(117, 91, 0, 0.2);
-        }
-        /* Custom styles for transitions */
-        .accordion-content {
-            transition: max-height 0.3s ease-out, opacity 0.3s ease-out, padding 0.3s ease-out;
-            max-height: 1000px;
-            overflow: hidden;
-        }
-        .accordion-content.collapsed {
-            max-height: 0;
-            opacity: 0;
-            padding-top: 0;
-            padding-bottom: 0;
-            pointer-events: none;
-        }
-        .rotate-180 {
-            transform: rotate(180deg);
-        }
     </style>
 
+<form action="{{ route('courses.store') }}" method="POST" enctype="multipart/form-data">
+    @csrf
 <div class="pt-28  pb-12 space-y-12">
 <!-- Page Header & Action Bar -->
 <div class="flex justify-between items-start mb-12">
+    @include('partials.alerts')
 <div class="max-w-2xl">
 <span class="text-xs font-label tracking-widest text-secondary font-bold uppercase mb-2 block">Content Studio</span>
 <h3 class="text-5xl font-headline text-primary font-bold leading-tight">Course Content Enrollment</h3>
 <p class="text-on-surface-variant text-lg mt-3 font-light leading-relaxed">Craft an authoritative and high-converting landing page for our clinical excellence programs.</p>
 </div>
 <div class="flex gap-4 pt-4">
-<button class="px-6 py-3 text-primary font-medium hover:bg-surface-container transition-all rounded-xl border border-outline-variant border-opacity-30 active:scale-95">Preview Draft</button>
-<button class="px-8 py-3 bg-primary text-white font-bold rounded-xl editorial-shadow hover:bg-primary-container active:scale-95 transition-all">Publish Content</button>
-</div>
+<button type="button" class="px-6 py-3 text-primary font-medium hover:bg-surface-container transition-all rounded-xl border border-outline-variant border-opacity-30 active:scale-95">Preview Draft</button>
+<button type="submit" class="px-8 py-3 bg-primary text-white font-bold rounded-xl editorial-shadow hover:bg-primary-container active:scale-95 transition-all">
+    Publish Content
+</button></div>
 </div>
 <!-- Editor Grid -->
 <div class="grid grid-cols-12 gap-8">
@@ -231,28 +136,50 @@
 <div class="space-y-8">
 <div class="group">
 <label class="block text-xs font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 transition-colors group-focus-within:text-secondary">Course Master Title</label>
-<input class="w-full bg-surface-container-low border-b-2 border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 text-3xl font-headline text-primary py-4 px-0 transition-all placeholder:text-outline-variant" placeholder="e.g., Advanced Clinical Neuropsychiatry Mastery" type="text"/>
+<input class="w-full bg-surface-container-low border-b-2 border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 text-3xl font-headline text-primary py-4 px-0 transition-all placeholder:text-outline-variant" name="title" placeholder="e.g., Advanced Clinical Neuropsychiatry Mastery" type="text"/>
+</div>
+<div class="group mt-6">
+    <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3">
+        Course Type
+    </label>
+
+    <div class="flex gap-3">
+        <label class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container-low transition-all">
+            <input type="radio" name="course_type" value="free" class="text-secondary focus:ring-secondary">
+            <span class="text-sm font-body text-primary">Free</span>
+        </label>
+
+        <label class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container-low transition-all">
+            <input type="radio" name="course_type" value="premium" class="text-secondary focus:ring-secondary">
+            <span class="text-sm font-body text-primary">Premium</span>
+        </label>
+
+        <label class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container-low transition-all">
+            <input type="radio" name="course_type" value="specialised" class="text-secondary focus:ring-secondary">
+            <span class="text-sm font-body text-primary">Specialised</span>
+        </label>
+    </div>
 </div>
 <div class="grid grid-cols-3 gap-8">
 <div class="group">
 <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 transition-colors group-focus-within:text-secondary">Duration</label>
 <div class="relative">
 <span class="material-symbols-outlined absolute left-0 top-1/2 -translate-y-1/2 text-outline text-lg" data-icon="schedule">schedule</span>
-<input class="w-full bg-transparent border-b border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 font-body py-3 pl-8 text-sm" placeholder="4 Intensive Days" type="text"/>
+<input class="w-full bg-transparent border-b border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 font-body py-3 pl-8 text-sm" name="duration" placeholder="4 Intensive Days" type="text"/>
 </div>
 </div>
 <div class="group">
 <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 transition-colors group-focus-within:text-secondary">Tuition Fee (USD)</label>
 <div class="relative">
 <span class="absolute left-0 top-1/2 -translate-y-1/2 text-secondary font-bold text-sm">$</span>
-<input class="w-full bg-transparent border-b border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 font-body py-3 pl-4 text-sm font-bold" placeholder="2,500" type="number"/>
+<input class="w-full bg-transparent border-b border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 font-body py-3 pl-4 text-sm font-bold" placeholder="2,500" name="price" type="number"/>
 </div>
 </div>
 <div class="group">
 <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 transition-colors group-focus-within:text-secondary">Cohort Capacity</label>
 <div class="relative">
 <span class="material-symbols-outlined absolute left-0 top-1/2 -translate-y-1/2 text-outline text-lg" data-icon="groups">groups</span>
-<input class="w-full bg-transparent border-b border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 font-body py-3 pl-8 text-sm" placeholder="24 Elite Seats" type="text"/>
+<input class="w-full bg-transparent border-b border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 font-body py-3 pl-8 text-sm" placeholder="24 Elite Seats" name="capacity" type="text"/>
 </div>
 </div>
 </div>
@@ -267,89 +194,192 @@
 </div>
 <h4 class="text-2xl font-headline font-bold text-primary">Curriculum Roadmap</h4>
 </div>
-<button class="bg-surface border border-outline-variant px-4 py-2 rounded-lg text-secondary font-bold text-sm flex items-center gap-2 hover:bg-surface-container-low transition-all active:scale-95" id="add-module-btn">
-<span class="material-symbols-outlined text-lg" data-icon="add">add</span> 
-                        Add Module
-                    </button>
+<button type="button"
+class="bg-surface border border-outline-variant px-4 py-2 rounded-lg text-secondary font-bold text-sm flex items-center gap-2 hover:bg-surface-container-low transition-all active:scale-95"
+id="add-module-btn">Add  Module
 </div>
 <div class="space-y-6" id="module-container">
-<!-- Day 1 (Active/Expanded) -->
+
 <div class="module-item border border-outline-variant border-opacity-20 rounded-xl overflow-hidden bg-surface group">
+
 <div class="accordion-header flex items-stretch bg-surface-container-low border-b border-outline-variant border-opacity-10 cursor-pointer">
-<div class="w-12 flex flex-col items-center justify-center bg-surface-container-high text-outline cursor-grab active:cursor-grabbing hover:text-primary transition-colors">
-<span class="material-symbols-outlined" data-icon="drag_indicator">drag_indicator</span>
+<div class="w-12 flex flex-col items-center justify-center bg-surface-container-high text-outline cursor-grab">
+<span class="material-symbols-outlined">drag_indicator</span>
 </div>
+
 <div class="flex-1 p-6 flex items-center gap-6">
 <span class="module-number h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm shrink-0">01</span>
-<input class="flex-1 bg-transparent border-none text-xl font-headline font-bold text-primary focus:ring-0 p-0" type="text" value="Foundations of Therapeutic Precision"/>
-<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors transform transition-transform" data-icon="expand_less">expand_less</span>
+
+<!-- ✅ MODULE TITLE -->
+<input 
+name="modules[0][title]"
+class="flex-1 bg-transparent border-none text-xl font-headline font-bold text-primary focus:ring-0 p-0"
+type="text"
+value="Foundations of Therapeutic Precision"/>
+
+<span class="material-symbols-outlined">expand_less</span>
 </div>
 </div>
+
 <div class="accordion-content p-6 space-y-6">
-<textarea class="w-full bg-surface-container-lowest border-none focus:ring-0 font-body text-sm text-on-surface-variant p-4 italic rounded-lg" placeholder="Brief overview of the day's clinical focus..." rows="2">Establishing the academic sanctuary through peer review and core diagnostic principles.</textarea>
+
+<!-- ✅ DESCRIPTION -->
+<textarea 
+name="modules[0][description]"
+class="w-full bg-surface-container-lowest border-none focus:ring-0 font-body text-sm text-on-surface-variant p-4 italic rounded-lg"
+rows="2">Establishing the academic sanctuary through peer review and core diagnostic principles.</textarea>
+
 <div>
-<label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3">Sub-topics &amp; Focus Areas</label>
+<label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3">
+Sub-topics & Focus Areas
+</label>
+
 <div class="topic-list flex flex-wrap gap-2">
-<span class="inline-flex items-center gap-2 bg-surface-container-high px-4 py-2 rounded-full text-xs font-medium text-primary">
-                                        Case Histology
-                                        <button class="remove-topic material-symbols-outlined text-sm" data-icon="close">close</button>
-</span>
-<span class="inline-flex items-center gap-2 bg-surface-container-high px-4 py-2 rounded-full text-xs font-medium text-primary">
-                                        Ethical Alignment
-                                        <button class="remove-topic material-symbols-outlined text-sm" data-icon="close">close</button>
-</span>
-<button class="add-topic-btn inline-flex items-center gap-1 bg-transparent border border-dashed border-outline-variant px-4 py-2 rounded-full text-xs font-bold text-secondary hover:bg-secondary-fixed/10 transition-colors">
-<span class="material-symbols-outlined text-xs" data-icon="add">add</span> New Topic
-                                    </button>
+
+<!-- ✅ TOPICS -->
+<input type="text" name="modules[0][topics][]" value="Case Histology"
+class="bg-surface-container-high px-4 py-2 rounded-full text-xs"/>
+
+<input type="text" name="modules[0][topics][]" value="Ethical Alignment"
+class="bg-surface-container-high px-4 py-2 rounded-full text-xs"/>
+
+<!-- ADD -->
+<button type="button" class="add-topic-btn inline-flex items-center gap-1 border border-dashed px-4 py-2 rounded-full text-xs text-secondary">
++ New Topic
+</button>
+
 </div>
 </div>
+
 <div class="pt-4 flex justify-end">
-<button class="remove-module-btn text-xs font-bold text-error flex items-center gap-1 hover:underline">
-<span class="material-symbols-outlined text-sm" data-icon="delete">delete</span> Remove Module
-                                </button>
+<button type="button" class="remove-module-btn text-xs font-bold text-error">
+Remove Module
+</button>
+</div>
+
 </div>
 </div>
-</div>
+
 </div>
 </section>
 <!-- High-Value Bonuses -->
 <section class="bg-surface-container-lowest rounded-2xl p-10 editorial-shadow border border-outline-variant border-opacity-10">
-<div class="flex items-center gap-3 mb-10">
-<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center">
-<span class="material-symbols-outlined text-secondary" data-icon="redeem">redeem</span>
-</div>
-<h4 class="text-2xl font-headline font-bold text-primary">Strategic Bonuses</h4>
-</div>
-<div class="grid grid-cols-1 gap-6 mb-8" id="bonus-container">
-<!-- Bonus Item Card -->
-<div class="bonus-item p-6 bg-surface rounded-xl border border-outline-variant border-opacity-15 hover:border-secondary/30 hover:bg-surface-bright transition-all group flex flex-col gap-6">
-<div class="flex items-start gap-6">
-<div class="w-12 h-12 bg-surface-container-low rounded-lg flex items-center justify-center text-secondary shrink-0">
-<span class="material-symbols-outlined" data-icon="verified">verified</span>
-</div>
-<div class="flex-1">
-<label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-1">Bonus Title</label>
-<input class="w-full bg-transparent border-none focus:ring-0 font-headline text-xl font-bold text-primary p-0" type="text" value="Clinical Protocol Manuals"/>
-</div>
-<div class="w-40 border-l border-outline-variant border-opacity-20 pl-6">
-<label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-1">Value (USD)</label>
-<div class="flex items-center gap-1">
-<span class="text-secondary font-bold">$</span>
-<input class="w-full bg-transparent border-none focus:ring-0 font-body font-bold text-secondary text-lg p-0" type="text" value="499"/>
-</div>
-</div>
-<button class="remove-bonus material-symbols-outlined text-outline-variant hover:text-error transition-colors p-2 hover:bg-error/5 rounded-full" data-icon="delete_outline">delete_outline</button>
-</div>
-<div class="pl-[72px]">
-<label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-2">Bonus Description</label>
-<textarea class="w-full bg-surface-container-low border border-outline-variant border-opacity-20 rounded-lg p-3 font-body text-sm text-on-surface-variant focus:border-secondary focus:ring-0" placeholder="Describe the strategic advantage of this bonus..." rows="2">Comprehensive clinical standard operating procedures for immediate practice implementation.</textarea>
-</div>
-</div>
-</div>
-<button class="w-full py-5 border-2 border-dashed border-outline-variant border-opacity-30 rounded-xl text-on-surface-variant font-bold text-sm flex items-center justify-center gap-3 hover:bg-surface-container-low hover:border-secondary/50 hover:text-secondary transition-all active:scale-95" id="add-bonus-btn">
-<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
-                    Enroll Additional High-Value Bonus
+
+    <div class="flex items-center gap-3 mb-10">
+        <div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center">
+            <span class="material-symbols-outlined text-secondary">redeem</span>
+        </div>
+        <h4 class="text-2xl font-headline font-bold text-primary">Strategic Bonuses</h4>
+    </div>
+
+    <div class="grid grid-cols-1 gap-6 mb-8" id="bonus-container">
+
+        @if(isset($course) && $course->bonuses)
+            @foreach($course->bonuses as $index => $bonus)
+        <div class="bonus-item p-6 bg-surface rounded-xl border border-outline-variant border-opacity-15 flex flex-col gap-6">
+
+            <div class="flex items-start gap-6">
+
+                <div class="w-12 h-12 bg-surface-container-low rounded-lg flex items-center justify-center text-secondary shrink-0">
+                    <span class="material-symbols-outlined">verified</span>
+                </div>
+
+                <!-- TITLE -->
+                <div class="flex-1">
+                    <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-1">
+                        Bonus Title
+                    </label>
+                    <input 
+                        name="bonuses[{{ $index }}][title]"
+                        value="{{ $bonus->title }}"
+                        class="w-full bg-transparent border-none focus:ring-0 font-headline text-xl font-bold text-primary p-0"
+                        type="text"
+                    />
+                </div>
+
+                <!-- VALUE -->
+                <div class="w-40 border-l border-outline-variant border-opacity-20 pl-6">
+                    <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-1">
+                        Value (USD)
+                    </label>
+                    <div class="flex items-center gap-1">
+                        <span class="text-secondary font-bold">$</span>
+                        <input 
+                            name="bonuses[{{ $index }}][value]"
+                            value="{{ $bonus->value }}"
+                            class="w-full bg-transparent border-none focus:ring-0 font-body font-bold text-secondary text-lg p-0"
+                            type="number"
+                        />
+                    </div>
+                </div>
+
+                <!-- DELETE -->
+                <button type="button" class="remove-bonus material-symbols-outlined text-outline-variant hover:text-error p-2">
+                    delete_outline
                 </button>
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div class="pl-[72px]">
+                <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-2">
+                    Bonus Description
+                </label>
+                <textarea 
+                    name="bonuses[{{ $index }}][description]"
+                    class="w-full bg-surface-container-low border border-outline-variant border-opacity-20 rounded-lg p-3 font-body text-sm text-on-surface-variant focus:border-secondary focus:ring-0"
+                    rows="2"
+                >{{ $bonus->description }}</textarea>
+            </div>
+
+        </div>
+            @endforeach
+        @else
+
+        <!-- DEFAULT EMPTY -->
+        <div class="bonus-item p-6 bg-surface rounded-xl border border-outline-variant border-opacity-15 flex flex-col gap-6">
+
+            <div class="flex items-start gap-6">
+
+                <div class="w-12 h-12 bg-surface-container-low rounded-lg flex items-center justify-center text-secondary shrink-0">
+                    <span class="material-symbols-outlined">verified</span>
+                </div>
+
+                <div class="flex-1">
+                    <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-1">
+                        Bonus Title
+                    </label>
+                    <input name="bonuses[0][title]" class="w-full bg-transparent border-none focus:ring-0 font-headline text-xl font-bold text-primary p-0" type="text"/>
+                </div>
+
+                <div class="w-40 border-l border-outline-variant border-opacity-20 pl-6">
+                    <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-1">
+                        Value (USD)
+                    </label>
+                    <input name="bonuses[0][value]" class="w-full bg-transparent border-none focus:ring-0 font-body font-bold text-secondary text-lg p-0" type="number"/>
+                </div>
+
+            </div>
+
+            <div class="pl-[72px]">
+                <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-2">
+                    Bonus Description
+                </label>
+                <textarea name="bonuses[0][description]" class="w-full bg-surface-container-low border rounded-lg p-3"></textarea>
+            </div>
+
+        </div>
+
+        @endif
+
+    </div>
+
+    <!-- ADD BUTTON -->
+    <button type="button" id="add-bonus-btn"
+        class="w-full py-5 border-2 border-dashed border-outline-variant rounded-xl text-on-surface-variant font-bold text-sm flex items-center justify-center gap-3 hover:bg-surface-container-low hover:border-secondary transition-all">
+        <span class="material-symbols-outlined">add_circle</span>
+        Enroll Additional High-Value Bonus
+    </button>
+
 </section>
 </div>
 <!-- Right Column: Contextual & Urgency -->
@@ -373,10 +403,9 @@
             <!-- Preview Image -->
             <img 
                 id="mentorPreview"
-                name="mentor_preview"
                 alt="Mentor Image"
                 class="w-full h-full rounded-full object-cover grayscale-[0.3] group-hover:grayscale-0 transition-all duration-500"
-                src="{{ isset($mentor) ? asset('storage/'.$mentor->image) : 'https://via.placeholder.com/150' }}"
+                src="{{ isset($mentor) && $mentor->image ? asset('storage/'.$mentor->image) : 'https://via.placeholder.com/150' }}"
             />
 
         </div>
@@ -443,11 +472,13 @@
 <div>
 <label class="block text-xs font-label uppercase tracking-widest text-on-surface-variant font-bold mb-4">Scrolling Marquee Text</label>
 <div class="relative group">
-<input class="w-full bg-surface-container-low border border-outline-variant border-opacity-30 rounded-xl focus:border-secondary focus:ring-2 focus:ring-secondary/10 font-body text-xs font-bold tracking-tight p-4 pr-12 transition-all text-primary" type="text" value="GLOBAL CPD ACCREDITED • NEXT INTAKE: NOV 15TH • LIMITED SEATS REMAINING"/>
+<input class="w-full bg-surface-container-low border border-outline-variant border-opacity-30 rounded-xl focus:border-secondary focus:ring-2 focus:ring-secondary/10 font-body text-xs font-bold tracking-tight p-4 pr-12 transition-all text-primary" type="text"  name="marquee_text" 
+value="GLOBAL CPD ACCREDITED • NEXT INTAKE: NOV 15TH • LIMITED SEATS REMAINING"/>
 <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-outline-variant" data-icon="edit">edit</span>
 </div>
 </div>
 <div>
+<input type="hidden" name="enrollment_status" id="enrollment_status" value="active">
 <label class="block text-xs font-label uppercase tracking-widest text-on-surface-variant font-bold mb-4">Enrollment Status</label>
 <div class="flex p-1 bg-surface-container-low rounded-xl gap-1" id="enrollment-status-toggles">
 <button class="status-btn flex-1 py-3 bg-secondary text-white rounded-lg text-[10px] font-bold uppercase tracking-widest shadow-md transition-all active:scale-95" data-status="active">Active</button>
@@ -478,4 +509,66 @@
 </div>
 </div>
 
+<script>
+const buttons = document.querySelectorAll('.status-btn');
+const hiddenInput = document.getElementById('enrollment_status');
+
+buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+
+        // remove active styles
+        buttons.forEach(b => {
+            b.classList.remove('bg-secondary', 'text-white', 'shadow-md');
+        });
+
+        // add active style
+        btn.classList.add('bg-secondary', 'text-white', 'shadow-md');
+
+        // set value
+        hiddenInput.value = btn.dataset.status;
+    });
+});
+</script>
+
+
+<script>
+let bonusIndex = {{ isset($course) && $course->bonuses ? count($course->bonuses) : 1 }};
+
+document.getElementById('add-bonus-btn').addEventListener('click', function () {
+
+    let html = `
+    <div class="bonus-item p-6 bg-surface rounded-xl border flex flex-col gap-6">
+        <div class="flex items-start gap-6">
+
+            <div class="flex-1">
+                <input name="bonuses[${bonusIndex}][title]" placeholder="Bonus Title"
+                    class="w-full text-xl font-bold bg-transparent border-none"/>
+            </div>
+
+            <div class="w-40">
+                <input name="bonuses[${bonusIndex}][value]" placeholder="Value"
+                    class="w-full bg-transparent border-none" type="number"/>
+            </div>
+
+            <button type="button" class="remove-bonus text-red-500">✕</button>
+        </div>
+
+        <textarea name="bonuses[${bonusIndex}][description]"
+            placeholder="Description"
+            class="w-full border rounded p-2"></textarea>
+    </div>
+    `;
+
+    document.getElementById('bonus-container').insertAdjacentHTML('beforeend', html);
+    bonusIndex++;
+});
+
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('remove-bonus')) {
+        e.target.closest('.bonus-item').remove();
+    }
+});
+</script>
+
+</form>
 @endsection

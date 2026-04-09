@@ -60,7 +60,7 @@
                     newTopic.className = "inline-flex items-center gap-2 bg-surface-container-high px-4 py-2 rounded-full text-xs font-medium text-primary";
                     newTopic.innerHTML = `
                         ${topicName}
-                        <button class="remove-topic material-symbols-outlined text-sm" data-icon="close">close</button>
+                        <button type="button" class="remove-topic material-symbols-outlined text-sm" data-icon="close">close</button>
                     `;
                     addTopicBtn.before(newTopic);
                 }
@@ -113,7 +113,7 @@
                     <div>
                         <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3">Sub-topics & Focus Areas</label>
                         <div class="topic-list flex flex-wrap gap-2">
-                            <button class="add-topic-btn inline-flex items-center gap-1 bg-transparent border border-dashed border-outline-variant px-4 py-2 rounded-full text-xs font-bold text-secondary hover:bg-secondary-fixed/10 transition-colors">
+                            <button type="button" class="add-topic-btn inline-flex items-center gap-1 bg-transparent border border-dashed border-outline-variant px-4 py-2 rounded-full text-xs font-bold text-secondary hover:bg-secondary-fixed/10 transition-colors">
                                 <span class="material-symbols-outlined text-xs" data-icon="add">add</span> New Topic
                             </button>
                         </div>

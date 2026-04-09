@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\UserAuthController;
+use App\Http\Controllers\CourseController;
 
 Route::get('/', function () {
     return view('pages.home');
@@ -61,15 +62,14 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::view('/dashboard', 'pages.dasboard.admin.dashboard')->name('admin.dashboard');
     Route::view('/users', 'pages.dasboard.admin.users')->name('admin.users');
     Route::view('/users/add', 'pages.dasboard.admin.add_user')->name('admin.users.add');
-    Route::post('/
-    
-    
-    
-    
-    users/store', [UserAuthController::class, 'storeUser'])
+    Route::post('/users/store', [UserAuthController::class, 'storeUser'])
     ->name('users.store');
-    Route::view('/courses', 'pages.dasboard.admin.courses')->name('admin.courses');
+    Route::get('/courses', [CourseController::class, 'index'])->name('admin.courses');
     Route::view('/courses/add', 'pages.dasboard.admin.add_course')->name('admin.courses.add');
+    Route::post('/courses/store', [CourseController::class, 'store'])->name('courses.store');
+    Route::get('/admin/courses/{id}/edit', [CourseController::class, 'edit'])->name('courses.edit'); 
+    Route::put('/admin/courses/{id}', [CourseController::class, 'update'])->name('courses.update');
+    Route::delete('/admin/courses/{id}', [CourseController::class, 'destroy'])->name('courses.destroy');
     Route::view('/attendance', 'pages.dasboard.admin.attendance')->name('admin.attendance');
     Route::view('/payments', 'pages.dasboard.admin.payments')->name('admin.payments');
     Route::view('/grant-access', 'pages.dasboard.admin.grant-access')->name('admin.grant-access');
