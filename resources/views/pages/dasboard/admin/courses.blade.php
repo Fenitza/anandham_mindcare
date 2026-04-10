@@ -28,86 +28,99 @@
         </div>
     </div>
 </section>
-<!-- Perspective Quote Component -->
+<!-- Perspective Quote Component
 <div class="mb-16 perspective-quote bg-surface-container-lowest p-8 rounded-xl max-w-4xl">
 <p class="text-2xl font-headline text-tertiary italic">
                     "The integration of cognitive behavioral frameworks with ancient mindfulness is the bridge to modern restorative care."
                 </p>
 <p class="mt-4 text-secondary font-bold tracking-widest text-xs uppercase">Restorative Care Philosophy</p>
-</div>
+</div> -->
 <!-- Bento-Style Course Grid -->
 <!-- Bento-Style Course Grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
 @forelse($courses as $course)
 
-<article class="group relative bg-surface-container-lowest rounded-xl p-6 border border-outline-variant/15 hover:border-outline-variant/40 transition-all duration-300 flex flex-col justify-between">
+<article class="group relative rounded-xl overflow-hidden border border-outline-variant/15 hover:border-outline-variant/40 transition-all duration-300 flex flex-col justify-between">
 
-<div>
-    <div class="flex justify-between items-start mb-6">
+    <!-- 🔥 BACKGROUND IMAGE -->
+    <div class="absolute inset-0">
+        <img 
+            src="{{ $course->course_image ? asset('storage/'.$course->course_image) : 'https://via.placeholder.com/600x400' }}"
+            class="w-full h-full object-cover"
+        >
+        <!-- Overlay -->
+        <div class="absolute inset-0 bg-black/50 group-hover:bg-black/40 transition-all"></div>
+    </div>
 
-        <!-- LEVEL = COURSE TYPE -->
-        <span class="px-3 py-1 bg-secondary-fixed text-on-secondary-fixed text-[10px] font-bold tracking-widest uppercase rounded-full">
-            Level: {{ ucfirst($course->course_type) }}
-        </span>
+    <!-- CONTENT -->
+    <div class="relative z-10 p-6 flex flex-col justify-between h-full text-white">
 
-        <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div>
 
-            <!-- EDIT -->
-            <a href="{{ route('courses.edit', $course->id) }}"
-               class="p-2 hover:bg-surface-container text-primary rounded-lg transition-colors">
-                <span class="material-symbols-outlined text-lg">edit</span>
-            </a>
+            <div class="flex justify-between items-start mb-6">
 
-            <!-- DELETE -->
-            <form action="{{ route('courses.destroy', $course->id) }}" method="POST"
-                  onsubmit="return confirm('Delete this course?')">
-                @csrf
-                @method('DELETE')
-                <button type="submit"
-                        class="p-2 hover:bg-error-container text-error rounded-lg transition-colors">
-                    <span class="material-symbols-outlined text-lg">delete</span>
-                </button>
-            </form>
+                <!-- LEVEL -->
+                <span class="px-3 py-1 bg-white/20 backdrop-blur text-white text-[10px] font-bold tracking-widest uppercase rounded-full">
+                    {{ ucfirst($course->course_type) }}
+                </span>
+
+                <!-- ACTIONS -->
+                <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+
+                    <a href="{{ route('courses.edit', $course->id) }}"
+                       class="p-2 bg-white/10 hover:bg-white/20 text-white rounded-lg">
+                        <span class="material-symbols-outlined text-lg">edit</span>
+                    </a>
+
+                    <form action="{{ route('courses.destroy', $course->id) }}" method="POST"
+                          onsubmit="return confirm('Delete this course?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                                class="p-2 bg-red-500/20 hover:bg-red-500 text-white rounded-lg">
+                            <span class="material-symbols-outlined text-lg">delete</span>
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+
+            <!-- TITLE -->
+            <h3 class="text-2xl font-bold mb-3 leading-snug">
+                {{ $course->title }}
+            </h3>
+
+            <!-- DESCRIPTION -->
+            <p class="text-white/80 text-sm line-clamp-2 mb-6">
+                {{ \Illuminate\Support\Str::limit($course->description, 120) }}
+            </p>
 
         </div>
+
+        <!-- FOOTER -->
+        <div class="pt-6 border-t border-white/20 flex justify-between items-center">
+
+            <div>
+                <p class="text-[10px] uppercase tracking-wider font-bold text-white/70">
+                    Last Modified
+                </p>
+                <p class="text-sm font-medium">
+                    {{ $course->updated_at->format('M d, Y') }}
+                </p>
+            </div>
+
+            <!-- 💰 FEE -->
+            <div class="text-right">
+                <p class="text-[10px] uppercase text-white/70 font-bold">Fee</p>
+                <p class="text-lg font-bold text-secondary-fixed">
+                    ₹{{ number_format($course->fee, 0) }}
+                </p>
+            </div>
+
+        </div>
+
     </div>
-
-    <!-- TITLE -->
-    <h3 class="text-2xl font-bold text-primary mb-3 leading-snug">
-        {{ $course->title }}
-    </h3>
-
-    <!-- DESCRIPTION -->
-    <p class="text-on-surface-variant text-sm line-clamp-2 mb-6">
-        {{ \Illuminate\Support\Str::limit($course->description, 120) }}
-    </p>
-
-</div>
-
-<div class="pt-6 border-t border-surface-container-low flex justify-between items-center">
-
-    <div>
-        <p class="text-[10px] text-outline uppercase tracking-wider font-bold">
-            Last Modified
-        </p>
-        <p class="text-sm font-medium text-on-surface">
-            {{ $course->updated_at->format('M d, Y') }}
-        </p>
-    </div>
-
-    <!-- STATUS ICON -->
-    @if($course->enrollment_status === 'active')
-        <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">
-            verified
-        </span>
-    @elseif($course->enrollment_status === 'waitlist')
-        <span class="material-symbols-outlined text-yellow-500">schedule</span>
-    @else
-        <span class="material-symbols-outlined text-red-500">block</span>
-    @endif
-
-</div>
 
 </article>
 

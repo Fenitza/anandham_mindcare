@@ -129,9 +129,10 @@
 @include('partials.alerts')
 </header>
 
-  <form class="space-y-6" method="POST" action="{{ route('register.store') }}">
-    @csrf
-  <!-- Full Name -->
+<form class="space-y-6" method="POST" action="{{ route('register.store') }}">
+  @csrf
+  
+<!-- Full Name -->
 <div class="space-y-1">
 <label class="block font-label text-[10px] font-bold text-primary uppercase tracking-widest ml-1" for="name">Full Name</label>
 <div class="relative">
@@ -139,6 +140,7 @@
 <span class="absolute right-0 top-2.5 text-outline/40 material-symbols-outlined text-xl">person</span>
 </div>
 </div>
+
 <!-- Email Address -->
 <div class="space-y-1">
 <label class="block font-label text-[10px] font-bold text-primary uppercase tracking-widest ml-1" for="email">Email Address</label>
@@ -147,6 +149,7 @@
 <span class="absolute right-0 top-2.5 text-outline/40 material-symbols-outlined text-xl">mail</span>
 </div>
 </div>
+
 <!-- Phone Number -->
 <div class="space-y-1">
 <label class="block font-label text-[10px] font-bold text-primary uppercase tracking-widest ml-1" for="phone">Phone Number</label>
@@ -155,6 +158,7 @@
 <span class="absolute right-0 top-2.5 text-outline/40 material-symbols-outlined text-xl">call</span>
 </div>
 </div>
+
 <!-- Password -->
 <div class="space-y-1">
 <label class="block font-label text-[10px] font-bold text-primary uppercase tracking-widest ml-1" for="password">Password</label>
@@ -177,10 +181,11 @@
             required
             class="w-full px-0 py-2.5 bg-transparent border-0 border-b-2 border-outline-variant focus:border-secondary focus:ring-0"
             placeholder="Re-enter password"
-        />
+          />
         <span class="absolute right-0 top-2.5 text-outline/40 material-symbols-outlined text-xl">lock</span>
     </div>
 </div>
+
 <!-- Terms of Service -->
 <div class="flex items-start gap-3 py-2">
 <div class="flex items-center h-5">

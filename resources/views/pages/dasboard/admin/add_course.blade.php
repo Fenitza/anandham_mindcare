@@ -104,12 +104,21 @@
         }
     </style>
 
-<form action="{{ route('courses.store') }}" method="POST" enctype="multipart/form-data">
-    @csrf
+<form 
+    action="{{ isset($course) ? route('courses.update', $course->id) : route('courses.store') }}" 
+    method="POST" 
+    enctype="multipart/form-data"
+>
+@csrf
+
+@if(isset($course))
+    @method('PUT')
+@endif
 <div class="pt-28  pb-12 space-y-12">
+    @include('partials.alerts')
 <!-- Page Header & Action Bar -->
 <div class="flex justify-between items-start mb-12">
-    @include('partials.alerts')
+  
 <div class="max-w-2xl">
 <span class="text-xs font-label tracking-widest text-secondary font-bold uppercase mb-2 block">Content Studio</span>
 <h3 class="text-5xl font-headline text-primary font-bold leading-tight">Course Content Enrollment</h3>
@@ -136,7 +145,51 @@
 <div class="space-y-8">
 <div class="group">
 <label class="block text-xs font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 transition-colors group-focus-within:text-secondary">Course Master Title</label>
-<input class="w-full bg-surface-container-low border-b-2 border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 text-3xl font-headline text-primary py-4 px-0 transition-all placeholder:text-outline-variant" name="title" placeholder="e.g., Advanced Clinical Neuropsychiatry Mastery" type="text"/>
+<input class="w-full bg-surface-container-low border-b-2 border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 text-3xl font-headline text-primary py-4 px-0 transition-all placeholder:text-outline-variant" name="title" value="{{ old('title', $course->title ?? '') }}" placeholder="e.g., Advanced Clinical Neuropsychiatry Mastery" type="text"/>
+</div>
+<!-- HERO IMAGE -->
+<div class="flex flex-col items-center mb-10">
+    
+    <div class="relative group">
+        <div class="w-full max-w-3xl h-64 rounded-xl border-2 border-dashed border-outline-variant overflow-hidden flex items-center justify-center bg-surface-container-low">
+
+            <!-- Preview -->
+            <img 
+            id="courseImagePreview"
+            src="{{ isset($course) && $course->course_image 
+                    ? asset('storage/'.$course->course_image) 
+                    : '' }}"
+            class="w-full h-full object-cover {{ isset($course) && $course->course_image ? '' : 'hidden' }}"
+            />
+
+            <span id="coursePlaceholder"
+            class="text-outline text-sm {{ isset($course) && $course->course_image ? 'hidden' : '' }}">
+            Upload Course Hero Image
+            </span>
+        </div>
+
+        <!-- Upload Button -->
+        <button type="button"
+            id="uploadCourseImageBtn"
+            class="absolute bottom-3 right-3 bg-secondary text-white px-4 py-2 rounded-lg text-xs font-bold shadow-lg hover:scale-105 transition">
+            Upload
+        </button>
+
+        <!-- Hidden Input -->
+        <input 
+            type="file" 
+            name="course_image"
+            value="{{ old('course_image', $course->course_image ?? '') }}"
+            id="courseImageInput"
+            accept="image/*"
+            class="hidden"
+        >
+    </div>
+
+</div>
+<div class="group">
+<label class=" text-xs font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 transition-colors group-focus-within:text-secondary">Specialisation</label>
+<input class="w-full bg-surface-container-low border-b-2 border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 text-3xl font-headline text-primary py-4 px-0 transition-all placeholder:text-outline-variant" name="specialisation" value="{{ old('specialisation', $course->specialisation ?? '') }}" placeholder="e.g., Clinical Neuropsychiatry" type="text"/>
 </div>
 <div class="group mt-6">
     <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3">
@@ -145,17 +198,17 @@
 
     <div class="flex gap-3">
         <label class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container-low transition-all">
-            <input type="radio" name="course_type" value="free" class="text-secondary focus:ring-secondary">
+            <input type="radio" name="course_type" value="free"{{ old('course_type', $course->course_type ?? '') == 'free' ? 'checked' : '' }} class="text-secondary focus:ring-secondary">
             <span class="text-sm font-body text-primary">Free</span>
         </label>
 
         <label class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container-low transition-all">
-            <input type="radio" name="course_type" value="premium" class="text-secondary focus:ring-secondary">
+            <input type="radio" name="course_type" value="premium"{{ old('course_type', $course->course_type ?? '') == 'premium' ? 'checked' : '' }} class="text-secondary focus:ring-secondary">
             <span class="text-sm font-body text-primary">Premium</span>
         </label>
 
         <label class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container-low transition-all">
-            <input type="radio" name="course_type" value="specialised" class="text-secondary focus:ring-secondary">
+            <input type="radio" name="course_type" value="specialised"{{ old('course_type', $course->course_type ?? '') == 'specialised' ? 'checked' : '' }} class="text-secondary focus:ring-secondary">
             <span class="text-sm font-body text-primary">Specialised</span>
         </label>
     </div>
@@ -165,21 +218,21 @@
 <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 transition-colors group-focus-within:text-secondary">Duration</label>
 <div class="relative">
 <span class="material-symbols-outlined absolute left-0 top-1/2 -translate-y-1/2 text-outline text-lg" data-icon="schedule">schedule</span>
-<input class="w-full bg-transparent border-b border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 font-body py-3 pl-8 text-sm" name="duration" placeholder="4 Intensive Days" type="text"/>
+<input class="w-full bg-transparent border-b border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 font-body py-3 pl-8 text-sm" name="duration" value="{{ old('duration', $course->duration ?? '') }}" placeholder="4 Intensive Days" type="text"/>
 </div>
 </div>
 <div class="group">
 <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 transition-colors group-focus-within:text-secondary">Tuition Fee (USD)</label>
 <div class="relative">
-<span class="absolute left-0 top-1/2 -translate-y-1/2 text-secondary font-bold text-sm">$</span>
-<input class="w-full bg-transparent border-b border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 font-body py-3 pl-4 text-sm font-bold" placeholder="2,500" name="price" type="number"/>
+<span class="absolute left-0 top-1/2 -translate-y-1/2 text-secondary font-bold text-sm">₹</span>
+<input class="w-full bg-transparent border-b border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 font-body py-3 pl-4 text-sm font-bold" placeholder="2,500" name="price" value="{{ old('price', $course->fee ?? '') }}" type="number"/>
 </div>
 </div>
 <div class="group">
 <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 transition-colors group-focus-within:text-secondary">Cohort Capacity</label>
 <div class="relative">
 <span class="material-symbols-outlined absolute left-0 top-1/2 -translate-y-1/2 text-outline text-lg" data-icon="groups">groups</span>
-<input class="w-full bg-transparent border-b border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 font-body py-3 pl-8 text-sm" placeholder="24 Elite Seats" name="capacity" type="text"/>
+<input class="w-full bg-transparent border-b border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 font-body py-3 pl-8 text-sm" placeholder="24 Elite Seats" name="capacity" value="{{ old('capacity', $course->capacity ?? '') }}" type="text"/>
 </div>
 </div>
 </div>
@@ -196,72 +249,161 @@
 </div>
 <button type="button"
 class="bg-surface border border-outline-variant px-4 py-2 rounded-lg text-secondary font-bold text-sm flex items-center gap-2 hover:bg-surface-container-low transition-all active:scale-95"
-id="add-module-btn">Add  Module
+id="add-module-btn">Add Module
 </div>
+@php
+$modules = old('modules', isset($course) ? $course->modules : []);
+@endphp
+
 <div class="space-y-6" id="module-container">
+
+@forelse($modules as $index => $module)
 
 <div class="module-item border border-outline-variant border-opacity-20 rounded-xl overflow-hidden bg-surface group">
 
-<div class="accordion-header flex items-stretch bg-surface-container-low border-b border-outline-variant border-opacity-10 cursor-pointer">
-<div class="w-12 flex flex-col items-center justify-center bg-surface-container-high text-outline cursor-grab">
-<span class="material-symbols-outlined">drag_indicator</span>
+    <!-- HEADER -->
+    <div class="accordion-header flex items-stretch bg-surface-container-low border-b border-outline-variant border-opacity-10 cursor-pointer">
+        
+        <div class="w-12 flex flex-col items-center justify-center bg-surface-container-high text-outline cursor-grab">
+            <span class="material-symbols-outlined">drag_indicator</span>
+        </div>
+
+        <div class="flex-1 p-6 flex items-center gap-6">
+            <span class="module-number h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm shrink-0">
+                {{ str_pad($index+1,2,'0',STR_PAD_LEFT) }}
+            </span>
+
+            <input 
+                name="modules[{{ $index }}][title]"
+                class="flex-1 bg-transparent border-none text-xl font-headline font-bold text-primary focus:ring-0 p-0"
+                type="text"
+                placeholder="Module Title"
+                value="{{ is_array($module) ? $module['title'] : $module->title }}"
+            />
+
+            <span class="material-symbols-outlined">expand_less</span>
+        </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="accordion-content p-6 space-y-6">
+
+        <textarea 
+            name="modules[{{ $index }}][description]"
+            class="w-full bg-surface-container-lowest border-none focus:ring-0 font-body text-sm text-on-surface-variant p-4 italic rounded-lg"
+            rows="2"
+            placeholder="Module Description"
+        >{{ is_array($module) ? $module['description'] : $module->description }}</textarea>
+
+        <div>
+            <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3">
+                Sub-topics & Focus Areas
+            </label>
+
+            @php
+            $topics = is_array($module) ? ($module['topics'] ?? []) : $module->topics;
+            @endphp
+
+            <div class="topic-list flex flex-wrap gap-2">
+
+                @foreach($topics as $topic)
+                <input 
+                    type="text" 
+                    name="modules[{{ $index }}][topics][]" 
+                    value="{{ is_array($topic) ? $topic['name'] : $topic->name }}"
+                    class="bg-surface-container-high px-4 py-2 rounded-full text-xs"
+                />
+                @endforeach
+
+                <!-- ADD TOPIC -->
+                <button type="button" class="add-topic-btn inline-flex items-center gap-1 border border-dashed px-4 py-2 rounded-full text-xs text-secondary">
+                    + New Topic
+                </button>
+
+            </div>
+        </div>
+
+        <div class="pt-4 flex justify-end">
+            <button type="button" class="remove-module-btn text-xs font-bold text-error">
+                Remove Module
+            </button>
+        </div>
+
+    </div>
 </div>
 
-<div class="flex-1 p-6 flex items-center gap-6">
-<span class="module-number h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm shrink-0">01</span>
+@empty
 
-<!-- ✅ MODULE TITLE -->
-<input 
-name="modules[0][title]"
-class="flex-1 bg-transparent border-none text-xl font-headline font-bold text-primary focus:ring-0 p-0"
-type="text"
-value="Foundations of Therapeutic Precision"/>
+{{-- ✅ PERFECT DEFAULT (MATCHES EDIT DESIGN) --}}
+<div class="module-item border border-outline-variant border-opacity-20 rounded-xl overflow-hidden bg-surface group">
 
-<span class="material-symbols-outlined">expand_less</span>
+    <!-- HEADER -->
+    <div class="accordion-header flex items-stretch bg-surface-container-low border-b border-outline-variant border-opacity-10 cursor-pointer">
+        
+        <div class="w-12 flex items-center justify-center bg-surface-container-high text-outline">
+            <span class="material-symbols-outlined">drag_indicator</span>
+        </div>
+
+        <div class="flex-1 p-6 flex items-center gap-6">
+            <span class="module-number h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">
+                01
+            </span>
+
+            <input 
+                name="modules[0][title]"
+                placeholder="Module Title"
+                class="flex-1 bg-transparent border-none text-xl font-headline font-bold text-primary focus:ring-0 p-0"
+                type="text"
+            />
+
+            <span class="material-symbols-outlined">expand_less</span>
+        </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="accordion-content p-6 space-y-6">
+
+        <textarea 
+            name="modules[0][description]"
+            placeholder="Module Description"
+            class="w-full bg-surface-container-lowest border-none focus:ring-0 font-body text-sm text-on-surface-variant p-4 italic rounded-lg"
+            rows="2"></textarea>
+
+        <div>
+            <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3">
+                Sub-topics & Focus Areas
+            </label>
+
+            <div class="topic-list flex flex-wrap gap-2">
+
+                <input 
+                    type="text" 
+                    name="modules[0][topics][]" 
+                    placeholder="Topic"
+                    class="bg-surface-container-high px-4 py-2 rounded-full text-xs"
+                />
+
+                <button type="button" class="add-topic-btn border border-dashed px-4 py-2 rounded-full text-xs text-secondary">
+                    + New Topic
+                </button>
+
+            </div>
+        </div>
+
+        <div class="pt-4 flex justify-end">
+            <button type="button" class="remove-module-btn text-xs font-bold text-error">
+                Remove Module
+            </button>
+        </div>
+
+    </div>
 </div>
-</div>
 
-<div class="accordion-content p-6 space-y-6">
-
-<!-- ✅ DESCRIPTION -->
-<textarea 
-name="modules[0][description]"
-class="w-full bg-surface-container-lowest border-none focus:ring-0 font-body text-sm text-on-surface-variant p-4 italic rounded-lg"
-rows="2">Establishing the academic sanctuary through peer review and core diagnostic principles.</textarea>
-
-<div>
-<label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3">
-Sub-topics & Focus Areas
-</label>
-
-<div class="topic-list flex flex-wrap gap-2">
-
-<!-- ✅ TOPICS -->
-<input type="text" name="modules[0][topics][]" value="Case Histology"
-class="bg-surface-container-high px-4 py-2 rounded-full text-xs"/>
-
-<input type="text" name="modules[0][topics][]" value="Ethical Alignment"
-class="bg-surface-container-high px-4 py-2 rounded-full text-xs"/>
-
-<!-- ADD -->
-<button type="button" class="add-topic-btn inline-flex items-center gap-1 border border-dashed px-4 py-2 rounded-full text-xs text-secondary">
-+ New Topic
-</button>
-
-</div>
-</div>
-
-<div class="pt-4 flex justify-end">
-<button type="button" class="remove-module-btn text-xs font-bold text-error">
-Remove Module
-</button>
-</div>
-
-</div>
-</div>
+@endforelse
 
 </div>
 </section>
+
 <!-- High-Value Bonuses -->
 <section class="bg-surface-container-lowest rounded-2xl p-10 editorial-shadow border border-outline-variant border-opacity-10">
 
@@ -274,14 +416,18 @@ Remove Module
 
     <div class="grid grid-cols-1 gap-6 mb-8" id="bonus-container">
 
-        @if(isset($course) && $course->bonuses)
-            @foreach($course->bonuses as $index => $bonus)
-        <div class="bonus-item p-6 bg-surface rounded-xl border border-outline-variant border-opacity-15 flex flex-col gap-6">
+        @php
+        $bonuses = old('bonuses', isset($course) ? $course->bonuses : []);
+        @endphp
+
+        @forelse($bonuses as $index => $bonus)
+
+        <div class="bonus-item p-6 bg-surface rounded-xl border border-outline-variant border-opacity-15 flex flex-col gap-6 hover:border-secondary/30 hover:bg-surface-bright transition-all group">
 
             <div class="flex items-start gap-6">
 
                 <div class="w-12 h-12 bg-surface-container-low rounded-lg flex items-center justify-center text-secondary shrink-0">
-                    <span class="material-symbols-outlined">verified</span>
+                    <span class="material-symbols-outlined">redeem</span>
                 </div>
 
                 <!-- TITLE -->
@@ -291,30 +437,32 @@ Remove Module
                     </label>
                     <input 
                         name="bonuses[{{ $index }}][title]"
-                        value="{{ $bonus->title }}"
+                        value="{{ is_array($bonus) ? $bonus['title'] : $bonus->title }}"
                         class="w-full bg-transparent border-none focus:ring-0 font-headline text-xl font-bold text-primary p-0"
                         type="text"
+                        placeholder="Bonus Title"
                     />
                 </div>
 
                 <!-- VALUE -->
                 <div class="w-40 border-l border-outline-variant border-opacity-20 pl-6">
                     <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-1">
-                        Value (USD)
+                        Value (₹)
                     </label>
                     <div class="flex items-center gap-1">
-                        <span class="text-secondary font-bold">$</span>
+                        <span class="text-secondary font-bold">₹</span>
                         <input 
                             name="bonuses[{{ $index }}][value]"
-                            value="{{ $bonus->value }}"
+                            value="{{ is_array($bonus) ? $bonus['value'] : $bonus->value }}"
                             class="w-full bg-transparent border-none focus:ring-0 font-body font-bold text-secondary text-lg p-0"
                             type="number"
+                            placeholder="0"
                         />
                     </div>
                 </div>
 
                 <!-- DELETE -->
-                <button type="button" class="remove-bonus material-symbols-outlined text-outline-variant hover:text-error p-2">
+                <button type="button" class="remove-bonus material-symbols-outlined text-outline-variant hover:text-error transition-colors p-2 hover:bg-error/5 rounded-full">
                     delete_outline
                 </button>
             </div>
@@ -328,48 +476,74 @@ Remove Module
                     name="bonuses[{{ $index }}][description]"
                     class="w-full bg-surface-container-low border border-outline-variant border-opacity-20 rounded-lg p-3 font-body text-sm text-on-surface-variant focus:border-secondary focus:ring-0"
                     rows="2"
-                >{{ $bonus->description }}</textarea>
+                    placeholder="Bonus Description"
+                >{{ is_array($bonus) ? $bonus['description'] : $bonus->description }}</textarea>
             </div>
 
         </div>
-            @endforeach
-        @else
 
-        <!-- DEFAULT EMPTY -->
-        <div class="bonus-item p-6 bg-surface rounded-xl border border-outline-variant border-opacity-15 flex flex-col gap-6">
+        @empty
+
+        {{-- ✅ PERFECT DEFAULT (MATCH EDIT DESIGN) --}}
+        <div class="bonus-item p-6 bg-surface rounded-xl border border-outline-variant border-opacity-15 flex flex-col gap-6 hover:border-secondary/30 hover:bg-surface-bright transition-all group">
 
             <div class="flex items-start gap-6">
 
                 <div class="w-12 h-12 bg-surface-container-low rounded-lg flex items-center justify-center text-secondary shrink-0">
-                    <span class="material-symbols-outlined">verified</span>
+                    <span class="material-symbols-outlined">redeem</span>
                 </div>
 
+                <!-- TITLE -->
                 <div class="flex-1">
                     <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-1">
                         Bonus Title
                     </label>
-                    <input name="bonuses[0][title]" class="w-full bg-transparent border-none focus:ring-0 font-headline text-xl font-bold text-primary p-0" type="text"/>
+                    <input 
+                        name="bonuses[0][title]"
+                        class="w-full bg-transparent border-none focus:ring-0 font-headline text-xl font-bold text-primary p-0"
+                        type="text"
+                        placeholder="Bonus Title"
+                    />
                 </div>
 
+                <!-- VALUE -->
                 <div class="w-40 border-l border-outline-variant border-opacity-20 pl-6">
                     <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-1">
-                        Value (USD)
+                        Value (₹)
                     </label>
-                    <input name="bonuses[0][value]" class="w-full bg-transparent border-none focus:ring-0 font-body font-bold text-secondary text-lg p-0" type="number"/>
+                    <div class="flex items-center gap-1">
+                        <span class="text-secondary font-bold">₹</span>
+                        <input 
+                            name="bonuses[0][value]"
+                            class="w-full bg-transparent border-none focus:ring-0 font-body font-bold text-secondary text-lg p-0"
+                            type="number"
+                            placeholder="0"
+                        />
+                    </div>
                 </div>
 
+                <!-- DELETE -->
+                <button type="button" class="remove-bonus material-symbols-outlined text-outline-variant hover:text-error p-2 rounded-full">
+                    delete_outline
+                </button>
             </div>
 
+            <!-- DESCRIPTION -->
             <div class="pl-[72px]">
                 <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-2">
                     Bonus Description
                 </label>
-                <textarea name="bonuses[0][description]" class="w-full bg-surface-container-low border rounded-lg p-3"></textarea>
+                <textarea 
+                    name="bonuses[0][description]"
+                    class="w-full bg-surface-container-low border border-outline-variant border-opacity-20 rounded-lg p-3 font-body text-sm text-on-surface-variant"
+                    rows="2"
+                    placeholder="Bonus Description"
+                ></textarea>
             </div>
 
         </div>
 
-        @endif
+        @endforelse
 
     </div>
 
@@ -381,10 +555,91 @@ Remove Module
     </button>
 
 </section>
+
+<!-- SCRIPT -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const bonusContainer = document.getElementById("bonus-container");
+    const addBonusBtn = document.getElementById("add-bonus-btn");
+
+    function getIndex() {
+        return bonusContainer.querySelectorAll('.bonus-item').length;
+    }
+
+    function initBonus(el) {
+        const removeBtn = el.querySelector('.remove-bonus');
+        if (removeBtn) {
+            removeBtn.addEventListener('click', () => {
+                el.remove();
+            });
+        }
+    }
+
+    document.querySelectorAll('.bonus-item').forEach(initBonus);
+
+    addBonusBtn.addEventListener('click', () => {
+
+        const index = getIndex();
+
+        const newBonus = document.createElement('div');
+        newBonus.className = "bonus-item p-6 bg-surface rounded-xl border border-outline-variant border-opacity-15 hover:border-secondary/30 hover:bg-surface-bright transition-all group flex flex-col gap-6 opacity-0 scale-95 duration-200";
+
+        newBonus.innerHTML = `
+            <div class="flex items-start gap-6">
+                <div class="w-12 h-12 bg-surface-container-low rounded-lg flex items-center justify-center text-secondary shrink-0">
+                    <span class="material-symbols-outlined">redeem</span>
+                </div>
+
+                <div class="flex-1">
+                    <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-1">Bonus Title</label>
+                    <input name="bonuses[${index}][title]" 
+                        class="w-full bg-transparent border-none focus:ring-0 font-headline text-xl font-bold text-primary p-0"
+                        type="text" placeholder="New Strategic Bonus">
+                </div>
+
+                <div class="w-40 border-l border-outline-variant border-opacity-20 pl-6">
+                    <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-1">Value (₹)</label>
+                    <div class="flex items-center gap-1">
+                        <span class="text-secondary font-bold">₹</span>
+                        <input name="bonuses[${index}][value]" 
+                            class="w-full bg-transparent border-none focus:ring-0 font-body font-bold text-secondary text-lg p-0"
+                            type="number" value="0">
+                    </div>
+                </div>
+
+                <button type="button" class="remove-bonus material-symbols-outlined text-outline-variant hover:text-error transition-colors p-2 hover:bg-error/5 rounded-full">
+                    delete_outline
+                </button>
+            </div>
+
+            <div class="pl-[72px]">
+                <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-2">Bonus Description</label>
+                <textarea name="bonuses[${index}][description]"
+                    class="w-full bg-surface-container-low border border-outline-variant border-opacity-20 rounded-lg p-3 font-body text-sm text-on-surface-variant"
+                    rows="2" placeholder="Describe the strategic advantage..."></textarea>
+            </div>
+        `;
+
+        bonusContainer.appendChild(newBonus);
+
+        setTimeout(() => {
+            newBonus.classList.remove('opacity-0', 'scale-95');
+            newBonus.classList.add('opacity-100', 'scale-100');
+        }, 10);
+
+        initBonus(newBonus);
+    });
+
+});
+</script>
 </div>
 <!-- Right Column: Contextual & Urgency -->
 <div class="col-span-4 flex flex-col gap-10">
 <!-- Lead Mentor Profile -->
+ @php 
+$mentor = $course->mentor ?? null; 
+@endphp
 <section class="bg-primary text-white rounded-2xl p-10 editorial-shadow overflow-hidden relative group">
 <!-- Background Pattern -->
 <div class="absolute -right-20 -top-20 w-64 h-64 bg-primary-container rounded-full opacity-20 transition-transform duration-700 group-hover:scale-110"></div>
@@ -405,8 +660,7 @@ Remove Module
                 id="mentorPreview"
                 alt="Mentor Image"
                 class="w-full h-full rounded-full object-cover grayscale-[0.3] group-hover:grayscale-0 transition-all duration-500"
-                src="{{ isset($mentor) && $mentor->image ? asset('storage/'.$mentor->image) : 'https://via.placeholder.com/150' }}"
-            />
+                src="{{ $mentor && $mentor->image ? asset('storage/'.$mentor->image) : asset('images/default-avatar.png') }}"/>
 
         </div>
 
@@ -433,7 +687,7 @@ Remove Module
         class="w-full bg-transparent border-none text-center font-headline text-3xl font-bold text-white focus:ring-0 p-0 mb-2"
         type="text" 
         placeholder="Enter Mentor Name"
-        value="{{ $mentor->name ?? '' }}"
+        value="{{ old('mentor_name', $mentor->name ?? '') }}"
     />
 
     <!-- QUALIFICATION -->
@@ -442,7 +696,7 @@ Remove Module
         class="w-full bg-transparent border-none text-center font-label text-[10px] uppercase tracking-[0.2em] text-secondary-fixed font-bold focus:ring-0 p-0"
         type="text" 
         placeholder="Qualification"
-        value="{{ $mentor->qualification ?? '' }}"
+        value="{{ old('mentor_qualification', $mentor->qualification ?? '') }}"
     />
 </div>
 
@@ -457,7 +711,7 @@ Remove Module
         class="w-full bg-primary-container/20 border border-white/5 rounded-xl font-body text-sm text-white/90 focus:border-secondary-fixed focus:ring-0 p-5 leading-relaxed"
         rows="4"
         placeholder="Enter mentor biography..."
-    >{{ $mentor->bio ?? '' }}</textarea>
+    >{{ old('mentor_bio', $mentor->bio ?? '') }}</textarea>
 </div>
 </section>
 <!-- Marketing Urgency Controls -->
@@ -472,18 +726,17 @@ Remove Module
 <div>
 <label class="block text-xs font-label uppercase tracking-widest text-on-surface-variant font-bold mb-4">Scrolling Marquee Text</label>
 <div class="relative group">
-<input class="w-full bg-surface-container-low border border-outline-variant border-opacity-30 rounded-xl focus:border-secondary focus:ring-2 focus:ring-secondary/10 font-body text-xs font-bold tracking-tight p-4 pr-12 transition-all text-primary" type="text"  name="marquee_text" 
-value="GLOBAL CPD ACCREDITED • NEXT INTAKE: NOV 15TH • LIMITED SEATS REMAINING"/>
+<input class="w-full bg-surface-container-low border border-outline-variant border-opacity-30 rounded-xl focus:border-secondary focus:ring-2 focus:ring-secondary/10 font-body text-xs font-bold tracking-tight p-4 pr-12 transition-all text-primary" type="text"  name="marquee_text" value="{{ old('marquee_text', $course->marquee_text ?? '') }}"/>
 <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-outline-variant" data-icon="edit">edit</span>
 </div>
 </div>
 <div>
-<input type="hidden" name="enrollment_status" id="enrollment_status" value="active">
+<input type="hidden" name="enrollment_status" id="enrollment_status" value="{{ old('enrollment_status', $course->enrollment_status ?? 'active') }}">
 <label class="block text-xs font-label uppercase tracking-widest text-on-surface-variant font-bold mb-4">Enrollment Status</label>
 <div class="flex p-1 bg-surface-container-low rounded-xl gap-1" id="enrollment-status-toggles">
-<button class="status-btn flex-1 py-3 bg-secondary text-white rounded-lg text-[10px] font-bold uppercase tracking-widest shadow-md transition-all active:scale-95" data-status="active">Active</button>
-<button class="status-btn flex-1 py-3 text-on-surface-variant hover:text-primary rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all active:scale-95" data-status="waitlist">Waitlist</button>
-<button class="status-btn flex-1 py-3 text-on-surface-variant hover:text-primary rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all active:scale-95" data-status="closed">Closed</button>
+<button type="button" class="status-btn flex-1 py-3 bg-secondary text-white rounded-lg text-[10px] font-bold uppercase tracking-widest shadow-md transition-all active:scale-95" data-status="active">Active</button>
+<button type="button" class="status-btn flex-1 py-3 text-on-surface-variant hover:text-primary rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all active:scale-95" data-status="waitlist">Waitlist</button>
+<button type="button" class="status-btn flex-1 py-3 text-on-surface-variant hover:text-primary rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all active:scale-95" data-status="closed">Closed</button>
 </div>
 </div>
 <div class="p-5 bg-tertiary/5 border border-tertiary/10 rounded-xl flex gap-4">
@@ -531,7 +784,7 @@ buttons.forEach(btn => {
 </script>
 
 
-<script>
+<!-- <script>
 let bonusIndex = {{ isset($course) && $course->bonuses ? count($course->bonuses) : 1 }};
 
 document.getElementById('add-bonus-btn').addEventListener('click', function () {
@@ -568,7 +821,7 @@ document.addEventListener('click', function(e) {
         e.target.closest('.bonus-item').remove();
     }
 });
-</script>
+</script> -->
 
 </form>
 @endsection

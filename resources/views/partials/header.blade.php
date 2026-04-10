@@ -10,7 +10,7 @@
         class="w-12 md:w-16 h-12 md:h-16 object-contain rounded-xl bg-white/80 p-1 shadow border border-white/30"
       />
       <div class="text-lg md:text-2xl font-serif italic text-primary font-headline tracking-tight">
-        Anandham Mindcare Foundation
+        Anandham Mindcare Institute & Research Foundation
       </div>
     </a>
 

@@ -97,34 +97,55 @@
             
             const newModule = document.createElement('div');
             newModule.className = "module-item border border-outline-variant border-opacity-20 rounded-xl overflow-hidden bg-surface-container-low group hover:border-secondary/30 transition-all duration-300";
-            newModule.innerHTML = `
-                <div class="accordion-header flex items-stretch cursor-pointer">
-                    <div class="w-12 flex flex-col items-center justify-center bg-surface-container-high/50 text-outline-variant">
-                        <span class="material-symbols-outlined" data-icon="drag_indicator">drag_indicator</span>
-                    </div>
-                    <div class="flex-1 p-6 flex items-center gap-6">
-                        <span class="module-number h-10 w-10 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-bold text-sm shrink-0">${formattedCount}</span>
-                        <input class="flex-1 bg-transparent border-none text-xl font-headline font-bold text-on-surface-variant focus:ring-0 p-0" placeholder="New Module Title" type="text" value=""/>
-                        <span class="material-symbols-outlined text-outline-variant transform transition-transform" data-icon="expand_more">expand_more</span>
-                    </div>
-                </div>
-                <div class="accordion-content collapsed p-6 space-y-6">
-                    <textarea class="w-full bg-surface-container-lowest border-none focus:ring-0 font-body text-sm text-on-surface-variant p-4 italic rounded-lg" placeholder="Brief overview of the day's clinical focus..." rows="2"></textarea>
-                    <div>
-                        <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3">Sub-topics & Focus Areas</label>
-                        <div class="topic-list flex flex-wrap gap-2">
-                            <button type="button" class="add-topic-btn inline-flex items-center gap-1 bg-transparent border border-dashed border-outline-variant px-4 py-2 rounded-full text-xs font-bold text-secondary hover:bg-secondary-fixed/10 transition-colors">
-                                <span class="material-symbols-outlined text-xs" data-icon="add">add</span> New Topic
-                            </button>
-                        </div>
-                    </div>
-                    <div class="pt-4 flex justify-end">
-                        <button class="remove-module-btn text-xs font-bold text-error flex items-center gap-1 hover:underline">
-                            <span class="material-symbols-outlined text-sm" data-icon="delete">delete</span> Remove Module
-                        </button>
-                    </div>
-                </div>
-            `;
+            const index = document.querySelectorAll('.module-item').length;
+
+newModule.innerHTML = `
+<div class="accordion-header flex items-stretch cursor-pointer">
+    <div class="w-12 flex flex-col items-center justify-center bg-surface-container-high/50 text-outline-variant">
+        <span class="material-symbols-outlined">drag_indicator</span>
+    </div>
+    <div class="flex-1 p-6 flex items-center gap-6">
+        <span class="module-number h-10 w-10 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-bold text-sm shrink-0">${formattedCount}</span>
+
+        <input 
+            name="modules[${index}][title]"
+            class="flex-1 bg-transparent border-none text-xl font-headline font-bold text-on-surface-variant focus:ring-0 p-0"
+            placeholder="New Module Title"
+            type="text"
+        />
+
+        <span class="material-symbols-outlined">expand_more</span>
+    </div>
+</div>
+
+<div class="accordion-content collapsed p-6 space-y-6">
+
+    <textarea 
+        name="modules[${index}][description]"
+        class="w-full bg-surface-container-lowest border-none focus:ring-0 font-body text-sm text-on-surface-variant p-4 italic rounded-lg"
+        placeholder="Brief overview..."
+        rows="2"></textarea>
+
+    <div>
+        <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3">
+            Sub-topics & Focus Areas
+        </label>
+
+        <div class="topic-list flex flex-wrap gap-2">
+            <button type="button" 
+                class="add-topic-btn inline-flex items-center gap-1 border border-dashed px-4 py-2 rounded-full text-xs text-secondary">
+                + New Topic
+            </button>
+        </div>
+    </div>
+
+    <div class="pt-4 flex justify-end">
+        <button type="button" class="remove-module-btn text-xs font-bold text-error">
+            Remove Module
+        </button>
+    </div>
+</div>
+`;
             moduleContainer.appendChild(newModule);
             initModule(newModule);
         });
@@ -142,41 +163,7 @@
             });
         }
 
-        document.querySelectorAll('.bonus-item').forEach(initBonus);
-
-        addBonusBtn.addEventListener('click', () => {
-            const newBonus = document.createElement('div');
-            newBonus.className = "bonus-item p-6 bg-surface rounded-xl border border-outline-variant border-opacity-15 hover:border-secondary/30 hover:bg-surface-bright transition-all group flex flex-col gap-6 opacity-0 scale-95 duration-200";
-            newBonus.innerHTML = `
-                <div class="flex items-start gap-6">
-                    <div class="w-12 h-12 bg-surface-container-low rounded-lg flex items-center justify-center text-secondary shrink-0">
-                        <span class="material-symbols-outlined" data-icon="redeem">redeem</span>
-                    </div>
-                    <div class="flex-1">
-                        <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-1">Bonus Title</label>
-                        <input class="w-full bg-transparent border-none focus:ring-0 font-headline text-xl font-bold text-primary p-0" type="text" placeholder="New Strategic Bonus" value=""/>
-                    </div>
-                    <div class="w-40 border-l border-outline-variant border-opacity-20 pl-6">
-                        <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-1">Value (USD)</label>
-                        <div class="flex items-center gap-1">
-                            <span class="text-secondary font-bold">$</span>
-                            <input class="w-full bg-transparent border-none focus:ring-0 font-body font-bold text-secondary text-lg p-0" type="text" value="0"/>
-                        </div>
-                    </div>
-                    <button class="remove-bonus material-symbols-outlined text-outline-variant hover:text-error transition-colors p-2 hover:bg-error/5 rounded-full" data-icon="delete_outline">delete_outline</button>
-                </div>
-                <div class="pl-[72px]">
-                    <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-2">Bonus Description</label>
-                    <textarea class="w-full bg-surface-container-low border border-outline-variant border-opacity-20 rounded-lg p-3 font-body text-sm text-on-surface-variant focus:border-secondary focus:ring-0" placeholder="Describe the strategic advantage of this bonus..." rows="2"></textarea>
-                </div>
-            `;
-            bonusContainer.appendChild(newBonus);
-            setTimeout(() => {
-                newBonus.classList.remove('opacity-0', 'scale-95');
-                newBonus.classList.add('opacity-100', 'scale-100');
-            }, 10);
-            initBonus(newBonus);
-        });
+        
 
         // --- Enrollment Status Toggles ---
         const statusButtons = document.querySelectorAll('.status-btn');
@@ -199,41 +186,68 @@
 
     document.addEventListener("DOMContentLoaded", function () {
 
-    const uploadBtn = document.getElementById("uploadBtn");
-    const fileInput = document.getElementById("mentorImageInput");
-    const preview = document.getElementById("mentorPreview");
+    function initImageUpload(uploadBtnId, inputId, previewId, placeholderId = null) {
+        const uploadBtn = document.getElementById(uploadBtnId);
+        const fileInput = document.getElementById(inputId);
+        const preview = document.getElementById(previewId);
+        const placeholder = placeholderId ? document.getElementById(placeholderId) : null;
 
-    // Open file picker
-    uploadBtn.addEventListener("click", function () {
-        fileInput.click();
-    });
+        if (!uploadBtn || !fileInput || !preview) return;
 
-    // Image preview + validation
-    fileInput.addEventListener("change", function (event) {
-        const file = event.target.files[0];
+        // Open file picker
+        uploadBtn.addEventListener("click", function () {
+            fileInput.click();
+        });
 
-        if (!file) return;
+        // Handle file change
+        fileInput.addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            if (!file) return;
 
-        // Validate type
-        if (!file.type.startsWith("image/")) {
-            alert("Please select a valid image.");
-            fileInput.value = "";
-            return;
-        }
+            // Validate type
+            if (!file.type.startsWith("image/")) {
+                alert("Please select a valid image.");
+                fileInput.value = "";
+                return;
+            }
 
-        // Validate size (2MB max)
-        if (file.size > 2 * 1024 * 1024) {
-            alert("Image must be less than 2MB.");
-            fileInput.value = "";
-            return;
-        }
+            // Validate size (2MB max)
+            if (file.size > 2 * 1024 * 1024) {
+                alert("Image must be less than 2MB.");
+                fileInput.value = "";
+                return;
+            }
 
-        // Preview
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            preview.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-    });
+            // Preview
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+
+                // Show image
+                preview.classList.remove("hidden");
+
+                // Hide placeholder if exists
+                if (placeholder) {
+                    placeholder.classList.add("hidden");
+                }
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // ✅ Mentor Image
+    initImageUpload(
+        "uploadBtn",
+        "mentorImageInput",
+        "mentorPreview"
+    );
+
+    // ✅ Course Hero Image
+    initImageUpload(
+        "uploadCourseImageBtn",
+        "courseImageInput",
+        "courseImagePreview",
+        "coursePlaceholder"
+    );
 
 });
