@@ -9,21 +9,19 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
-{
-    Schema::create('topics', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('module_id')->constrained()->onDelete('cascade');
-        $table->string('name');
-        $table->timestamps();
-    });
-}
+    public function up(): void
+    {
+        Schema::create('appointments', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+        });
+    }
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('topics');
+        Schema::dropIfExists('appointments');
     }
 };

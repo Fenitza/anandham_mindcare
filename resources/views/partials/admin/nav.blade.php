@@ -5,27 +5,42 @@
     </div>
     <nav class="flex-1 space-y-1">
         <a href="{{ route('admin.dashboard') }}"
-           class="flex items-center px-6 py-3 font-semibold border-r-4 transition-all opacity-90 {{ Request::is('admin/dashboard') ? 'text-blue-900 border-yellow-700 bg-slate-200' : 'text-slate-600 hover:text-blue-900 hover:bg-slate-200/50 border-transparent' }}">
+           class="flex items-center px-6 py-3 font-semibold border-r-4 transition-all opacity-90 {{ Request::is('admin/dashboard') || Request::is('admin/dashboard/*') ? 'text-blue-900 border-yellow-700 bg-slate-200' : 'text-slate-600 hover:text-blue-900 hover:bg-slate-200/50 border-transparent' }}">
             <span class="material-symbols-outlined mr-3">dashboard</span>
             <span class="text-sm tracking-wide font-label">Dashboard</span>
         </a>
         <a href="{{ route('admin.users') }}"
-           class="flex items-center px-6 py-3 font-semibold border-r-4 transition-all opacity-90 {{ Request::is('admin/users') ? 'text-blue-900 border-yellow-700 bg-slate-200' : 'text-slate-600 hover:text-blue-900 hover:bg-slate-200/50 border-transparent' }}">
+           class="flex items-center px-6 py-3 font-semibold border-r-4 transition-all opacity-90 {{ Request::is('admin/users') || Request::is('admin/users/*') ? 'text-blue-900 border-yellow-700 bg-slate-200' : 'text-slate-600 hover:text-blue-900 hover:bg-slate-200/50 border-transparent' }}">
             <span class="material-symbols-outlined mr-3">group</span>
             <span class="text-sm tracking-wide font-label">Users</span>
         </a>
         <a href="{{ route('admin.courses') }}"
-           class="flex items-center px-6 py-3 font-semibold border-r-4 transition-all opacity-90 {{ Request::is('admin/courses') ? 'text-blue-900 border-yellow-700 bg-slate-200' : 'text-slate-600 hover:text-blue-900 hover:bg-slate-200/50 border-transparent' }}">
+           class="flex items-center px-6 py-3 font-semibold border-r-4 transition-all opacity-90 {{ Request::is('admin/courses') || Request::is('admin/courses/*') ? 'text-blue-900 border-yellow-700 bg-slate-200' : 'text-slate-600 hover:text-blue-900 hover:bg-slate-200/50 border-transparent' }}">
             <span class="material-symbols-outlined mr-3">school</span>
             <span class="text-sm tracking-wide font-label">Courses</span>
         </a>
+        <a href="{{ route('admin.appointments') }}"
+           class="flex items-center px-6 py-3 font-semibold border-r-4 transition-all opacity-90 {{ Request::is('admin/appointments') || Request::is('admin/appointments/*') ? 'text-blue-900 border-yellow-700 bg-slate-200' : 'text-slate-600 hover:text-blue-900 hover:bg-slate-200/50 border-transparent' }}">
+            <span class="material-symbols-outlined mr-3">calendar_today</span>
+            <span class="text-sm tracking-wide font-label">Appointments</span>
+        </a>
+        <a href="{{ route('admin.blogs') }}"
+           class="flex items-center px-6 py-3 font-semibold border-r-4 transition-all opacity-90 {{ Request::is('admin/blogs') || Request::is('admin/blogs/*') ? 'text-blue-900 border-yellow-700 bg-slate-200' : 'text-slate-600 hover:text-blue-900 hover:bg-slate-200/50 border-transparent' }}">
+            <span class="material-symbols-outlined mr-3">rss_feed</span>
+            <span class="text-sm tracking-wide font-label">Blogs</span>
+        </a>
+        <a href="{{ route('admin.gallery') }}"
+           class="flex items-center px-6 py-3 font-semibold border-r-4 transition-all opacity-90 {{ Request::is('admin/gallery') || Request::is('admin/gallery/*') ? 'text-blue-900 border-yellow-700 bg-slate-200' : 'text-slate-600 hover:text-blue-900 hover:bg-slate-200/50 border-transparent' }}">
+            <span class="material-symbols-outlined mr-3">photo_library</span>
+            <span class="text-sm tracking-wide font-label">Gallery</span>
+        </a>
         <a href="{{ route('admin.attendance') }}"
-           class="flex items-center px-6 py-3 font-semibold border-r-4 transition-all opacity-90 {{ Request::is('admin/attendance') ? 'text-blue-900 border-yellow-700 bg-slate-200' : 'text-slate-600 hover:text-blue-900 hover:bg-slate-200/50 border-transparent' }}">
+           class="flex items-center px-6 py-3 font-semibold border-r-4 transition-all opacity-90 {{ Request::is('admin/attendance') || Request::is('admin/attendance/*') ? 'text-blue-900 border-yellow-700 bg-slate-200' : 'text-slate-600 hover:text-blue-900 hover:bg-slate-200/50 border-transparent' }}">
             <span class="material-symbols-outlined mr-3">calendar_today</span>
             <span class="text-sm tracking-wide font-label">Attendance</span>
         </a>
         <a href="{{ route('admin.payments') }}"
-           class="flex items-center px-6 py-3 font-semibold border-r-4 transition-all opacity-90 {{ Request::is('admin/payments') ? 'text-blue-900 border-yellow-700 bg-slate-200' : 'text-slate-600 hover:text-blue-900 hover:bg-slate-200/50 border-transparent' }}">
+           class="flex items-center px-6 py-3 font-semibold border-r-4 transition-all opacity-90 {{ Request::is('admin/payments') || Request::is('admin/payments/*') ? 'text-blue-900 border-yellow-700 bg-slate-200' : 'text-slate-600 hover:text-blue-900 hover:bg-slate-200/50 border-transparent' }}">
             <span class="material-symbols-outlined mr-3">payments</span>
             <span class="text-sm tracking-wide font-label">Payments</span>
         </a>

@@ -167,22 +167,42 @@ newModule.innerHTML = `
 
         // --- Enrollment Status Toggles ---
         const statusButtons = document.querySelectorAll('.status-btn');
+        const statusInput = document.getElementById('enrollment_status');
+
+        // ✅ Preselect current value (for edit form)
+        const currentStatus = statusInput.value;
+
+        statusButtons.forEach(btn => {
+            if (btn.dataset.status === currentStatus) {
+                btn.classList.add('bg-secondary', 'text-white', 'shadow-md');
+                btn.classList.remove('text-on-surface-variant', 'hover:text-primary');
+            }
+        });
+
+        // ✅ Handle click
         statusButtons.forEach(btn => {
             btn.addEventListener('click', () => {
+
+                // Reset all buttons
                 statusButtons.forEach(b => {
                     b.classList.remove('bg-secondary', 'text-white', 'shadow-md');
                     b.classList.add('text-on-surface-variant', 'hover:text-primary');
                 });
+
+                // Activate clicked
                 btn.classList.add('bg-secondary', 'text-white', 'shadow-md');
                 btn.classList.remove('text-on-surface-variant', 'hover:text-primary');
+
+                // ✅ Update hidden input value
+                statusInput.value = btn.dataset.status;
             });
         });
 
-        // Add tactile feedback to existing buttons
-        document.querySelectorAll('button:not([active\\:scale-95])').forEach(btn => {
-            btn.classList.add('active:scale-95', 'transition-transform');
-        });
+    // ✅ Add tactile feedback (optional polish)
+    document.querySelectorAll('button:not([class*="active:scale-95"])').forEach(btn => {
+        btn.classList.add('active:scale-95', 'transition-transform');
     });
+});
 
     document.addEventListener("DOMContentLoaded", function () {
 
@@ -248,6 +268,22 @@ newModule.innerHTML = `
         "courseImageInput",
         "courseImagePreview",
         "coursePlaceholder"
+    );
+
+    // ✅ Gallery Media Upload
+    initImageUpload(
+        "uploadGalleryMediaBtn",
+        "galleryMediaInput",
+        "galleryMediaPreview",
+        "galleryMediaPlaceholder"
+    );
+
+    //Blog Image Upload
+    initImageUpload(
+        "uploadBlogImageBtn",
+        "blogImageInput",
+        "blogImagePreview",
+        "blogImagePlaceholder"
     );
 
 });

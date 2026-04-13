@@ -117,19 +117,34 @@
 <div class="pt-28  pb-12 space-y-12">
     @include('partials.alerts')
 <!-- Page Header & Action Bar -->
-<div class="flex justify-between items-start mb-12">
+<!-- <div class="flex justify-between items-start mb-12"> -->
   
-<div class="max-w-2xl">
-<span class="text-xs font-label tracking-widest text-secondary font-bold uppercase mb-2 block">Content Studio</span>
-<h3 class="text-5xl font-headline text-primary font-bold leading-tight">Course Content Enrollment</h3>
-<p class="text-on-surface-variant text-lg mt-3 font-light leading-relaxed">Craft an authoritative and high-converting landing page for our clinical excellence programs.</p>
+<!-- <div class="max-w-xl">
+    <span class="text-[10px] font-label tracking-wider text-secondary font-bold uppercase mb-1 block">
+        Content Studio
+    </span>
+
+    <h3 class="text-3xl font-headline text-primary font-bold leading-snug">
+        Course Content Enrollment
+    </h3>
+
+    <p class="text-on-surface-variant text-sm mt-2 font-light leading-relaxed">
+        Craft an authoritative and high-converting landing page for our clinical excellence programs.
+    </p>
+</div> -->
+
+<!-- <div class="flex gap-3 pt-3">
+    <button type="button"
+        class="px-4 py-2 text-sm text-primary font-medium hover:bg-surface-container transition-all rounded-lg border border-outline-variant border-opacity-30 active:scale-95">
+        Preview Draft
+    </button>
+
+    <button type="submit"
+        class="px-5 py-2 text-sm bg-primary text-white font-semibold rounded-lg editorial-shadow hover:bg-primary-container active:scale-95 transition-all">
+        Publish Content
+    </button>
 </div>
-<div class="flex gap-4 pt-4">
-<button type="button" class="px-6 py-3 text-primary font-medium hover:bg-surface-container transition-all rounded-xl border border-outline-variant border-opacity-30 active:scale-95">Preview Draft</button>
-<button type="submit" class="px-8 py-3 bg-primary text-white font-bold rounded-xl editorial-shadow hover:bg-primary-container active:scale-95 transition-all">
-    Publish Content
-</button></div>
-</div>
+</div> -->
 <!-- Editor Grid -->
 <div class="grid grid-cols-12 gap-8">
 <!-- Left Column: Core Data -->
@@ -145,7 +160,19 @@
 <div class="space-y-8">
 <div class="group">
 <label class="block text-xs font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 transition-colors group-focus-within:text-secondary">Course Master Title</label>
-<input class="w-full bg-surface-container-low border-b-2 border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 text-3xl font-headline text-primary py-4 px-0 transition-all placeholder:text-outline-variant" name="title" value="{{ old('title', $course->title ?? '') }}" placeholder="e.g., Advanced Clinical Neuropsychiatry Mastery" type="text"/>
+<input class="w-full bg-surface-container-low border-b-2 border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 text-2xl font-headline text-primary py-4 px-0 transition-all placeholder:text-outline-variant" name="title" value="{{ old('title', $course->title ?? '') }}" placeholder="e.g., Advanced Clinical Neuropsychiatry Mastery" type="text"/>
+</div>
+
+<!-- ✅ Description Added -->
+<div class="group">
+<label class="block text-xs font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 transition-colors group-focus-within:text-secondary">
+Course Description
+</label>
+<textarea 
+class="w-full bg-surface-container-low border-b-2 border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 text-base text-primary py-4 px-0 transition-all placeholder:text-outline-variant resize-none"
+name="description"
+rows="3"
+placeholder="Write a short engaging description about the course...">{{ old('description', $course->description ?? '') }}</textarea>
 </div>
 <!-- HERO IMAGE -->
 <div class="flex flex-col items-center mb-10">
@@ -189,7 +216,7 @@
 </div>
 <div class="group">
 <label class=" text-xs font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 transition-colors group-focus-within:text-secondary">Specialisation</label>
-<input class="w-full bg-surface-container-low border-b-2 border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 text-3xl font-headline text-primary py-4 px-0 transition-all placeholder:text-outline-variant" name="specialisation" value="{{ old('specialisation', $course->specialisation ?? '') }}" placeholder="e.g., Clinical Neuropsychiatry" type="text"/>
+<input class="w-full bg-surface-container-low border-b-2 border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 text-2xl font-headline text-primary py-4 px-0 transition-all placeholder:text-outline-variant" name="specialisation" value="{{ old('specialisation', $course->specialisation ?? '') }}" placeholder="e.g., Clinical Neuropsychiatry" type="text"/>
 </div>
 <div class="group mt-6">
     <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3">
@@ -213,29 +240,86 @@
         </label>
     </div>
 </div>
-<div class="grid grid-cols-3 gap-8">
-<div class="group">
-<label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 transition-colors group-focus-within:text-secondary">Duration</label>
-<div class="relative">
-<span class="material-symbols-outlined absolute left-0 top-1/2 -translate-y-1/2 text-outline text-lg" data-icon="schedule">schedule</span>
-<input class="w-full bg-transparent border-b border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 font-body py-3 pl-8 text-sm" name="duration" value="{{ old('duration', $course->duration ?? '') }}" placeholder="4 Intensive Days" type="text"/>
+<!-- FIRST ROW -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+  <!-- Duration -->
+  <div class="group">
+    <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 group-focus-within:text-secondary">
+      Duration
+    </label>
+    <div class="relative">
+      <span class="material-symbols-outlined absolute left-0 top-1/2 -translate-y-1/2 text-outline text-lg">schedule</span>
+      <input class="w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 pl-8 text-sm"
+        name="duration"
+        value="{{ old('duration', $course->duration ?? '') }}"
+        placeholder="4 Intensive Days"
+        type="text"/>
+    </div>
+  </div>
+
+  <!-- Fee -->
+  <div class="group">
+    <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 group-focus-within:text-secondary">
+      Tuition Fee (₹)
+    </label>
+    <div class="relative">
+      <span class="absolute left-0 top-1/2 -translate-y-1/2 text-secondary font-bold text-sm">₹</span>
+      <input class="w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 pl-4 text-sm font-bold"
+        name="price"
+        value="{{ old('price', $course->fee ?? '') }}"
+        placeholder="2500"
+        type="number"/>
+    </div>
+  </div>
+
+  <!-- Capacity -->
+  <div class="group">
+    <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 group-focus-within:text-secondary">
+      Cohort Capacity
+    </label>
+    <div class="relative">
+      <span class="material-symbols-outlined absolute left-0 top-1/2 -translate-y-1/2 text-outline text-lg">groups</span>
+      <input class="w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 pl-8 text-sm"
+        name="capacity"
+        value="{{ old('capacity', $course->capacity ?? '') }}"
+        placeholder="24 Seats"
+        type="text"/>
+    </div>
+  </div>
+
 </div>
-</div>
-<div class="group">
-<label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 transition-colors group-focus-within:text-secondary">Tuition Fee (USD)</label>
-<div class="relative">
-<span class="absolute left-0 top-1/2 -translate-y-1/2 text-secondary font-bold text-sm">₹</span>
-<input class="w-full bg-transparent border-b border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 font-body py-3 pl-4 text-sm font-bold" placeholder="2,500" name="price" value="{{ old('price', $course->fee ?? '') }}" type="number"/>
-</div>
-</div>
-<div class="group">
-<label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 transition-colors group-focus-within:text-secondary">Cohort Capacity</label>
-<div class="relative">
-<span class="material-symbols-outlined absolute left-0 top-1/2 -translate-y-1/2 text-outline text-lg" data-icon="groups">groups</span>
-<input class="w-full bg-transparent border-b border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 font-body py-3 pl-8 text-sm" placeholder="24 Elite Seats" name="capacity" value="{{ old('capacity', $course->capacity ?? '') }}" type="text"/>
-</div>
-</div>
-</div>
+
+<!-- SECOND ROW (SEPARATE GRID) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+
+  <!-- Course Date -->
+  <div class="group">
+    <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 group-focus-within:text-secondary">
+      Course Date
+    </label>
+    <div class="relative">
+      <span class="material-symbols-outlined absolute left-0 top-1/2 -translate-y-1/2 text-outline text-lg">calendar_month</span>
+      <input class="w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 pl-8 text-sm"
+        name="course_date"
+        value="{{ old('course_date', isset($course) && $course->course_date ? \Carbon\Carbon::parse($course->course_date)->format('Y-m-d') : '') }}"        type="date"/>
+    </div>
+  </div>
+
+  <!-- Course Time -->
+  <div class="group">
+    <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 group-focus-within:text-secondary">
+      Course Time
+    </label>
+    <div class="relative">
+      <span class="material-symbols-outlined absolute left-0 top-1/2 -translate-y-1/2 text-outline text-lg">schedule</span>
+      <input class="w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 pl-8 text-sm"
+        name="course_time"
+        value="{{ old('course_time', $course->course_time ?? '') }}"
+        type="time"/>
+    </div>
+  </div>
+
 </div>
 </section>
 <!-- Curriculum Roadmap Builder -->
@@ -636,6 +720,17 @@ document.addEventListener("DOMContentLoaded", function () {
 </div>
 <!-- Right Column: Contextual & Urgency -->
 <div class="col-span-4 flex flex-col gap-10">
+    <div class="flex gap-3 pt-3">
+    <button type="button"
+        class="px-4 py-2 text-sm text-primary font-medium hover:bg-surface-container transition-all rounded-lg border border-outline-variant border-opacity-30 active:scale-95">
+        Preview Draft
+    </button>
+
+    <button type="submit"
+        class="px-5 py-2 text-sm bg-primary text-white font-semibold rounded-lg editorial-shadow hover:bg-primary-container active:scale-95 transition-all">
+        Publish Content
+    </button>
+</div>
 <!-- Lead Mentor Profile -->
  @php 
 $mentor = $course->mentor ?? null; 
@@ -731,13 +826,14 @@ $mentor = $course->mentor ?? null;
 </div>
 </div>
 <div>
-<input type="hidden" name="enrollment_status" id="enrollment_status" value="{{ old('enrollment_status', $course->enrollment_status ?? 'active') }}">
+<input type="hidden" name="enrollment_status" id="enrollment_status" value="{{ old('enrollment_status', $course->status ?? 'active') }}">
 <label class="block text-xs font-label uppercase tracking-widest text-on-surface-variant font-bold mb-4">Enrollment Status</label>
 <div class="flex p-1 bg-surface-container-low rounded-xl gap-1" id="enrollment-status-toggles">
-<button type="button" class="status-btn flex-1 py-3 bg-secondary text-white rounded-lg text-[10px] font-bold uppercase tracking-widest shadow-md transition-all active:scale-95" data-status="active">Active</button>
+<button type="button" class="status-btn flex-1 py-3 text-on-surface-variant hover:text-primary rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all active:scale-95" data-status="active">Active</button>
+
 <button type="button" class="status-btn flex-1 py-3 text-on-surface-variant hover:text-primary rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all active:scale-95" data-status="waitlist">Waitlist</button>
-<button type="button" class="status-btn flex-1 py-3 text-on-surface-variant hover:text-primary rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all active:scale-95" data-status="closed">Closed</button>
-</div>
+
+<button type="button" class="status-btn flex-1 py-3 text-on-surface-variant hover:text-primary rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all active:scale-95" data-status="closed">Closed</button></div>
 </div>
 <div class="p-5 bg-tertiary/5 border border-tertiary/10 rounded-xl flex gap-4">
 <span class="material-symbols-outlined text-tertiary mt-0.5" data-icon="tips_and_updates" style="font-variation-settings: 'FILL' 1;">tips_and_updates</span>

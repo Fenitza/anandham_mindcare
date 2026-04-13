@@ -66,25 +66,46 @@
                         "body": ["Work Sans"],
                         "label": ["Work Sans"]
                     },
-                    "animation": {
-                        "marquee": "marquee 25s linear infinite",
-                        "fade-in-up": "fadeInUp 0.8s ease-out forwards",
-                        "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-                    },
-                    "keyframes": {
-                        "marquee": {
-                            "0%": { transform: "translateX(0%)" },
-                            "100%": { transform: "translateX(-50%)" }
-                        },
-                        "fadeInUp": {
-                            "0%": { opacity: "0", transform: "translateY(20px)" },
-                            "100%": { opacity: "1", transform: "translateY(0)" }
-                        }
-                    }
-                },
+                                animation: {
+                marquee: "marquee 25s linear infinite",
+                "fade-in-up": "fadeInUp 0.8s ease-out forwards",
+                "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+                pop: "pop 2s ease-in-out infinite"
             },
+
+            keyframes: {
+                marquee: {
+                    "0%": { transform: "translateX(0%)" },
+                    "100%": { transform: "translateX(-50%)" }
+                },
+                fadeInUp: {
+                    "0%": { opacity: "0", transform: "translateY(20px)" },
+                    "100%": { opacity: "1", transform: "translateY(0)" }
+                },
+                pop: {
+                    "0%, 100%": { transform: "scale(1)" },
+                    "50%": { transform: "scale(1.08)" }
+                }
+            }
         }
-    </script>
+    }
+}
+</script>
+<script>
+function toggleModule(index) {
+    const content = document.getElementById('content-' + index);
+    const icon = document.getElementById('icon-' + index);
+
+    if (content.classList.contains('hidden')) {
+        content.classList.remove('hidden');
+        icon.style.transform = 'rotate(180deg)';
+    } else {
+        content.classList.add('hidden');
+        icon.style.transform = 'rotate(0deg)';
+    }
+}
+</script>
+
 <style>
         body { font-family: 'Work Sans', sans-serif; background-color: #f7f9fc; color: #191c1e; }
         h1, h2, h3, h4 { font-family: 'Newsreader', serif; }
@@ -100,75 +121,119 @@
         .delay-500 { animation-delay: 500ms; }
     </style>
 
+@php
+    $marqueeItems = [];
+
+    if (!empty($course->marquee_text)) {
+        // Split using bullet separator
+        $marqueeItems = explode('•', $course->marquee_text);
+
+        // Trim spaces
+        $marqueeItems = array_map('trim', $marqueeItems);
+    }
+@endphp
+
 <!-- Scrolling Marquee -->
 <div class="fixed top-[68px] w-full bg-secondary z-[90] overflow-hidden whitespace-nowrap py-2 border-b border-secondary-container">
-<div class="flex animate-marquee">
-<div class="flex items-center space-x-12 px-4">
-<span class="text-primary font-bold text-xs uppercase tracking-widest flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span> Only 4 Seats Remaining for November Cohort</span>
-<span class="text-primary font-bold text-xs uppercase tracking-widest flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary"></span> Global CPD Accredited Certification</span>
-<span class="text-primary font-bold text-xs uppercase tracking-widest flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span> Next Intake Starts: Nov 15th, 2024</span>
-<span class="text-primary font-bold text-xs uppercase tracking-widest flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary"></span> 5.0 Star Rating from 500+ Practitioners</span>
+    
+    <div class="flex animate-marquee">
+
+        {{-- FIRST LOOP --}}
+        <div class="flex items-center space-x-12 px-4">
+            @foreach($marqueeItems as $item)
+                @if($item)
+                <span class="text-primary font-bold text-xs uppercase tracking-widest flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                    {{ $item }}
+                </span>
+                @endif
+            @endforeach
+        </div>
+
+        {{-- DUPLICATE FOR INFINITE LOOP --}}
+        <div class="flex items-center space-x-12 px-4">
+            @foreach($marqueeItems as $item)
+                @if($item)
+                <span class="text-primary font-bold text-xs uppercase tracking-widest flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-primary"></span>
+                    {{ $item }}
+                </span>
+                @endif
+            @endforeach
+        </div>
+
+    </div>
 </div>
-<!-- Duplicated for seamless loop -->
-<div class="flex items-center space-x-12 px-4">
-<span class="text-primary font-bold text-xs uppercase tracking-widest flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span> Only 4 Seats Remaining for November Cohort</span>
-<span class="text-primary font-bold text-xs uppercase tracking-widest flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary"></span> Global CPD Accredited Certification</span>
-<span class="text-primary font-bold text-xs uppercase tracking-widest flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span> Next Intake Starts: Nov 15th, 2024</span>
-<span class="text-primary font-bold text-xs uppercase tracking-widest flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary"></span> 5.0 Star Rating from 500+ Practitioners</span>
-</div>
-</div>
-</div>
-<!-- Immersive Hero Section - COMPACTED HEIGHT -->
-<header class="relative pt-36 pb-16 md:pt-48 md:pb-24 overflow-hidden bg-primary min-h-[70vh] flex items-center">
-<!-- Layered Background -->
-<div class="absolute inset-0 z-0">
-<div class="absolute inset-0 bg-gradient-to-b from-primary/95 via-primary/80 to-primary z-10"></div>
-<img class="w-full h-full object-cover scale-110 animate-[pulse_10s_ease-in-out_infinite]" data-alt="microscopic view of elegant neural networks or cellular structures in soft clinical blue and white tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3CuoXmS8L9Ec8T0ATtDrD6nzKAmj1g3Ak3-Q-vbLscX0x5XKLeY_al44__qwBnmrJbNNbOnCSnNxRkxOu7NyHIx-CGu8qz3jzo-LmzYMjim04A5W3AvBoN6Pe9KnyG0PQGVs1FbnpCRlbdfjKJTxzDOVNmQzDk7DmTsDGcqHLSTCMLEo6sBcFZa_vpgZNJfUQ_Gbxc0s3-LwvfK9L5DumFMOJM_7aPVz9bD3CNBRFp43exw3O7Nao3apeEVe2agN5FUfymZtoDw8W"/>
-</div>
-<div class="max-w-7xl mx-auto px-8 relative z-20 text-center">
-<!-- Badge - Reduced Margin -->
-<div class="opacity-0 animate-fade-in-up">
-<span class="inline-block px-4 py-1.5 mb-6 rounded-full bg-secondary text-primary text-[10px] font-bold tracking-widest uppercase shadow-lg shadow-secondary/20">
-                Advanced Clinical Certification 2024
+<header class="relative pt-16 md:pt-20 pb-12 md:pb-16 overflow-hidden bg-primary min-h-[55vh] flex items-center">
+    <!-- Background -->
+    <div class="absolute inset-0 z-0">
+        <div class="absolute inset-0 bg-gradient-to-b from-primary/95 via-primary/80 to-primary z-10"></div>
+
+        <img 
+            class="w-full h-full object-cover scale-110 animate-[pulse_10s_ease-in-out_infinite]"
+            src="{{ asset('storage/'.$course->course_image) }}"
+        />
+    </div>
+
+    <div class="max-w-7xl mx-auto px-8 relative z-20 text-center">
+
+        <!-- Badge -->
+        <div class="opacity-0 animate-fade-in-up">
+            <span class="inline-block px-4 py-1.5 mb-6 rounded-full bg-secondary text-primary text-[10px] font-bold tracking-widest uppercase shadow-lg shadow-secondary/20">
+                {{ $course->course_type ?? 'Course' }}
             </span>
-</div>
-<!-- Heading - Reduced Size & Margin -->
-<h1 class="opacity-0 animate-fade-in-up delay-100 text-4xl md:text-7xl font-bold text-white mb-6 leading-[1.15] max-w-4xl mx-auto">
-            Master Clinical <span class="text-secondary italic">Restorative</span> Care
+        </div>
+
+        <!-- Title -->
+        <h1 class="opacity-0 animate-fade-in-up delay-100 text-4xl md:text-7xl font-bold text-white mb-6 leading-[1.15] max-w-4xl mx-auto">
+            {{ $course->title }}
         </h1>
-<!-- Subheading - Reduced Size & Margin -->
-<p class="opacity-0 animate-fade-in-up delay-200 text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-10 font-light leading-relaxed">
-            Elevate your medical practice with our world-renowned framework for neuro-cognitive rehabilitation and clinical excellence.
+
+        <!-- Description -->
+        <p class="opacity-0 animate-fade-in-up delay-200 text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-10 font-light leading-relaxed">
+            {{ $course->description }}
         </p>
-<!-- Course Summary Boxes - Compact Sizes -->
-<div class="opacity-0 animate-fade-in-up delay-300 grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto mb-10">
-<div class="hero-glass p-4 rounded-xl flex flex-col items-center justify-center text-white group hover:bg-white/20 transition-all duration-300">
-<span class="text-secondary-container mb-1.5 material-symbols-outlined text-3xl">payments</span>
-<p class="text-[10px] uppercase tracking-widest opacity-60 mb-0.5">Tuition Fee</p>
-<p class="text-2xl font-bold font-headline">$1,299 <span class="text-xs font-body font-normal opacity-40 line-through ml-1">$1,999</span></p>
-</div>
-<div class="hero-glass p-4 rounded-xl flex flex-col items-center justify-center text-white group hover:bg-white/20 transition-all duration-300">
-<span class="text-secondary-container mb-1.5 material-symbols-outlined text-3xl">schedule</span>
-<p class="text-[10px] uppercase tracking-widest opacity-60 mb-0.5">Duration</p>
-<p class="text-2xl font-bold font-headline">4 Intensive Days</p>
-</div>
-<div class="hero-glass p-4 rounded-xl flex flex-col items-center justify-center text-white group hover:bg-white/20 transition-all duration-300">
-<span class="text-secondary-container mb-1.5 material-symbols-outlined text-3xl">groups</span>
-<p class="text-[10px] uppercase tracking-widest opacity-60 mb-0.5">Limited Cohort</p>
-<p class="text-2xl font-bold font-headline">24 Seats Only</p>
-</div>
-</div>
-<!-- CTAs - Compact Padding -->
-<div class="opacity-0 animate-fade-in-up delay-400 flex flex-col sm:flex-row justify-center gap-4">
-<button class="bg-secondary text-primary px-8 py-4 rounded-lg font-bold text-base shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2 group">
-                Reserve Your Seat Now
-                <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
-</button>
-<button class="bg-transparent border border-white/30 text-white px-8 py-4 rounded-lg font-bold text-base hover:bg-white/10 transition-all">
-                Download Prospectus
-            </button>
-</div>
-</div>
+
+        <!-- Summary Cards -->
+        <div class="opacity-0 animate-fade-in-up delay-300 grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto mb-10">
+
+            <!-- Fee -->
+            <div class="hero-glass p-4 rounded-xl flex flex-col items-center text-white">
+                <span class="text-secondary-container mb-1.5 material-symbols-outlined text-3xl">payments</span>
+                <p class="text-[10px] uppercase tracking-widest opacity-60 mb-0.5">Tuition Fee</p>
+                <p class="text-2xl font-bold font-headline">
+                    {{ $course->fee > 0 ? '₹'.number_format($course->fee) : 'Free' }}
+                </p>
+            </div>
+
+            <!-- Duration -->
+            <div class="hero-glass p-4 rounded-xl flex flex-col items-center text-white">
+                <span class="text-secondary-container mb-1.5 material-symbols-outlined text-3xl">schedule</span>
+                <p class="text-[10px] uppercase tracking-widest opacity-60 mb-0.5">Duration</p>
+                <p class="text-2xl font-bold font-headline">
+                    {{ $course->duration ?? $course->course_time }}
+                </p>
+            </div>
+
+            <!-- Seats -->
+            <div class="hero-glass p-4 rounded-xl flex flex-col items-center text-white">
+                <span class="text-secondary-container mb-1.5 material-symbols-outlined text-3xl">groups</span>
+                <p class="text-[10px] uppercase tracking-widest opacity-60 mb-0.5">Capacity</p>
+                <p class="text-2xl font-bold font-headline">
+                    {{ $course->capacity ?? 'Limited' }}
+                </p>
+            </div>
+
+        </div>
+
+        <!-- CTA -->
+        <a href="{{ route('courses.enroll', $course->id) }}"
+            class="bg-secondary text-surface px-8 py-4 rounded-lg font-bold animate-pop hover:scale-110 transition duration-300 shadow-lg hover:shadow-xl inline-block">
+                
+                🚀 Reserve Your Seat
+            </a>
+
+    </div>
 </header>
 <!-- Trust Bar -->
 <section class="bg-white py-10 border-b border-outline-variant/20 relative z-30">
@@ -192,6 +257,198 @@
 </div>
 </div>
 </div>
+</section>
+
+<!-- Curriculum -->
+<section class="py-20 bg-surface">
+    <div class="max-w-4xl mx-auto px-8">
+
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold text-primary mb-4">
+                {{ $course->duration ?? 'Course' }} Curriculum
+            </h2>
+
+            <p class="text-on-surface-variant text-lg">
+                {{ $course->description ?? 'Structured learning experience designed for excellence.' }}
+            </p>
+        </div>
+
+        <div class="space-y-4">
+
+            @foreach($course->modules->sortBy('module_order') as $index => $module)
+
+                <div class="bg-white rounded-2xl ghost-border p-8 shadow-sm group hover:border-secondary transition-colors">
+
+                    <!-- Header -->
+                    <div class="flex justify-between items-center cursor-pointer"
+                         onclick="toggleModule({{ $index }})">
+
+                        <div class="flex items-center gap-6">
+
+                            <!-- Day Number -->
+                            <span class="w-14 h-14 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-primary/20">
+                                {{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}
+                            </span>
+
+                            <!-- Module Title -->
+                            <h3 class="text-2xl font-bold text-primary">
+                                {{ $module->title }}
+                            </h3>
+                        </div>
+
+                        <!-- Icon -->
+                        <span id="icon-{{ $index }}"
+                              class="material-symbols-outlined text-on-surface-variant group-hover:text-secondary transition-all duration-300">
+                            expand_more
+                        </span>
+                    </div>
+
+                    <!-- Topics -->
+                    <div id="content-{{ $index }}"
+                         class="mt-6 pl-20 space-y-3 text-on-surface-variant border-l-2 border-secondary/20 ml-7 hidden">
+
+                        
+                    {{-- ✅ MODULE DESCRIPTION (ONLY ONCE) --}}
+                    @if($module->description)
+                        <p class="text-base text-on-surface-variant font-medium">
+                            {{ $module->description }}
+                        </p>
+                    @endif
+
+                    {{-- ✅ TOPICS --}}
+                    @foreach($module->topics as $topic)
+                        <p class="flex items-center gap-3">
+                            <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                            {{ $topic->name }}
+                        </p>
+                    @endforeach
+
+                    </div>
+                </div>
+
+            @endforeach
+
+        </div>
+    </div>
+</section>
+<!-- High-Value Bonuses -->
+<section class="py-24 bg-primary text-white">
+    <div class="max-w-7xl mx-auto px-8">
+
+        <h2 class="text-4xl md:text-5xl font-bold mb-16 text-center text-white">
+            Enrollment High-Value Bonuses
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+
+            @foreach($course->bonuses as $bonus)
+
+                <div class="bg-white/5 border border-white/10 p-10 rounded-2xl flex gap-8 hover:bg-white/10 transition-all group">
+
+                    <!-- Icon (dynamic optional later) -->
+                    <div class="w-16 h-16 rounded-full bg-secondary flex items-center justify-center shrink-0 shadow-lg shadow-secondary/10">
+                        <span class="material-symbols-outlined text-3xl text-primary">
+                            redeem
+                        </span>
+                    </div>
+
+                    <!-- Content -->
+                    <div>
+                        <h3 class="text-2xl font-bold mb-2 text-secondary">
+                            {{ $bonus->title }}
+                        </h3>
+
+                        {{-- Optional value --}}
+                        @if($bonus->value > 0)
+                            <p class="text-sm text-white/50 mb-2">
+                                Worth ₹{{ number_format($bonus->value) }}
+                            </p>
+                        @endif
+
+                        <p class="text-white/70 leading-relaxed text-lg">
+                            {{ $bonus->description }}
+                        </p>
+                    </div>
+
+                </div>
+
+            @endforeach
+
+        </div>
+    </div>
+</section>
+<!-- Meet Your Mentor -->
+<section class="py-24 bg-surface">
+    <div class="max-w-7xl mx-auto px-8">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+
+            <!-- Image -->
+            <div>
+                <h2 class="text-4xl md:text-5xl font-bold text-primary mb-12">
+                    Meet Your Mentor
+                </h2>
+
+                <div class="relative">
+                    <div class="absolute -inset-4 bg-secondary/10 rounded-3xl blur-xl"></div>
+
+                    <img 
+                        class="rounded-2xl ghost-border mb-10 relative z-10 w-full"
+                        src="{{ $course->mentor && $course->mentor->image 
+                                ? asset('storage/'.$course->mentor->image) 
+                                : 'https://via.placeholder.com/600x400' }}"
+                    />
+                </div>
+
+                <!-- Qualification Pills -->
+                <div class="flex flex-wrap gap-4">
+
+                    @if($course->mentor && $course->mentor->qualification)
+                        @foreach(explode(',', $course->mentor->qualification) as $qual)
+                            <div class="bg-secondary/20 px-6 py-2.5 rounded-lg text-primary font-bold text-sm tracking-wide">
+                                {{ trim($qual) }}
+                            </div>
+                        @endforeach
+                    @endif
+
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="space-y-8">
+
+                <h3 class="text-4xl font-bold text-primary font-headline">
+                    {{ $course->mentor->name ?? 'Expert Mentor' }}
+                </h3>
+
+                <p class="text-xl text-on-surface-variant leading-relaxed">
+                    {{ $course->mentor->bio ?? 'Mentor details will be updated soon.' }}
+                </p>
+
+                <!-- Static achievements (optional dynamic later) -->
+                <ul class="space-y-5">
+
+                    <li class="flex items-start gap-4">
+                        <span class="material-symbols-outlined text-secondary text-2xl">verified</span>
+                        <span class="text-on-surface-variant text-lg">
+                            Industry Expert & Certified Practitioner
+                        </span>
+                    </li>
+
+                    <li class="flex items-start gap-4">
+                        <span class="material-symbols-outlined text-secondary text-2xl">verified</span>
+                        <span class="text-on-surface-variant text-lg">
+                            Extensive Clinical & Academic Experience
+                        </span>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+    </div>
 </section>
 <!-- Why This Course (Grid) -->
 <section class="py-20 bg-surface relative">
@@ -260,127 +517,7 @@
 </div>
 </div>
 </section>
-<!-- 4-Day Curriculum -->
-<section class="py-24 bg-surface">
-<div class="max-w-4xl mx-auto px-8">
-<div class="text-center mb-16">
-<h2 class="text-4xl md:text-5xl font-bold text-primary mb-4">4-Day Intensive Curriculum</h2>
-<p class="text-on-surface-variant text-lg">A deep dive into clinical excellence across 96 hours of immersive learning.</p>
-</div>
-<div class="space-y-4">
-<!-- Day 1 -->
-<div class="bg-white rounded-2xl ghost-border p-8 shadow-sm group hover:border-secondary transition-colors">
-<div class="flex justify-between items-center cursor-pointer">
-<div class="flex items-center gap-6">
-<span class="w-14 h-14 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-primary/20">01</span>
-<h3 class="text-2xl font-bold text-primary">Foundations of Neuro-Restorative Logic</h3>
-</div>
-<span class="material-symbols-outlined text-on-surface-variant group-hover:text-secondary transition-colors">expand_more</span>
-</div>
-<div class="mt-8 pl-20 space-y-4 text-on-surface-variant border-l-2 border-secondary/20 ml-7">
-<p class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> Introduction to Bio-Psycho-Social Mapping</p>
-<p class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> Understanding the Neuroplasticity Threshold</p>
-<p class="flex items-center gap-3"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> Baseline Diagnostic Standards &amp; KPIs</p>
-</div>
-</div>
-<!-- Day 2 -->
-<div class="bg-white rounded-2xl ghost-border p-8 shadow-sm group hover:border-secondary transition-colors opacity-80">
-<div class="flex justify-between items-center cursor-pointer">
-<div class="flex items-center gap-6">
-<span class="w-14 h-14 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-xl">02</span>
-<h3 class="text-2xl font-bold text-primary">The Restorative Protocol Stack</h3>
-</div>
-<span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
-</div>
-</div>
-<!-- Day 3 -->
-<div class="bg-white rounded-2xl ghost-border p-8 shadow-sm group hover:border-secondary transition-colors opacity-80">
-<div class="flex justify-between items-center cursor-pointer">
-<div class="flex items-center gap-6">
-<span class="w-14 h-14 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-xl">03</span>
-<h3 class="text-2xl font-bold text-primary">Integrative Mindcare Methodologies</h3>
-</div>
-<span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
-</div>
-</div>
-<!-- Day 4 -->
-<div class="bg-white rounded-2xl ghost-border p-8 shadow-sm group hover:border-secondary transition-colors opacity-80">
-<div class="flex justify-between items-center cursor-pointer">
-<div class="flex items-center gap-6">
-<span class="w-14 h-14 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-xl">04</span>
-<h3 class="text-2xl font-bold text-primary">Clinical Implementation &amp; Case Labs</h3>
-</div>
-<span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
-</div>
-</div>
-</div>
-</div>
-</section>
-<!-- High-Value Bonuses -->
-<section class="py-24 bg-primary text-white">
-<div class="max-w-7xl mx-auto px-8">
-<h2 class="text-4xl md:text-5xl font-bold mb-16 text-center text-white">Enrollment High-Value Bonuses</h2>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-<div class="bg-white/5 border border-white/10 p-10 rounded-2xl flex gap-8 hover:bg-white/10 transition-all group">
-<div class="w-16 h-16 rounded-full bg-secondary flex items-center justify-center shrink-0 shadow-lg shadow-secondary/10">
-<span class="material-symbols-outlined text-3xl text-primary">menu_book</span>
-</div>
-<div>
-<h3 class="text-2xl font-bold mb-4 text-secondary">Clinical Protocol Manuals</h3>
-<p class="text-white/70 leading-relaxed text-lg">A complete set of diagnostic templates, patient worksheets, and implementation guides valued at $499, yours free upon enrollment.</p>
-</div>
-</div>
-<div class="bg-white/5 border border-white/10 p-10 rounded-2xl flex gap-8 hover:bg-white/10 transition-all group">
-<div class="w-16 h-16 rounded-full bg-secondary flex items-center justify-center shrink-0 shadow-lg shadow-secondary/10">
-<span class="material-symbols-outlined text-3xl text-primary">groups</span>
-</div>
-<div>
-<h3 class="text-2xl font-bold mb-4 text-secondary">1-on-1 Strategy Session</h3>
-<p class="text-white/70 leading-relaxed text-lg">A 30-minute private consultation with Dr. Selvakodi to review your clinic's specific integration plan and practice goals.</p>
-</div>
-</div>
-</div>
-</div>
-</section>
-<!-- Meet Your Mentor -->
-<section class="py-24 bg-surface">
-<div class="max-w-7xl mx-auto px-8">
-<div class="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
-<div>
-<h2 class="text-4xl md:text-5xl font-bold text-primary mb-12">Meet Your Mentor</h2>
-<div class="relative">
-<div class="absolute -inset-4 bg-secondary/10 rounded-3xl blur-xl"></div>
-<img class="rounded-2xl ghost-border mb-10 relative z-10 w-full" data-alt="close up portrait of Dr. Helena Selvakodi, a distinguished South Asian female professor in academic attire, warm lighting, study background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7slQFPgZpaMHDAbHeCh34F5tMUcsm8akBr9FDeZaE_CFmXymDWk_qs05jB9kvgygrqYNUwxsjxnJzYWNtvUHNBjlRxRmdx1394ew4HD-NbKjLOTDgYgWFT0Rl2kcdEEsRragvbE7GgUZUWdqOJHnU4DQg2Qy7trLzJW-jrGf8tNlycruACtGW9okXmYphz3j-swiccPVKGscAhLl2rRQ30q6-xQV8F0AbUY5Ypzw3FFsr-7oQz8UiRDLqHnVCHOmkBQjcpNj84R2A"/>
-</div>
-<div class="flex gap-4">
-<div class="bg-secondary/20 px-6 py-2.5 rounded-lg text-primary font-bold text-sm tracking-wide">MD, Psychiatry</div>
-<div class="bg-secondary/20 px-6 py-2.5 rounded-lg text-primary font-bold text-sm tracking-wide">PhD, Neuro-Restoration</div>
-</div>
-</div>
-<div class="space-y-8">
-<h3 class="text-4xl font-bold text-primary font-headline">Dr. Helena Selvakodi</h3>
-<p class="text-xl text-on-surface-variant leading-relaxed">With over 25 years of academic and clinical experience, Dr. Selvakodi has pioneered the "Anandham Framework" for cognitive healing. Her research has been featured in top medical journals and she has served as a lead consultant for global mental health initiatives.</p>
-<ul class="space-y-5">
-<li class="flex items-start gap-4">
-<span class="material-symbols-outlined text-secondary text-2xl">verified</span>
-<span class="text-on-surface-variant text-lg">Author of "The Restorative Mind: A Clinical Guide"</span>
-</li>
-<li class="flex items-start gap-4">
-<span class="material-symbols-outlined text-secondary text-2xl">verified</span>
-<span class="text-on-surface-variant text-lg">Former Chair of Mindcare Research Council</span>
-</li>
-<li class="flex items-start gap-4">
-<span class="material-symbols-outlined text-secondary text-2xl">verified</span>
-<span class="text-on-surface-variant text-lg">Fellow of the International Restorative Academy</span>
-</li>
-</ul>
-<div class="pt-10">
-<img class="h-20 opacity-40 grayscale" data-alt="a subtle gold foil embossed academic seal on high quality parchment paper" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAA5xD-2R493aVFopOiE3Epg66ownqcKptFQ_mL0NEA9KtM1gOLSRfizxOaStB5VDKyxOsWgiV9KEVuVKgzHlnl-AmUi6SGVffrZrMBDlhUj-6guQfAz75Ml8f4ummV2liyNpJNUamRgCUspx6GUuUtlwnmaM6xP_Mq5TG3Oc6oFaDVVpgsBz8LRVphNIglsc6L7Q1ZuPDksyEqO7vdfSMHMPstgCYiyOCebXx0mOETQHtPrq7zB50wOt09QZzmyF8NB3vHlbijxSNY"/>
-</div>
-</div>
-</div>
-</div>
-</section>
+
 <!-- Student Perspectives -->
 <section class="py-24 bg-primary-container/10">
 <div class="max-w-7xl mx-auto px-8">
@@ -462,27 +599,66 @@
 </section>
 
 <!-- Sticky Footer CTA -->
+<!-- Sticky Footer CTA -->
 <div class="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-xl py-4 px-8 border-t border-outline-variant/20 shadow-[0_-15px_40px_rgba(0,37,85,0.15)] z-[110] transform translate-y-0 transition-transform">
-<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-<div class="hidden md:block">
-<p class="text-primary font-bold text-xl font-headline tracking-tight">Master Clinical Restorative Care</p>
-<div class="flex items-center gap-2 mt-0.5">
-<span class="inline-block w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
-<p class="text-primary/70 text-[10px] font-bold uppercase tracking-widest">Enrollment closing in 48 hours • Only 4 spots left</p>
-</div>
-</div>
-<div class="flex items-center gap-8">
-<div class="text-right hidden sm:block">
-<p class="text-slate-400 line-through text-xs">$1,999</p>
-<p class="text-primary font-bold text-2xl">$1,299</p>
-</div>
-<button class="bg-secondary text-primary font-bold px-10 py-3 rounded-lg shadow-lg shadow-secondary/20 hover:scale-105 active:scale-95 transition-all w-full md:w-auto text-base">
+
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+
+        <!-- Course Info -->
+        <div class="hidden md:block">
+
+            <!-- Title -->
+            <p class="text-primary font-bold text-xl font-headline tracking-tight">
+                {{ $course->title }}
+            </p>
+
+            <!-- Urgency -->
+            <div class="flex items-center gap-2 mt-0.5">
+                <span class="inline-block w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+
+                <p class="text-primary/70 text-[10px] font-bold uppercase tracking-widest">
+                    @if($course->course_date)
+                        Enrollment closing soon • Starts {{ \Carbon\Carbon::parse($course->course_date)->format('M d') }}
+                    @else
+                        Limited seats available • Enroll now
+                    @endif
+
+                    @if($course->capacity)
+                        • Only {{ $course->capacity }} seats
+                    @endif
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Price + CTA -->
+        <div class="flex items-center gap-8">
+
+            <!-- Price -->
+            <div class="text-right hidden sm:block">
+
+                {{-- Optional old price (if you add later) --}}
+                @if(!empty($course->original_price))
+                    <p class="text-slate-400 line-through text-xs">
+                        ₹{{ number_format($course->original_price) }}
+                    </p>
+                @endif
+
+                <p class="text-primary font-bold text-2xl">
+                    {{ $course->fee > 0 ? '₹'.number_format($course->fee) : 'Free' }}
+                </p>
+            </div>
+
+            <!-- CTA Button -->
+            <a href="{{ route('courses.enroll', $course->id) }}"
+               class="bg-secondary text-surface font-bold px-10 py-3 rounded-lg shadow-lg shadow-secondary/20 hover:scale-105 active:scale-95 transition-all w-full md:w-auto text-base animate-pop">
+
                 Secure My Seat
-            </button>
+            </a>
+
+        </div>
+    </div>
 </div>
-</div>
-</div>
-<!-- Extra Spacing for Sticky CTA -->
-<div class="h-24"></div>
+
 
 @endsection

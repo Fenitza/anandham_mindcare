@@ -9,23 +9,24 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
-{
-    Schema::create('modules', function (Blueprint $table) {
+    public function up(): void
+    {
+        Schema::create('galleries', function (Blueprint $table) {
+           
         $table->id();
-        $table->foreignId('course_id')->constrained()->onDelete('cascade');
-        $table->integer('module_order');
-        $table->string('title');
+        $table->string('name');
         $table->text('description')->nullable();
+        $table->string('media')->nullable(); // file path
         $table->timestamps();
-    });
-}
+
+        });
+    }
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('modules');
+        Schema::dropIfExists('galleries');
     }
 };

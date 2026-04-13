@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+
 use App\Models\Course;
 use App\Models\Module;
 use App\Models\Topic;
@@ -43,7 +45,10 @@ class CourseController extends Controller
                 'fee' => $request->price,
                 'capacity' => $request->capacity,
                 'marquee_text' => $request->marquee_text,
-                'enrollment_status' => $request->enrollment_status,
+                'status' => $request->enrollment_status,
+                'course_time' => $request->course_time,
+                'course_date' => $request->course_date,
+                'description' => $request->description,
             ]);
             // dd($request->all());
             // ✅ 2. Save Modules + Topics
@@ -146,8 +151,12 @@ class CourseController extends Controller
             'fee' => $request->price,
             'capacity' => $request->capacity,
             'marquee_text' => $request->marquee_text,
-            'enrollment_status' => $request->enrollment_status,
+            'status' => $request->enrollment_status,
+            'description' => $request->description,
+            'course_time' => $request->course_time,
+            'course_date' => $request->course_date,
         ]);
+        // dd($request->all());
 
         /*
         |--------------------------------------------------------------------------
@@ -286,4 +295,137 @@ class CourseController extends Controller
         return redirect()->route('admin.courses')
             ->with('success', 'Course Deleted Successfully ✅');
     }
+
+    public function home()
+    {
+        
+    $courses = Course::latest()->take(6)->get(); // featured
+    $upcoming = Course::whereDate('course_date', '>=', now())
+                      ->orderBy('course_date')
+                      ->take(2)
+                      ->get();
+
+    return view('pages.courses.home', compact('courses', 'upcoming'));  
+    }
+
+        public function list(Request $request)
+    {   // 🔹 Filters
+     
+        $selectedType = $request->type ?? 'All Courses';
+        $selectedSpecialization = $request->specialization;
+
+        // 🔹 Base Query
+        $query = Course::query()->where('status', 'active');
+
+        // 🔹 Course Type Filter
+        if ($selectedType !== 'All Courses') {
+
+            match ($selectedType) {
+                'Free Modules' => $query->where('course_type', 'free'),
+                'Premium Tracks' => $query->where('course_type', 'premium'),
+                'Specialised Fellowships' => $query->where('course_type', 'specialised'),
+                default => null
+            };
+        }
+
+        // 🔹 Specialization Filter
+        if ($selectedSpecialization) {
+            $query->where('specialisation', $selectedSpecialization);
+        }
+
+        // 🔹 Get Courses
+        $courses = $query->orderBy('course_date', 'desc')->get();
+
+        // 🔹 Specializations
+        $specializations = Course::select('specialisation')
+            ->distinct()
+            ->get()
+            ->map(function ($item) {
+                return (object)[
+                    'id' => $item->specialisation,
+                    'name' => ucfirst($item->specialisation),
+                    'icon' => $this->getIcon($item->specialisation)
+                ];
+            });
+
+        // 🔹 Timeline Grouping
+        $timelineGroups = $courses->groupBy(function ($course) {
+            return Carbon::parse($course->course_date)->format('M Y');
+        })->map(function ($group, $key) {
+
+            return [
+                'label' => Carbon::parse($key)->format('M y'),
+                'title' => $this->getPhaseTitle($key),
+                'courses' => $group->map(function ($course) {
+
+                    return (object)[
+                        'id' => $course->id,
+                        'title' => $course->title,
+                        'price' => $course->fee > 0 ? '₹' . number_format($course->fee) : 'Free',
+                        'description' => $course->description,
+                        'image' => $course->course_image,
+                        'duration' => $course->duration ?? $course->course_time,
+                        'category' => ucfirst($course->specialisation),
+                        'type' => match ($course->course_type) {
+                            'free' => 'Free Module',
+                            'premium' => 'Premium Track',
+                            'specialised' => 'Fellowship',
+                            default => 'Unknown'
+                        }
+                    ];
+                })->values()
+            ];
+        })->values();
+
+        return view('pages.courses.course_list', compact(
+            'specializations',
+            'selectedType',
+            'selectedSpecialization',
+            'timelineGroups'
+        ));
+    }
+    private function getIcon($specialisation)
+{
+    return match (strtolower($specialisation)) {
+        'psychiatry' => 'psychology',
+        'neurology' => 'neurology',
+        'holistic care' => 'self_care',
+        'pediatrics' => 'child_care',
+        'research' => 'biotech',
+        default => 'category'
+    };
+}
+private function getPhaseTitle($date)
+{
+    $month = \Carbon\Carbon::parse($date)->month;
+
+    if ($month <= 4) {
+        return 'Foundation & Integrative Basics';
+    } elseif ($month <= 8) {
+        return 'Clinical Specializations';
+    } else {
+        return 'Global Research Practicum';
+    }
+}
+
+public function detail($id)
+{
+    $course = Course::with(['modules.topics', 'bonuses', 'mentor'])
+                    ->findOrFail($id);
+
+    return view('pages.courses.course_detail', compact('course'));
+
+}
+
+public function enroll($id)
+{
+    $course = Course::findOrFail($id);
+
+    // ❌ Optional: prevent enrollment if no seats
+    // if ($course->capacity !== null && $course->capacity <= 0) {
+    //     return redirect()->back()->with('error', 'Seats are full ❌');
+    // }
+
+    return redirect()->back()->with('enrolled', true);
+}
 }

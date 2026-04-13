@@ -1,61 +1,35 @@
-<!-- Header -->
 <nav class="bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-sm border-b border-outline-variant/10">
 
-  <div class="flex justify-between items-center max-w-7xl mx-auto px-4 md:px-8 h-20">
+  <div class="max-w-7xl mx-auto px-4 md:px-8 h-20 flex items-center">
 
     <!-- LEFT: LOGO -->
     <a href="{{ route('hospital') }}" class="flex items-center gap-3">
       <img 
         src="{{ asset('assets/logo/hosp_logo.jpeg') }}"
-        class="w-12 md:w-16 h-12 md:h-16 object-contain rounded-xl bg-white/80 p-1 shadow border border-white/30"
+        class="w-16 md:w-20 h-16 md:h-20 object-contain rounded-xl bg-white p-1 shadow-md"
       />
-      <div class="text-lg md:text-2xl font-serif italic text-primary font-headline tracking-tight">
-        Anandham Mindcare Institute & Research Foundation
+      <div class="text-base md:text-xl font-serif italic text-primary leading-tight">
+        Anandham Mindcare Institute
+        <div class="text-base md:text-xl font-serif italic text-primary leading-tight">& Research Foundation</div>
       </div>
     </a>
 
-    <!-- DESKTOP MENU -->
-    <div class="hidden lg:flex items-center gap-x-8">
-      <!-- <a class="{{ request()->routeIs('hospital') ? 'text-primary font-bold border-b-2 border-secondary pb-1 text-sm tracking-wide' : 'text-on-surface-variant text-sm hover:text-primary' }}" 
-        href="{{ route('hospital') }}">
-        Home
-      </a> -->
+    <!-- RIGHT: MENU + SIGN IN -->
+    <div class="ml-auto flex items-center gap-6">
 
-      <a class="{{ request()->routeIs('about-us') ? 'text-primary font-bold border-b-2 border-secondary pb-1 text-sm tracking-wide' : 'text-on-surface-variant text-sm hover:text-primary' }}" 
-        href="{{ route('about-us') }}">
-        About Us
-      </a>
+      <!-- DESKTOP MENU -->
+      <div class="hidden lg:flex items-center gap-6">
 
-      <a class="{{ request()->routeIs('services') ? 'text-primary font-bold border-b-2 border-secondary pb-1 text-sm tracking-wide' : 'text-on-surface-variant text-sm hover:text-primary' }}" 
-        href="{{ route('services') }}">
-        Services
-      </a>
+        <a href="{{ route('about-us') }}" class="hover:text-primary">About</a>
+        <a href="{{ route('services') }}" class="hover:text-primary">Services</a>
+        <a href="{{ route('gallery') }}" class="hover:text-primary">Gallery</a>
+        <a href="{{ route('blogs') }}" class="hover:text-primary">Blogs</a>
+        <a href="{{ route('courses') }}" class="hover:text-primary">Courses</a>
+        <a href="{{ route('contact-us') }}" class="hover:text-primary">Contact</a>
 
-      <a class="{{ request()->routeIs('gallery') ? 'text-primary font-bold border-b-2 border-secondary pb-1 text-sm tracking-wide' : 'text-on-surface-variant text-sm hover:text-primary' }}" 
-        href="{{ route('gallery') }}">
-        Gallery
-      </a>
+      </div>
 
-      <a class="{{ request()->routeIs('blogs') ? 'text-primary font-bold border-b-2 border-secondary pb-1 text-sm tracking-wide' : 'text-on-surface-variant text-sm hover:text-primary' }}" 
-        href="{{ route('blogs') }}">
-        Blogs
-      </a>
-
-      <a class="{{ request()->routeIs('courses') ? 'text-primary font-bold border-b-2 border-secondary pb-1 text-sm tracking-wide' : 'text-on-surface-variant text-sm hover:text-primary' }}" 
-        href="{{ route('courses') }}">
-        Courses
-      </a>
-
-      <a class="{{ request()->routeIs('contact-us') ? 'text-primary font-bold border-b-2 border-secondary pb-1 text-sm tracking-wide' : 'text-on-surface-variant text-sm hover:text-primary' }}" 
-        href="{{ route('contact-us') }}">
-        Contact Us
-      </a>
-    </div>
-
-    <!-- RIGHT -->
-    <div class="flex items-center gap-3">
-
-      <!-- SIGN IN (HIDE SMALL) -->
+      <!-- SIGN IN -->
       <a href="{{ route('signin') }}" 
         class="hidden sm:flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm">
         <span class="material-symbols-outlined text-lg">login</span>
@@ -72,21 +46,18 @@
   </div>
 
   <!-- MOBILE MENU -->
-  <div id="mobileMenu" class="hidden lg:hidden px-6 pb-6">
-
+  <div id="mobileMenu" class="hidden lg:hidden px-6 pb-6 bg-white">
     <div class="flex flex-col gap-4 pt-4 border-t">
-      <a class="text-primary font-semibold" href="{{ route('hospital') }}">Home</a>
-      <a class="text-primary font-semibold" href="{{ route('about-us') }}">About Us</a>
-      <a class="text-on-surface-variant" href="{{ route('services') }}">Services</a>
-      <a class="text-on-surface-variant" href="{{ route('courses') }}">Courses</a>
-      <a class="text-on-surface-variant" href="{{ route('contact-us') }}">Contact Us</a>
+      <a href="{{ route('hospital') }}">Home</a>
+      <a href="{{ route('about-us') }}">About</a>
+      <a href="{{ route('services') }}">Services</a>
+      <a href="{{ route('courses') }}">Courses</a>
+      <a href="{{ route('contact-us') }}">Contact</a>
 
-      <button class="mt-4 bg-primary text-white py-2 rounded-lg text-sm">
+      <a href="{{ route('signin') }}" class="mt-4 bg-primary text-white py-2 rounded-lg text-center">
         Sign In
-      </button>
-
+      </a>
     </div>
-
   </div>
 
 </nav>
