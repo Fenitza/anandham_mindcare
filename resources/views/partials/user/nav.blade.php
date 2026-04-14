@@ -13,6 +13,10 @@
 <span class="material-symbols-outlined" data-icon="auto_stories">auto_stories</span>
 <span class="font-label">Course Catalog</span>
 </a>
+<a href="{{ route('user.appointments.list') }}"  class="flex items-center gap-4 py-3 text-slate-500 dark:text-slate-400 pl-5 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors scale-95 duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="auto_stories">auto_stories</span>
+<span class="font-label">My Appointments</span>
+</a>
 <a class="flex items-center gap-4 py-3 text-slate-500 dark:text-slate-400 pl-5 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors scale-95 duration-150 ease-in-out" href="#">
 <span class="material-symbols-outlined" data-icon="videocam">videocam</span>
 <span class="font-label">Live Sessions</span>

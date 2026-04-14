@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\UserAuthController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\AppointmentController;
 
 Route::get('/', function () {
     return view('pages.home');
@@ -22,7 +23,7 @@ Route::view('/gallery', 'pages.hospital.gallery')->name('gallery');
 Route::view('/blogs', 'pages.hospital.blogs')->name('blogs');
 Route::view('/about-us', 'pages.hospital.about')->name('about-us');
 Route::view('/contact-us', 'pages.hospital.contact')->name('contact-us');
-Route::view('/appointment', 'pages.hospital.appointments')->name('appointment');
+
 
 
 /*
@@ -50,6 +51,12 @@ Route::get('/login', fn() => redirect()->route('signin'));
 Route::prefix('user')->group(function () {
     Route::middleware('auth')->group(function () {
         Route::view('/dashboard', 'pages.dasboard.users.dashboard')->name('user.dashboard');
+
+        Route::get('/appointments/list', [AppointmentController::class, 'index'])->name('user.appointments.list');
+        Route::view('/appointment/add', 'pages.dasboard.users.appointments')->name('user.appointment.add');
+        Route::post('/appointment/store', [AppointmentController::class, 'store'])->name('appointment.store');
+        Route::get('/appointment/{id}/edit', [AppointmentController::class, 'edit'])->name('appointment.edit');
+        Route::put('/appointment/{id}', [AppointmentController::class, 'update'])->name('appointment.update');
     });
     }); 
 

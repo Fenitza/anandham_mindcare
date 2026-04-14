@@ -7,59 +7,85 @@ use Illuminate\Http\Request;
 
 class AppointmentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function index(Request $request)
+{
+    $query = Appointment::where('user_id', auth()->id());
+
+    // 🔍 Search (name or ID)
+    if ($request->search) {
+        $query->where(function ($q) use ($request) {
+            $q->where('first_name', 'like', '%' . $request->search . '%')
+              ->orWhere('last_name', 'like', '%' . $request->search . '%')
+              ->orWhere('id', $request->search);
+        });
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    // 🏥 Service Filter
+    if ($request->service && $request->service != 'All Services') {
+        $query->where('service', $request->service);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+    // 📅 Date Filter
+if ($request->date_range) {
+
+    if ($request->date_range == 'today') {
+        $query->whereDate('date', now());
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Appointment $appointment)
-    {
-        //
+    if ($request->date_range == '7') {
+        $query->whereBetween('date', [now(), now()->addDays(7)]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Appointment $appointment)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Appointment $appointment)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Appointment $appointment)
-    {
-        //
+    if ($request->date_range == '30') {
+        $query->whereBetween('date', [now(), now()->addDays(30)]);
     }
 }
+
+    $appointments = $query->latest()->paginate(10);
+
+     $services = Appointment::where('user_id', auth()->id())
+                    ->select('service')
+                    ->distinct()
+                    ->pluck('service');
+
+    return view('pages.dasboard.users.appointment_list', compact('appointments', 'services'));
+}
+
+    public function store(Request $request)
+    {
+        // dd($request->all(), auth()->id());
+        $request->validate([
+            'first_name' => 'required',
+            'phone' => 'required',
+            'date' => 'required|date',
+            'start_time' => 'required',
+            'end_time' => 'required',
+        ]);
+
+        Appointment::create([
+        ...$request->all(),
+        'user_id' => auth()->id(), // ✅ attach user
+    ]);
+
+        return redirect()->back()->with('success', 'Appointment created');
+    }
+
+    public function edit($id)
+    {
+        $appointment = Appointment::findOrFail($id);
+        return view('appointments.form', compact('appointment'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $appointment = Appointment::findOrFail($id);
+
+        $appointment->update([
+        ...$request->all(),
+        'user_id' => auth()->id(), // optional (keep ownership)
+    ]);
+
+        return redirect()->back()->with('success', 'Updated successfully');
+    }
+}
+

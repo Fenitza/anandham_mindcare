@@ -18,9 +18,9 @@
                     We provide special care for child &amp; Adolescent Mental Health. A sanctuary for healing and cognitive restoration.
                 </p>
 <div class="flex flex-wrap gap-6 pt-4 reveal stagger-2">
-    <a href="{{ route('appointment') }}">
+    <a href="{{ route('user.appointment') }}">
         <button class="bg-tertiary-fixed-dim text-on-tertiary-fixed px-8 py-4 rounded-xl font-semibold flex items-center gap-3 hover:scale-105 transition-transform shadow-lg">
-                        Book Consultation
+                        Book Appointment
                         <span class="material-symbols-outlined">calendar_month</span>
 </button>
 </a>
