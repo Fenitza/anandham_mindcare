@@ -320,6 +320,50 @@ placeholder="Write a short engaging description about the course...">{{ old('des
     </div>
   </div>
 
+  <!-- Zoom Link -->
+<div class="group">
+  <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 group-focus-within:text-secondary">
+    Zoom Link
+  </label>
+
+  <div class="relative">
+    <span class="material-symbols-outlined absolute left-0 top-1/2 -translate-y-1/2 text-outline text-lg">
+      link
+    </span>
+
+    <input 
+      type="url"
+      name="zoom_link"
+      value="{{ old('zoom_link', $course->zoom_link ?? '') }}"
+      placeholder="https://zoom.us/..."
+      class="w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 pl-8 text-sm"
+    />
+  </div>
+</div>
+
+<!-- QR Enable Toggle -->
+<div class="group mt-6">
+  <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3">
+    Payment QR Option
+  </label>
+
+  <div class="flex items-center gap-3">
+
+    <input 
+      type="checkbox"
+      name="enable_qr"
+      value="1"
+      {{ old('enable_qr', $course->enable_qr ?? false) ? 'checked' : '' }}
+      class="w-4 h-4 accent-secondary cursor-pointer"
+    >
+
+    <span class="text-sm text-on-surface-variant">
+      Enable QR Payment for this course
+    </span>
+
+  </div>
+</div>
+
 </div>
 </section>
 <!-- Curriculum Roadmap Builder -->

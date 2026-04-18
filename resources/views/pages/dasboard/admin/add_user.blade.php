@@ -103,8 +103,7 @@
 <div class="mb-14 flex flex-col md:flex-row md:items-end justify-between gap-6 opacity-0 animate-fade-in-up">
 <div class="flex-1">
 <p class="text-secondary font-label text-xs uppercase tracking-[0.2em] font-bold mb-3">Institutional Stewardship</p>
-<h2 class="text-5xl font-headline font-bold text-primary tracking-tight leading-tight">Create Clinical User</h2>
-<p class="text-on-surface-variant font-body mt-4 max-w-xl leading-relaxed">Onboard new practitioners to the Mindcare registry. Please ensure all credentials align with the institutional professional standards.</p>
+<h2 class="text-5xl font-headline font-bold text-primary tracking-tight leading-tight">{{ isset($user) ? 'Edit Clinical User' : 'Create Clinical User' }}</h2>
 </div>
 <div class="hidden lg:block">
 <div class="relative">
@@ -116,8 +115,12 @@
 
 <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/15 overflow-hidden transition-all duration-300">
 <div class="p-10">
-<form class="space-y-12" method="POST" action="{{ route('users.store') }}">
+<form method="POST" action="{{ isset($user) ? route('admin.users.update', $user->id) : route('users.store') }}">
     @csrf
+
+    @if(isset($user))
+        @method('POST')
+    @endif
 <!-- Form Section: Identity -->
 <div class="space-y-8">
 <div class="border-l-4 border-primary/20 pl-4">
@@ -126,11 +129,11 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
 <div class="space-y-1">
 <label class="block font-label text-xs font-bold text-primary tracking-wide" for="full_name">FULL NAME</label>
-<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="full_name" name="name" placeholder="e.g. Dr. Sarah Jenkins" type="text"/>
+<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="full_name" name="name" value="{{ old('name', isset($user) ? $user->name : '') }}" placeholder="e.g. Dr. Sarah Jenkins" type="text"/>
 </div>
 <div class="space-y-1">
 <label class="block font-label text-xs font-bold text-primary tracking-wide" for="email">EMAIL ADDRESS</label>
-<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="email" name="email" placeholder="sarah.j@anandham.com" type="email"/>
+<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="email" name="email" value="{{ old('email', isset($user) ? $user->email : '') }}" placeholder="sarah.j@anandham.com" type="email"/>
 </div>
 </div>
 </div>
@@ -144,22 +147,22 @@
 <label class="block font-label text-xs font-bold text-primary tracking-wide" for="role">USER ROLE</label>
 <div class="relative">
 <select class="w-full bg-surface-container-low border-0 border-b border-surface-container-highest focus:border-primary focus:ring-0 appearance-none transition-all font-body text-lg py-3 px-4 pr-10 cursor-pointer rounded-t-lg" id="role" name="role">
-<option value="doctor">Doctor</option>
-<option value="student">Student</option>
-<option value="professional">Professional</option>
+    <option value="doctor" {{ (old('role', $user->role ?? '') == 'doctor') ? 'selected' : '' }}>Doctor</option>
+    <option value="student" {{ (old('role', $user->role ?? '') == 'student') ? 'selected' : '' }}>Student</option>
+    <option value="professional" {{ (old('role', $user->role ?? '') == 'professional') ? 'selected' : '' }}>Professional</option>
 </select>
 <span class="material-symbols-outlined absolute right-0 top-4 pointer-events-none text-slate-400">expand_more</span>
 </div>
 </div>
 <div class="space-y-1">
 <label class="block font-label text-xs font-bold text-primary tracking-wide" for="specialization">CLINICAL SPECIALIZATION</label>
-<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="specialization" name="specialization" placeholder="e.g. Cognitive Behavioral Therapy" type="text"/>
+<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="specialization" name="specialization" value="{{ old('specialization', isset($user) ? $user->specialization : '') }}" placeholder="e.g. Cognitive Behavioral Therapy" type="text"/>
 </div>
 </div>
 <div class="grid grid-cols-1 gap-10">
 <div class="space-y-1">
 <label class="block font-label text-xs font-bold text-primary tracking-wide" for="license_number">PROFESSIONAL LICENSE NUMBER</label>
-<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="license_number" name="license_number" placeholder="e.g. LIC-9876543210" type="text"/>
+<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="license_number" name="license_number" value="{{ old('license_number', isset($user) ? $user->license_number : '') }}" placeholder="e.g. LIC-9876543210" type="text"/>
 </div>
 </div>
 </div>
@@ -171,33 +174,33 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
 <div class="space-y-1">
 <label class="block font-label text-xs font-bold text-primary tracking-wide" for="phone">PHONE NUMBER</label> 
-<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="phone" name="phone" placeholder=" 98765 43210
+<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="phone" name="phone" value="{{ old('phone', isset($user) ? $user->phone : '') }}" placeholder=" 98765 43210
 " type="tel"/>
 </div>
 <div class="space-y-1">
 <label class="block font-label text-xs font-bold text-primary tracking-wide" for="address">STREET ADDRESS</label>
-<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="address" name="address" placeholder="123 Clinical Way" type="text"/>
+<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="address" name="address" value="{{ old('address', isset($user) ? $user->address : '') }}" placeholder="123 Clinical Way" type="text"/>
 </div>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
 <div class="space-y-1">
 <label class="block font-label text-xs font-bold text-primary tracking-wide" for="city">CITY</label>
-<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="city" name="city" placeholder="Healthcare City" type="text"/>
+<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="city" name="city" value="{{ old('city', isset($user) ? $user->city : '') }}" placeholder="Healthcare City" type="text"/>
 </div>
 <div class="space-y-1">
 <label class="block font-label text-xs font-bold text-primary tracking-wide" for="state">STATE</label>
-<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="state" name="state" placeholder="State" type="text"/>
+<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="state" name="state" value="{{ old('state', isset($user) ? $user->state : '') }}" placeholder="State" type="text"/>
 </div>
 <div class="space-y-1">
 <label class="block font-label text-xs font-bold text-primary tracking-wide" for="zip">ZIP CODE</label>
-<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="zip" name="zip" placeholder="00000" type="text"/>
+<input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="zip" name="zip" value="{{ old('zip', isset($user) ? $user->zip : '') }}" placeholder="00000" type="text"/>
 </div>
 </div>
 </div>
 <!-- Form Section: Status & Toggle -->
 
 <!-- Hidden input (this goes to backend) -->
-<input type="hidden" name="status" id="status" value="{{ $user->status ?? 1 }}">
+<input type="hidden" name="status" id="status" value="{{ old('status', $user->status ?? 1) }}">
 
 <div class="bg-surface-container-low p-6 rounded-lg flex items-center justify-between">
     
@@ -243,16 +246,7 @@
 </form>
 </div>
 </div>
-<!-- Perspective Quote (Design System Component) -->
-<div class="mt-16 bg-surface-container-lowest p-8 rounded-lg border-l-4 border-secondary/50 shadow-sm flex items-center gap-8">
-<div class="flex-grow">
-<p class="font-headline text-2xl italic text-primary leading-relaxed">"The transition to digital records must be handled with clinical precision and human compassion. Every account represents a key to restorative care."</p>
-<p class="font-label text-sm mt-4 text-on-surface-variant">— Institutional Stewardship Board</p>
-</div>
-<div class="hidden sm:block opacity-20 text-blue-900">
-<span class="material-symbols-outlined text-6xl" style="font-variation-settings: 'FILL' 1;">medical_information</span>
-</div>
-</div>
+
 </div>
 
 <script>
@@ -260,10 +254,26 @@
     const circle = document.getElementById('toggleCircle');
     const statusInput = document.getElementById('status');
 
+    function updateToggleUI() {
+    if (isActive) {
+        toggle.classList.add('bg-primary');
+        toggle.classList.remove('bg-gray-300');
+        circle.classList.add('translate-x-5');
+        circle.classList.remove('translate-x-0');
+    } else {
+        toggle.classList.remove('bg-primary');
+        toggle.classList.add('bg-gray-300');
+        circle.classList.remove('translate-x-5');
+        circle.classList.add('translate-x-0');
+    }
+}
+
+updateToggleUI();
+
     let isActive = true; // default ON
 
     toggle.addEventListener('click', () => {
-        isActive = !isActive;
+        let isActive = {{ isset($user) ? ($user->status ? 'true' : 'false') : 'true' }};
 
         // Update backend value
         statusInput.value = isActive ? 1 : 0;

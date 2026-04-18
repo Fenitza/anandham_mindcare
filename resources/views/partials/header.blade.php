@@ -30,11 +30,30 @@
       </div>
 
       <!-- SIGN IN -->
-      <a href="{{ route('signin') }}" 
-        class="hidden sm:flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm">
+      @php
+    $isAdmin = Auth::guard('admin')->check();
+    $isUser = Auth::guard('web')->check();
+@endphp
+
+@if($isAdmin || $isUser)
+
+    <a href="{{ $isAdmin ? route('admin.dashboard') : route('user.dashboard') }}"
+       class="hidden sm:flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm">
+
+        <span class="material-symbols-outlined text-lg">account_circle</span>
+        My Account
+    </a>
+
+@else
+
+    <a href="{{ route('signin') }}" 
+       class="hidden sm:flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm">
+
         <span class="material-symbols-outlined text-lg">login</span>
         Sign In
-      </a>
+    </a>
+
+@endif
 
       <!-- HAMBURGER -->
       <button id="menuBtn" class="lg:hidden flex items-center justify-center w-10 h-10 rounded-lg border">

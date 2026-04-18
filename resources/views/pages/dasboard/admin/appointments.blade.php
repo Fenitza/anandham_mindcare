@@ -1,221 +1,190 @@
-@extends('layouts.admin')
-@section('title', 'Blogs - Anandham Mindcare')
+@extends('layouts.user')
+@section('title', 'Appointments - Anandham Mindcare')
 @section('content')
-<div class="pt-28 px-8 pb-12 space-y-12">
-    @include('partials.alerts')
-<!-- Filters Section -->
-<div class="bg-surface-container-low rounded-xl p-6 mb-8 flex flex-wrap items-end gap-6 shadow-sm">
-<div class="flex-1 min-w-[240px]">
-<label class="block text-xs font-bold text-primary uppercase tracking-wider mb-2">Search Registry</label>
+
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .perspective-quote-bar {
+            border-left: 4px solid #755b00;
+        }
+        .ghost-border {
+            border: 1px solid rgba(196, 198, 209, 0.15);
+        }
+    </style>
+    
+
+    <!-- <header class="mb-20"> -->
+<!-- <h2 class="font-headline text-5xl text-primary font-bold mb-4">Schedule New Clinical Session</h2> -->
+
+</header>
+<form 
+    action="{{ isset($appointment) ? route('appointment.update',$appointment->id) : route('appointment.store') }}"
+    method="POST"
+    class="space-y-12"
+>
+@csrf
+@if(isset($appointment)) @method('PUT') @endif
+<!-- Section 1: Patient Details (Bento-style Grid) -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+    
+<div class="md:col-span-4">
+<h3 class="font-headline text-2xl text-primary font-bold">Patient Details</h3>
+<p class="text-on-surface-variant text-sm mt-2 leading-relaxed">Identify the recipient of care. Ensure the Patient ID matches the medical records for seamless integration.</p>
+</div>
+<div class="md:col-span-8 bg-surface-container-lowest p-8 rounded-xl ghost-border space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 <div class="relative">
-<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm" data-icon="search">search</span>
-<input class="w-full bg-white border-none rounded-lg py-2.5 pl-10 pr-4 focus:ring-2 focus:ring-secondary/30 text-sm font-body outline-none transition-all" placeholder="Patient name or ID..." type="text"/>
+<label class="block text-xs font-semibold text-secondary uppercase tracking-widest mb-1">First Name</label>
+<input class="w-full bg-surface-container-high border-none border-b-2 border-transparent focus:border-secondary focus:ring-0 transition-all px-4 py-3 font-body" name="first_name" value="{{ old('first_name', $appointment->first_name ?? '') }}" placeholder="e.g. Eleanor" type="text"/>
+</div>
+<div class="relative">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-widest mb-1">Last Name</label>
+<input class="w-full bg-surface-container-high border-none border-b-2 border-transparent focus:border-secondary focus:ring-0 transition-all px-4 py-3 font-body" name="last_name"  value="{{ old('last_name', $appointment->last_name ?? '') }}" placeholder="e.g. Vance" type="text"/>
 </div>
 </div>
-<div class="w-48">
-<label class="block text-xs font-bold text-primary uppercase tracking-wider mb-2">Department</label>
-<select class="w-full bg-white border-none rounded-lg py-2.5 px-4 focus:ring-2 focus:ring-secondary/30 text-sm font-body appearance-none cursor-pointer">
-<option>All Services</option>
-<option>Child Care</option>
-<option>Adult Counseling</option>
-<option>Diagnostic Psychiatry</option>
+<div class="relative">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-widest mb-1">Contact Number</label>
+<input class="w-full bg-surface-container-high border-none border-b-2 border-transparent focus:border-secondary focus:ring-0 transition-all px-4 py-3 font-body" name="phone" value="{{ old('phone', $appointment->phone ?? '') }}" placeholder="+91 9876543210" type="tel"/>
+</div>
+<div class="relative">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-widest mb-1">Address</label>
+<input class="w-full bg-surface-container-high border-none border-b-2 border-transparent focus:border-secondary focus:ring-0 transition-all px-4 py-3 font-body" name="address" value="{{ old('address', $appointment->address ?? '') }}" placeholder="123 Main Street, City, State, ZIP" type="text"/>
+</div>
+</div>
+</section>
+<!-- Section 2: Appointment Scheduling -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+<div class="md:col-span-4">
+<h3 class="font-headline text-2xl text-primary font-bold">Scheduling</h3>
+<p class="text-on-surface-variant text-sm mt-2 leading-relaxed">Define the temporal boundaries of the session. Recurrence ensures continuity in the therapeutic journey.</p>
+</div>
+<div class="md:col-span-8 bg-surface-container-low p-8 rounded-xl space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="relative">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-widest mb-1">Date</label>
+<input class="w-full bg-surface-container-lowest border-none border-b-2 border-transparent focus:border-secondary focus:ring-0 transition-all px-4 py-3 font-body" name="date" value="{{ old('date', $appointment->date ?? '') }}" type="date"/>
+</div>
+<div class="relative">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-widest mb-1">Start Time</label>
+<input class="w-full bg-surface-container-lowest border-none border-b-2 border-transparent focus:border-secondary focus:ring-0 transition-all px-4 py-3 font-body" name="start_time" value="{{ old('start_time', $appointment->start_time ?? '') }}" type="time"/>
+</div>
+<div class="relative">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-widest mb-1">End Time</label>
+<input class="w-full bg-surface-container-lowest border-none border-b-2 border-transparent focus:border-secondary focus:ring-0 transition-all px-4 py-3 font-body" name="end_time" value="{{ old('end_time', $appointment->end_time ?? '') }}" type="time"/>
+</div>
+</div>
+
+</div>
+</section>
+<!-- Section 3: Service Configuration -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+<div class="md:col-span-4">
+<h3 class="font-headline text-2xl text-primary font-bold">Service Configuration</h3>
+<p class="text-on-surface-variant text-sm mt-2 leading-relaxed">Assign the specialized care module and the presiding clinician for this session.</p>
+</div>
+<div class="md:col-span-8 bg-surface-container-lowest p-8 rounded-xl ghost-border grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="relative">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-widest mb-1">Specialized Service</label>
+<select class="w-full bg-surface-container-high border-none border-b-2 border-transparent focus:border-secondary focus:ring-0 transition-all px-4 py-3 font-body appearance-none" name="service">
+<option value="">Select Service...</option>
+<option value="Child Care" {{ old('service', $appointment->service ?? '') == 'Child Care' ? 'selected' : '' }}>Child Care</option>
+<option value="Adolescent Care" {{ old('service', $appointment->service ?? '') == 'Adolescent Care' ? 'selected' : '' }}>Adolescent Care</option>
+<option value="Geriatric Mental Health" {{ old('service', $appointment->service ?? '') == 'Geriatric Mental Health' ? 'selected' : '' }}>Geriatric Mental Health</option>
+<option value="Trauma-Informed Therapy" {{ old('service', $appointment->service ?? '') == 'Trauma-Informed Therapy' ? 'selected' : '' }}>Trauma-Informed Therapy</option>
 </select>
 </div>
-<div class="w-48">
-<label class="block text-xs font-bold text-primary uppercase tracking-wider mb-2">Date Horizon</label>
-<div class="relative">
-<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm" data-icon="calendar_today">calendar_today</span>
-<input class="w-full bg-white border-none rounded-lg py-2.5 pl-10 pr-4 focus:ring-2 focus:ring-secondary/30 text-sm font-body outline-none" type="text" value="Next 7 Days"/>
+<!-- <div class="relative">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-widest mb-1">Consulting Physician</label>
+<select class="w-full bg-surface-container-high border-none border-b-2 border-transparent focus:border-secondary focus:ring-0 transition-all px-4 py-3 font-body appearance-none">
+<option>Assign Physician...</option>
+<option>Dr. Julian Aristhone</option>
+<option>Dr. Sarah Hemlock</option>
+<option>Dr. Marcus Vane</option>
+</select>
+</div> -->
 </div>
+</section>
+<!-- Section 4: Clinical Context -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start pb-24">
+<div class="md:col-span-4">
+<h3 class="font-headline text-2xl text-primary font-bold">Clinical Context</h3>
+<p class="text-on-surface-variant text-sm mt-2 leading-relaxed">Provide preliminary observations and set the triage priority for the intake team.</p>
 </div>
-<button class="bg-secondary text-on-secondary font-semibold py-2.5 px-8 rounded-lg hover:bg-on-secondary-fixed-variant transition-all duration-300 shadow-sm flex items-center gap-2">
-<span class="material-symbols-outlined text-sm" data-icon="filter_list">filter_list</span>
-                    Apply Filters
-                </button>
+<div class="md:col-span-8 space-y-6">
+<div class="bg-surface-container-lowest p-8 rounded-xl ghost-border">
+<label class="block text-xs font-semibold text-secondary uppercase tracking-widest mb-1">Preliminary Notes</label>
+<textarea class="w-full bg-surface-container-high border-none border-b-2 border-transparent focus:border-secondary focus:ring-0 transition-all px-4 py-3 font-body resize-none" placeholder="Summarize patient condition or specific session goals..." rows="4" name="notes">{{ old('notes', $appointment->notes ?? '') }}</textarea>
 </div>
-<!-- Appointments Table Container -->
-<div class="bg-surface-container-lowest rounded-xl overflow-hidden ghost-border shadow-sm">
-<table class="w-full text-left border-collapse">
-<thead>
-<tr class="bg-surface-container-low/50">
-<th class="px-6 py-5 text-xs font-bold text-primary uppercase tracking-widest font-body">Patient Name</th>
-<th class="px-6 py-5 text-xs font-bold text-primary uppercase tracking-widest font-body">Specialized Service</th>
-<th class="px-6 py-5 text-xs font-bold text-primary uppercase tracking-widest font-body">Consulting Physician</th>
-<th class="px-6 py-5 text-xs font-bold text-primary uppercase tracking-widest font-body">Date &amp; Time</th>
-<th class="px-6 py-5 text-xs font-bold text-primary uppercase tracking-widest font-body">Status</th>
-<th class="px-6 py-5 text-xs font-bold text-primary uppercase tracking-widest font-body text-right">Actions</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-surface-container">
-<!-- Table Row 1 -->
-<tr class="group hover:bg-surface-container-low transition-colors duration-200">
-<td class="px-6 py-6">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold text-sm">ES</div>
+<div class="flex items-center justify-between bg-surface-container-low p-6 rounded-xl">
 <div>
-<div class="font-semibold text-on-surface">Eleanor Shellstrop</div>
-<div class="text-xs text-on-surface-variant">ID: #AM-4921</div>
+<h4 class="font-semibold text-primary">Urgency Level</h4>
+<p class="text-xs text-on-surface-variant">Priority sessions are flagged for immediate clinician review.</p>
 </div>
-</div>
-</td>
-<td class="px-6 py-6 font-body text-sm text-on-surface">Counseling &amp; Therapy</td>
-<td class="px-6 py-6">
-<div class="flex items-center gap-2">
-<img alt="Dr. Aris Thorne" class="w-6 h-6 rounded-full" data-alt="portrait of a professional male doctor with glasses and a stethoscope in a clinical setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEd89R0XfBN3py_qf-u80Untp9_zYDYKqYnqC6u5-1NO3qSSv5OrIBO-5f5lB8YVqypw6ENebJjAegebW5X0OXKdM4pXYC4H-u7sNZSjL99uYK22gz7964bDl6BVM2kx5JvwAtgEFkR7DY0cN2TPMWS_JeYLh-JKN1SuiwfHVQnjk2zFRmnTc36moZ-GwG2nKR1_jZk9wVmeGr1lxxWz9PUjXU0Q7TRx9VmKLwb-0ah5KWQ-GSN7HjLaKnaOsqLKmpBEbazmkqww0x"/>
-<span class="text-sm font-medium text-on-surface">Dr. Aris Thorne</span>
-</div>
-</td>
-<td class="px-6 py-6">
-<div class="text-sm font-semibold text-on-surface">Oct 24, 2023</div>
-<div class="text-xs text-on-surface-variant">09:30 AM — 10:30 AM</div>
-</td>
-<td class="px-6 py-6">
-<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
-                                    Scheduled
-                                </span>
-</td>
-<td class="px-6 py-6 text-right">
-<div class="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-<button class="p-2 text-slate-400 hover:text-primary transition-colors">
-<span class="material-symbols-outlined text-lg" data-icon="edit">edit</span>
+<div class="flex items-center gap-4 bg-surface-container-lowest p-1 rounded-full border border-outline-variant/30">
+    <input type="hidden" name="urgency" id="urgencyInput"
+value="{{ old('urgency', $appointment->urgency ?? 'standard') }}">
+<button type="button"
+onclick="setUrgency('standard')"
+id="standardBtn"
+class="px-6 py-2 rounded-full text-sm font-semibold">
+Standard
 </button>
-<button class="p-2 text-slate-400 hover:text-error transition-colors">
-<span class="material-symbols-outlined text-lg" data-icon="cancel">cancel</span>
-</button>
-</div>
-</td>
-</tr>
-<!-- Table Row 2 -->
-<tr class="group hover:bg-surface-container-low transition-colors duration-200">
-<td class="px-6 py-6">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed font-bold text-sm">JM</div>
-<div>
-<div class="font-semibold text-on-surface">Julian Moore</div>
-<div class="text-xs text-on-surface-variant">ID: #AM-5102</div>
-</div>
-</div>
-</td>
-<td class="px-6 py-6 font-body text-sm text-on-surface">Child Care Psychiatry</td>
-<td class="px-6 py-6">
-<div class="flex items-center gap-2">
-<img alt="Dr. Sarah Jenkins" class="w-6 h-6 rounded-full" data-alt="close-up portrait of a friendly female pediatrician smiling in a warm clinic environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgsi3KqK0mwI4gxCj6TElJ18N9flVaORIwBkobeP2kLIvxB83aJXP03yP89iPkHYyhX3hQV01L30yBAjZFyD5ser7uH0ejlbTPXBOvT63BruyMxAPj-r5Fs8Ezhjb4qdgenEsoXyfmCyWwDAjiOHnQmjs1OLofaq_m7Cldf1-esII7UDCdbh2AR8YO-tJs2A99QzlDBIjzDICNGJoE34F4R-WfftvvK8UI0wRPhI473h-IFUf3_jQwpe2s6Ec7DoXnz6e9fn8Y47-5"/>
-<span class="text-sm font-medium text-on-surface">Dr. Sarah Jenkins</span>
-</div>
-</td>
-<td class="px-6 py-6">
-<div class="text-sm font-semibold text-on-surface">Oct 24, 2023</div>
-<div class="text-xs text-on-surface-variant">11:00 AM — 11:45 AM</div>
-</td>
-<td class="px-6 py-6">
-<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">
-                                    Pending
-                                </span>
-</td>
-<td class="px-6 py-6 text-right">
-<div class="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-<button class="p-2 text-slate-400 hover:text-primary transition-colors">
-<span class="material-symbols-outlined text-lg" data-icon="edit">edit</span>
-</button>
-<button class="p-2 text-slate-400 hover:text-error transition-colors">
-<span class="material-symbols-outlined text-lg" data-icon="cancel">cancel</span>
-</button>
-</div>
-</td>
-</tr>
-<!-- Table Row 3 -->
-<tr class="group hover:bg-surface-container-low transition-colors duration-200">
-<td class="px-6 py-6">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed font-bold text-sm">KL</div>
-<div>
-<div class="font-semibold text-on-surface">Kaelen Lousia</div>
-<div class="text-xs text-on-surface-variant">ID: #AM-3844</div>
-</div>
-</div>
-</td>
-<td class="px-6 py-6 font-body text-sm text-on-surface">Holistic Wellness</td>
-<td class="px-6 py-6">
-<div class="flex items-center gap-2">
-<img alt="Dr. Aris Thorne" class="w-6 h-6 rounded-full" data-alt="confident professional male doctor standing in a hallway of a high-end medical clinic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpWod39uVwFVJq7juB0H2yvaN2PFIik2Mj5zZyOOW1pa7J5afctRKjeUoUTM-f-SgROQZONIEF9vfcFD0HGMKIk_e5-6F_33d7af7hO54NUL8s04gtRP8zT4xoQ17HYQyeBrByNNfRWyjI51sUIdVcW3T9Y9LfhxnbVDXGBmn2K2JtXHmRShJ46JEkAxPnVmAIGzFvdmvrl6UmSSW7os_sXCghCIX5GDvZg61QlU1qcmIEJ2th5vqkbXEAGFK1e7SSfVeHh7s7EuTl"/>
-<span class="text-sm font-medium text-on-surface">Dr. Aris Thorne</span>
-</div>
-</td>
-<td class="px-6 py-6">
-<div class="text-sm font-semibold text-on-surface">Oct 23, 2023</div>
-<div class="text-xs text-on-surface-variant">02:00 PM — 03:00 PM</div>
-</td>
-<td class="px-6 py-6">
-<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">
-                                    Completed
-                                </span>
-</td>
-<td class="px-6 py-6 text-right">
-<div class="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-<button class="p-2 text-slate-400 hover:text-primary transition-colors">
-<span class="material-symbols-outlined text-lg" data-icon="edit">edit</span>
-</button>
-<button class="p-2 text-slate-400 hover:text-error transition-colors">
-<span class="material-symbols-outlined text-lg" data-icon="cancel">cancel</span>
-</button>
-</div>
-</td>
-</tr>
-<!-- Table Row 4 -->
-<tr class="group hover:bg-surface-container-low transition-colors duration-200">
-<td class="px-6 py-6">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-full bg-error-container flex items-center justify-center text-error font-bold text-sm">TW</div>
-<div>
-<div class="font-semibold text-on-surface">Thomas Wright</div>
-<div class="text-xs text-on-surface-variant">ID: #AM-2190</div>
-</div>
-</div>
-</td>
-<td class="px-6 py-6 font-body text-sm text-on-surface">Diagnostic Psychiatry</td>
-<td class="px-6 py-6">
-<div class="flex items-center gap-2">
-<img alt="Dr. Samuel Lee" class="w-6 h-6 rounded-full" data-alt="close-up of an Asian male medical professional in a lab coat with a thoughtful expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDs9Y7BW_ozODb4rq-DSEFvQ7W8c3NeF1DQB87T-fySj5DptTuAx7dewX7hgWfuQqnl2ryzuQI84sFnclmkuKxJmzWaDFnd8lys5j-uQMPB66vkT6dAugAv9HHF0yW8Eql49bqu7vqANKP7fxFHGmOhRt8ML8Qro0qsB1lC4GRsp4v_DjFgMN4flFsxqMiHZr-81aBCXYAU03ful8xq6Qi2za2YEgSsUU0bkPYSuxwfsMPgdPvAvmCseH0K932Hm_l1dAcrye6mchGA"/>
-<span class="text-sm font-medium text-on-surface">Dr. Samuel Lee</span>
-</div>
-</td>
-<td class="px-6 py-6">
-<div class="text-sm font-semibold text-on-surface">Oct 22, 2023</div>
-<div class="text-xs text-on-surface-variant">04:30 PM — 05:15 PM</div>
-</td>
-<td class="px-6 py-6">
-<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-800">
-                                    Cancelled
-                                </span>
-</td>
-<td class="px-6 py-6 text-right">
-<div class="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-<button class="p-2 text-slate-400 hover:text-primary transition-colors">
-<span class="material-symbols-outlined text-lg" data-icon="edit">edit</span>
-</button>
-<button class="p-2 text-slate-400 hover:text-error transition-colors">
-<span class="material-symbols-outlined text-lg" data-icon="cancel">cancel</span>
-</button>
-</div>
-</td>
-</tr>
-</tbody>
-</table>
-<!-- Table Footer / Pagination -->
-<div class="px-6 py-4 bg-surface-container-low/30 border-t border-surface-container flex items-center justify-between">
-<span class="text-sm text-on-surface-variant">Showing <span class="font-bold text-primary">1-4</span> of 48 appointments</span>
-<div class="flex gap-2">
-<button class="w-8 h-8 rounded border border-outline-variant flex items-center justify-center text-slate-400 hover:bg-white transition-colors">
-<span class="material-symbols-outlined text-sm" data-icon="chevron_left">chevron_left</span>
-</button>
-<button class="w-8 h-8 rounded border border-primary bg-primary text-white flex items-center justify-center text-sm font-bold">1</button>
-<button class="w-8 h-8 rounded border border-outline-variant flex items-center justify-center text-slate-600 hover:bg-white transition-colors text-sm">2</button>
-<button class="w-8 h-8 rounded border border-outline-variant flex items-center justify-center text-slate-600 hover:bg-white transition-colors text-sm">3</button>
-<button class="w-8 h-8 rounded border border-outline-variant flex items-center justify-center text-slate-400 hover:bg-white transition-colors">
-<span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+
+<button type="button"
+onclick="setUrgency('priority')"
+id="priorityBtn"
+class="px-6 py-2 rounded-full text-sm font-semibold">
+Priority
 </button>
 </div>
 </div>
+<div class="pt-8 flex justify-end gap-4">
+<button class="px-8 py-3 rounded-md border border-outline-variant text-primary font-semibold hover:bg-surface-container-low transition-colors font-body" type="button">Discard Draft</button>
+<button class="px-10 py-3 rounded-md bg-gradient-to-r from-primary to-primary-container text-on-primary font-semibold hover:scale-[1.02] transition-transform font-body shadow-lg" type="submit">Confirm Appointment</button>
 </div>
 </div>
+</section>
+</form>
+</main>
+<script>
+function setUrgency(value) {
+    document.getElementById('urgencyInput').value = value;
+
+    // UI highlight (optional but clean)
+    document.getElementById('standardBtn').classList.remove('bg-primary','text-white');
+    document.getElementById('priorityBtn').classList.remove('bg-primary','text-white');
+
+    if(value === 'standard'){
+        document.getElementById('standardBtn').classList.add('bg-primary','text-white');
+    } else {
+        document.getElementById('priorityBtn').classList.add('bg-primary','text-white');
+    }
+}
+
+// Preselect on edit
+document.addEventListener("DOMContentLoaded", function () {
+    setUrgency(document.getElementById('urgencyInput').value);
+});
+</script><script>
+function setUrgency(value) {
+    document.getElementById('urgencyInput').value = value;
+
+    // UI highlight (optional but clean)
+    document.getElementById('standardBtn').classList.remove('bg-primary','text-white');
+    document.getElementById('priorityBtn').classList.remove('bg-primary','text-white');
+
+    if(value === 'standard'){
+        document.getElementById('standardBtn').classList.add('bg-primary','text-white');
+    } else {
+        document.getElementById('priorityBtn').classList.add('bg-primary','text-white');
+    }
+}
+
+// Preselect on edit
+document.addEventListener("DOMContentLoaded", function () {
+    setUrgency(document.getElementById('urgencyInput').value);
+});
+</script>
 @endsection

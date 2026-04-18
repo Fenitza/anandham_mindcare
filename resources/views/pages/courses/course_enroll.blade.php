@@ -10,196 +10,185 @@ body { font-family: 'Work Sans', sans-serif; }
 h1, h2, h3 { font-family: 'Newsreader', serif; }
 </style>
 
-<section class="pt-24 pb-20 px-6">
-<div class="max-w-6xl mx-auto">
+<section class="py-16 px-6">
+<div class="max-w-5xl mx-auto">
 
     <!-- HEADER -->
-    <div class="mb-12 text-center">
-        <span class="text-secondary font-semibold tracking-widest uppercase text-[10px]">
-            Secure Enrollment Gateway
+    <div class="mb-10 text-center">
+        <span class="text-secondary font-semibold tracking-widest uppercase text-xs">
+            Secure Enrollment
         </span>
 
-        <h1 class="text-4xl md:text-5xl text-primary font-bold mt-3 italic leading-tight">
-            Course Enrollment & Payment
+        <h1 class="text-4xl md:text-5xl text-primary font-bold mt-3 italic">
+            Course Payment
         </h1>
     </div>
 
-    <!-- GRID -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-        @if(session('enrolled'))
-<div class="bg-secondary/10 border border-secondary/30 rounded-xl p-5 mb-6 text-center animate-fade-in-up">
+    <!-- ALERT -->
+    @if(session('enrolled'))
+<div class="mb-8 max-w-2xl mx-auto">
+    <div class="bg-blue-50 border border-blue-200 rounded-2xl p-6 shadow-sm">
 
-    <h4 class="text-primary font-bold text-sm uppercase tracking-wider mb-2">
-        Payment Approval Pending
-    </h4>
+        <div class="flex items-start gap-4">
 
-    <p class="text-on-surface-variant text-xs leading-relaxed max-w-md mx-auto">
-        We have received your transaction details. Our clinical administration is currently verifying the enrollment. You will receive an email confirmation and access to the modules within 2–4 business hours.
-    </p>
+            <div class="w-12 h-12 rounded-full bg-blue-500 text-white flex items-center justify-center">
+                <span class="material-symbols-outlined">hourglass_top</span>
+            </div>
 
-</div>
-@endif@if(session('enrolled'))
-<div class="bg-secondary/10 border border-secondary/30 rounded-xl p-5 mb-6 text-center animate-fade-in-up">
+            <div>
+                <h4 class="text-blue-700 font-bold text-base mb-1">
+                    Payment Under Verification
+                </h4>
 
-    <h4 class="text-primary font-bold text-sm uppercase tracking-wider mb-2">
-        Payment Approval Pending
-    </h4>
+                <p class="text-sm text-blue-600">
+                    Your payment proof has been submitted successfully. Verification takes 2–4 hours.
+                </p>
+                <a href="{{ route('user.course.enrollments') }}"
+                class="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-bold text-sm hover:scale-105 transition-all shadow-md hover:shadow-lg">
+                    
+                    <span class="material-symbols-outlined text-base">school</span>
+                    Check Course Enrolllment status
+                </a>
 
-    <p class="text-on-surface-variant text-xs leading-relaxed max-w-md mx-auto">
-        We have received your transaction details. Our clinical administration is currently verifying the enrollment. You will receive an email confirmation and access to the modules within 2–4 business hours.
-    </p>
+                
+            </div>
 
+        </div>
+
+    </div>
 </div>
 @endif
 
-        <!-- LEFT SIDE -->
-        <div class="space-y-10">
+    <!-- GRID -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
 
-            <!-- COURSE INFO -->
+        <!-- LEFT -->
+        <div class="space-y-8">
+
             <div>
-                <div class="flex items-center gap-3 mb-4">
-                    <span class="material-symbols-outlined text-secondary">clinical_notes</span>
-                    <h2 class="text-2xl text-primary font-bold italic">
-                        {{ $course->title ?? 'Course Title' }}
-                    </h2>
+                <h2 class="text-2xl md:text-3xl text-primary font-bold italic mb-3">
+                    {{ $course->title }}
+                </h2>
+
+                <p class="text-sm md:text-base text-on-surface-variant leading-relaxed">
+                    {{ $course->description }}
+                </p>
+            </div>
+
+            <!-- META -->
+            <div class="flex justify-between text-center text-sm border-y py-4">
+                <div>
+                    <p class="text-outline uppercase text-xs">Duration</p>
+                    <p class="font-bold text-primary text-base">
+                        {{ $course->duration ?? $course->course_time }}
+                    </p>
                 </div>
 
-                <p class="text-on-surface-variant text-sm leading-relaxed mb-6">
-                    {{ $course->description ?? 'Course description here...' }}
-                </p>
+                <div>
+                    <p class="text-outline uppercase text-xs">Certificate</p>
+                    <p class="font-bold text-primary text-base">CPD</p>
+                </div>
 
-                <!-- META -->
-                <div class="grid grid-cols-3 gap-6 py-6 border-y border-outline-variant/10 text-center">
-
-                    <div>
-                        <p class="text-[10px] uppercase text-outline font-semibold">Duration</p>
-                        <p class="font-bold text-primary text-sm">
-                            {{ $course->duration ?? $course->course_time }}
-                        </p>
-                    </div>
-
-                    <div>
-                        <p class="text-[10px] uppercase text-outline font-semibold">Certification</p>
-                        <p class="font-bold text-primary text-sm">CPD</p>
-                    </div>
-
-                    <div>
-                        <p class="text-[10px] uppercase text-outline font-semibold">Instructor</p>
-                        <p class="font-bold text-primary text-sm">
-                            {{ $course->mentor->name ?? 'Expert Mentor' }}
-                        </p>
-                    </div>
-
+                <div>
+                    <p class="text-outline uppercase text-xs">Mentor</p>
+                    <p class="font-bold text-primary text-base">
+                        {{ $course->mentor->name ?? 'Expert' }}
+                    </p>
                 </div>
             </div>
 
             <!-- TRUST -->
-            <div class="space-y-3 text-sm">
-                <div class="flex items-center gap-3 text-on-surface-variant">
-                    <span class="material-symbols-outlined text-primary/60 text-lg">verified_user</span>
-                    Accredited clinical framework
+            <div class="text-sm space-y-3 text-on-surface-variant">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined">verified_user</span>
+                    Accredited program
                 </div>
 
-                <div class="flex items-center gap-3 text-on-surface-variant">
-                    <span class="material-symbols-outlined text-primary/60 text-lg">lock</span>
-                    256-bit secure transactions
-                </div>
-            </div>
-
-            <!-- HELP -->
-            <div class="pt-6 border-t border-outline-variant/10">
-                <p class="text-xs text-on-surface-variant mb-3">Need help?</p>
-
-                <div class="flex gap-6 text-sm">
-                    <a href="mailto:support@anandham.com" class="text-primary font-semibold hover:underline flex items-center gap-1">
-                        <span class="material-symbols-outlined text-sm">mail</span>
-                        Support
-                    </a>
-
-                    <a href="#" class="text-primary font-semibold hover:underline flex items-center gap-1">
-                        <span class="material-symbols-outlined text-sm">help</span>
-                        FAQ
-                    </a>
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined">lock</span>
+                    Secure payment
                 </div>
             </div>
 
         </div>
 
-        <!-- RIGHT SIDE -->
-        <div class="bg-white p-8 rounded-2xl shadow-md border border-outline-variant/20">
+        <!-- RIGHT -->
+        <form action="{{ route('course.enroll.submit', $course->id) }}" method="POST" enctype="multipart/form-data">
+        @csrf
 
-            <div class="mb-6">
-                <h3 class="text-lg font-bold text-primary italic">Secure Payment</h3>
-                <p class="text-xs text-on-surface-variant">
-                    Scan using any UPI app
-                </p>
-            </div>
+        <div class="bg-white p-7 rounded-2xl shadow-md border">
 
-            
-            <!-- QR -->
-            <div class="flex flex-col items-center mb-10">
+            <!-- QR + PRICE -->
+            <div class="flex gap-6 items-center mb-8">
 
-                <div class="p-6 bg-background rounded-2xl border border-outline-variant/10 shadow-md hover:shadow-lg transition-all">
-                    
+                <!-- QR -->
+                <div class="p-3 border rounded-xl">
                     <img 
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-0ufG4JFtGRisSfArbMQAayKgKhFuaAV0saktWrptPqQ85Zz4EX_IfQ861qLmgs uAdt9Ng9sUEtBpVpjsLqN9-IZ8TdvVmYWqH15uMF7K7GG3ItGZ9lmeBj4JnNnKsXPwjaJVM1yIo1pgUxm3TnYPebWhvJkMmgFdmyCujHQUa9RM2jV0cTO0PFzQVA1bayXMGeAlQ2QvRHsCUWNmW2V8zFqiGmpzaRH5UYtfiecgGC0WUVKzpBP23_y8ftvd6cJRYSE1DVxC5k"
-                        class="w-56 h-56 md:w-64 md:h-64 object-contain"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-0ufG4JFtGRisSfArbMQAayKgKhFuaAV0saktWrptPqQ85Zz4EX_IfQ861qLmgsuAdt9Ng9sUEtBpVpjsLqN9-IZ8TdvVmYWqH15uMF7K7GG3ItGZ9lmeBj4JnNnKsXPwjaJVM1yIo1pgUxm3TnYPebWhvJkMmgFdmyCujHQUa9RM2jV0cTO0PFzQVA1bayXMGeAlQ2QvRHsCUWNmW2V8zFqiGmpzaRH5UYtfiecgGC0WUVKzpBP23_y8ftvd6cJRYSE1DVxC5k"
+                        class="w-36 h-36 object-contain"
                     >
                 </div>
 
-                <p class="text-[11px] mt-4 font-bold text-primary uppercase tracking-widest flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                    Waiting for payment...
-                </p>
+                <!-- PRICE -->
+                <div class="flex-1 text-base space-y-3">
+                    <div class="flex justify-between">
+                        <span>Fee</span>
+                        <span class="font-semibold">₹ {{ number_format($course->fee ?? 0) }}</span>
+                    </div>
+
+                    <div class="flex justify-between text-xl font-bold border-t pt-3">
+                        <span>Total</span>
+                        <span class="text-secondary">₹ {{ number_format($course->fee ?? 0) }}</span>
+                    </div>
+
+                    <p class="text-xs text-green-600 flex items-center gap-1">
+                        ● Waiting for payment
+                    </p>
+                </div>
 
             </div>
 
-            <!-- SUMMARY -->
-            <div class="space-y-3 mb-8 text-sm">
+            <!-- ERROR -->
+            @error('payment_screenshot')
+                <p class="text-red-500 text-sm mb-4">{{ $message }}</p>
+            @enderror
 
-                <div class="flex justify-between">
-                    <span>Course Fee</span>
-                    <span class="font-medium">
-                        ₹ {{ number_format($course->fee ?? 0) }}
-                    </span>
-                </div>
+            <!-- UPLOAD -->
+            <div class="mb-6">
+                <label class="text-sm font-semibold text-primary block mb-2">
+                    Upload Payment Screenshot
+                </label>
 
-                <div class="flex justify-between">
-                    <span>Tax</span>
-                    <span>₹ 0</span>
-                </div>
+                <input type="file" name="payment_screenshot" id="paymentInput"
+                    class="text-sm w-full border rounded-lg p-3" required>
 
-                <div class="flex justify-between pt-3 border-t font-bold text-lg">
-                    <span>Total</span>
-                    <span class="text-secondary">
-                        ₹ {{ number_format($course->fee ?? 0) }}
-                    </span>
-                </div>
-
+                <img id="previewImage" class="mt-4 hidden rounded-lg max-h-36">
             </div>
 
             <!-- CTA -->
-            <button class="w-full bg-primary text-white py-4 rounded-lg font-bold uppercase text-xs tracking-widest hover:scale-105 transition-all">
-                Confirm & Enroll
+            <button type="submit"
+                class="w-full bg-primary text-white py-4 rounded-lg text-sm font-bold uppercase hover:opacity-90">
+                Confirm Payment
             </button>
 
-            <p class="text-[10px] text-center text-outline mt-4 italic">
-                By continuing, you agree to terms
-            </p>
-
         </div>
+        </form>
 
-    </div>
-
-    <!-- BACK -->
-    <div class="text-center mt-12">
-        <a href="{{ route('courses.detail', $course->id) }}" 
-           class="text-primary underline hover:text-secondary text-sm">
-           ← Back to Course
-        </a>
     </div>
 
 </div>
 </section>
+
+<script>
+document.getElementById('paymentInput').addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    const preview = document.getElementById('previewImage');
+
+    if (file) {
+        preview.src = URL.createObjectURL(file);
+        preview.classList.remove('hidden');
+    }
+});
+</script>
 
 @endsection

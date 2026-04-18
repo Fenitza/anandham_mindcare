@@ -142,7 +142,7 @@ function toggleModule(index) {
         <div class="flex items-center space-x-12 px-4">
             @foreach($marqueeItems as $item)
                 @if($item)
-                <span class="text-primary font-bold text-xs uppercase tracking-widest flex items-center gap-2">
+                <span class="text-surface font-bold text-xs uppercase tracking-widest flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
                     {{ $item }}
                 </span>
@@ -154,7 +154,7 @@ function toggleModule(index) {
         <div class="flex items-center space-x-12 px-4">
             @foreach($marqueeItems as $item)
                 @if($item)
-                <span class="text-primary font-bold text-xs uppercase tracking-widest flex items-center gap-2">
+                <span class="text-surface font-bold text-xs uppercase tracking-widest flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-primary"></span>
                     {{ $item }}
                 </span>
@@ -227,8 +227,9 @@ function toggleModule(index) {
         </div>
 
         <!-- CTA -->
-        <a href="{{ route('courses.enroll', $course->id) }}"
-            class="bg-secondary text-surface px-8 py-4 rounded-lg font-bold animate-pop hover:scale-110 transition duration-300 shadow-lg hover:shadow-xl inline-block">
+        <a href="{{ route('course.enroll.handle', $course->id) }}"
+
+            class="bg-secondary text-surface px-8 py-4 rounded-lg font-bold animate-pop hover:scale-110 transition duration-300 shadow-lg hover:shadow-xl inline-block animate-pop">
                 
                 🚀 Reserve Your Seat
             </a>
@@ -650,8 +651,8 @@ function toggleModule(index) {
             </div>
 
             <!-- CTA Button -->
-            <a href="{{ route('courses.enroll', $course->id) }}"
-               class="bg-secondary text-surface font-bold px-10 py-3 rounded-lg shadow-lg shadow-secondary/20 hover:scale-105 active:scale-95 transition-all w-full md:w-auto text-base animate-pop">
+            <a href="{{ route('course.enroll.handle', $course->id) }}"
+               class="bg-secondary text-surface px-8 py-4 rounded-lg font-bold animate-pop hover:scale-110 transition duration-300 shadow-lg hover:shadow-xl inline-block animate-pop">
 
                 Secure My Seat
             </a>

@@ -43,12 +43,14 @@ class CourseController extends Controller
                 'specialisation' => $request->specialisation,
                 'duration' => $request->duration,
                 'fee' => $request->price,
-                'capacity' => $request->capacity,
+                'capacity' => $request->capacity, 
                 'marquee_text' => $request->marquee_text,
                 'status' => $request->enrollment_status,
                 'course_time' => $request->course_time,
                 'course_date' => $request->course_date,
                 'description' => $request->description,
+                'zoom_link' => $request->zoom_link,
+                'enable_qr' => $request->enable_qr ? true : false,
             ]);
             // dd($request->all());
             // ✅ 2. Save Modules + Topics
@@ -155,6 +157,8 @@ class CourseController extends Controller
             'description' => $request->description,
             'course_time' => $request->course_time,
             'course_date' => $request->course_date,
+            'zoom_link' => $request->zoom_link,
+            'enable_qr' => $request->enable_qr ? true : false,
         ]);
         // dd($request->all());
 
@@ -416,16 +420,11 @@ public function detail($id)
     return view('pages.courses.course_detail', compact('course'));
 
 }
-
-public function enroll($id)
+public function reserve($id)
 {
     $course = Course::findOrFail($id);
-
-    // ❌ Optional: prevent enrollment if no seats
-    // if ($course->capacity !== null && $course->capacity <= 0) {
-    //     return redirect()->back()->with('error', 'Seats are full ❌');
-    // }
-
-    return redirect()->back()->with('enrolled', true);
+    return view('pages.courses.course_enroll', compact('course'));
 }
+
+    
 }

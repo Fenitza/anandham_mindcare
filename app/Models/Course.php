@@ -18,7 +18,9 @@ class Course extends Model
         'fee',
         'capacity',
         'marquee_text',
-        'status'
+        'status',
+        'zoom_link',
+        'enable_qr'
     ];
 
     public function mentor()
@@ -34,5 +36,10 @@ class Course extends Model
     public function bonuses()
     {
         return $this->hasMany(Bonus::class);
+    }
+
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class);
     }
 }

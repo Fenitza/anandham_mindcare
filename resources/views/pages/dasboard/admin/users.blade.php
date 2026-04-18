@@ -20,7 +20,7 @@
 <span class="material-symbols-outlined text-secondary" data-icon="clinical_notes">clinical_notes</span>
 </div>
 <div>
-<span class="text-3xl font-bold text-primary">1,284</span>
+<span class="text-3xl font-bold text-primary">{{ $activeUsers }}</span>
 <p class="text-xs text-green-600 mt-1 flex items-center gap-1">
 <span class="material-symbols-outlined text-xs" data-icon="trending_up">trending_up</span>
                         +4.2% this month
@@ -33,7 +33,7 @@
 <span class="material-symbols-outlined text-secondary" data-icon="hourglass_empty">hourglass_empty</span>
 </div>
 <div>
-<span class="text-3xl font-bold text-primary">42</span>
+<span class="text-3xl font-bold text-primary">{{ $inactiveUsers }}</span>
 <p class="text-xs text-slate-400 mt-1">Requiring immediate review</p>
 </div>
 </div>
@@ -76,177 +76,151 @@
 </tr>
 </thead>
 <tbody class="divide-y divide-outline-variant/10">
-<!-- Row 1 -->
+
+@forelse($users as $user)
+
 <tr class="group hover:bg-surface-container-low/30 transition-colors">
-<td class="px-6 py-5">
-<div class="flex items-center gap-4">
-<img class="w-10 h-10 rounded-full object-cover" data-alt="Close-up portrait of a female doctor in medical attire with a confident expression in a bright clinical setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBb7XBBmSQh_p_MwYfGxTYcEWUjVie-3Tq6Tjm977qITp6KzAwGjbfwt1qql3AL7nH8b35tnddnFGzJExJ3NaEMGSTr40Zbv8UUNskQcCBTlzhSHqE-a5cUtdXdZuytPC-QARUFl4_yF0EX9Vu_xyFxVIErDnvBJK2KGeRV0lrJVDaBbwSKXVd6prjiSyLz_vBo-_Qr4bVi8JCI5pSEExA6BVAEMfHEjGD-qalWafGEt-aZiICO4Q_Nyi0ExJ29qR6EihmSjsh5XQD"/>
-<div>
-<p class="font-bold text-primary Newsreader text-lg">Dr. Elena Rostova</p>
-<p class="text-xs text-slate-400 font-mono tracking-tighter">ID: AM-2024-0892</p>
-<p class="text-xs text-slate-500">e.rostova@mindcare.edu</p>
-</div>
-</div>
+
+    <!-- USER INFO -->
+    <td class="px-6 py-5">
+        <div class="flex items-center gap-4">
+
+            <!-- AVATAR -->
+            <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+                {{ strtoupper(substr($user->name, 0, 1)) }}
+            </div>
+
+            <div>
+                <p class="font-bold text-primary text-lg">{{ $user->name }}</p>
+                <p class="text-xs text-slate-400 font-mono">ID: AM-{{ $user->id }}</p>
+                <p class="text-xs text-slate-500">{{ $user->email }}</p>
+            </div>
+
+        </div>
+    </td>
+
+    <!-- ROLE -->
+    <td class="px-6 py-5">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold
+            @if($user->role == 'doctor') bg-blue-50 text-blue-700
+            @elseif($user->role == 'student') bg-amber-50 text-amber-700
+            @else bg-slate-100 text-slate-700
+            @endif
+        ">
+            <span class="material-symbols-outlined text-sm">
+                @if($user->role == 'doctor') medical_services
+                @elseif($user->role == 'student') school
+                @else biotech
+                @endif
+            </span>
+
+            {{ ucfirst($user->role) }}
+        </span>
+    </td>
+
+    <!-- STATUS -->
+    <td class="px-6 py-5">
+        @if($user->status == 1)
+            <span class="inline-flex items-center gap-1 text-green-600 text-xs font-bold uppercase">
+                <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                Active
+            </span>
+        @else
+            <span class="inline-flex items-center gap-1 text-red-600 text-xs font-bold uppercase">
+                <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                Inactive
+            </span>
+        @endif
+    </td>
+
+    
+    <!-- LAST ACTIVITY -->
+    <td class="px-6 py-5">
+        <div class="flex flex-col">
+            
+            <!-- Time -->
+            <p class="text-sm text-primary font-medium">
+        {{ $user->last_activity 
+            ? $user->last_activity->timezone('Asia/Kolkata')->format('d M Y, h:i A') 
+            : 'No activity' 
+        }}
+    </p>
+
+    <p class="text-xs text-slate-400">
+        {{ $user->last_activity 
+            ? $user->last_activity->timezone('Asia/Kolkata')->diffForHumans() 
+            : '' 
+        }}
+    </p>
+        <!-- Context -->
+        <p class="text-[10px] text-secondary mt-1 italic">
+            {{ $user->specialization ?? 'General Practice' }}
+        </p>
+
+    </div>
 </td>
-<td class="px-6 py-5">
-<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold">
-<span class="material-symbols-outlined text-sm" data-icon="medical_services">medical_services</span>
-                                Senior Psychiatrist
-                            </span>
-</td>
-<td class="px-6 py-5">
-<span class="inline-flex items-center gap-1 text-green-600 text-xs font-bold uppercase tracking-widest">
-<span class="w-2 h-2 rounded-full bg-green-500"></span>
-                                Active
-                            </span>
-</td>
-<td class="px-6 py-5">
-<p class="text-sm text-slate-600">Today, 09:42 AM</p>
-<p class="text-[10px] text-slate-400">Section: Patient Care</p>
-</td>
+
+<!-- ACTIONS -->
 <td class="px-6 py-5 text-right">
-<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-<button class="p-2 text-slate-400 hover:text-primary transition-colors" title="View Profile">
-<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
-</button>
-<button class="p-2 text-slate-400 hover:text-primary transition-colors" title="Edit">
-<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
-</button>
-<button class="p-2 text-slate-400 hover:text-error transition-colors" title="Deactivate">
-<span class="material-symbols-outlined" data-icon="person_off">person_off</span>
-</button>
-</div>
+    <div class="flex justify-end items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-200">
+
+        <!-- VIEW -->
+        
+        <a href="{{ route('admin.users.show', $user->id) }}"
+           class="p-2 rounded-lg bg-surface-container-low hover:bg-primary/10 text-slate-500 hover:text-primary transition"
+           title="View Profile">
+            <span class="material-symbols-outlined text-lg">visibility</span>
+        </a>
+
+        <!-- EDIT -->
+        <a href="{{ route('admin.users.edit', $user->id) }}"
+           class="p-2 rounded-lg bg-surface-container-low hover:bg-secondary/10 text-slate-500 hover:text-secondary transition"
+           title="Edit User">
+            <span class="material-symbols-outlined text-lg">edit</span>
+        </a>
+
+        <!-- STATUS TOGGLE -->
+        <form action="{{ route('admin.users.toggle', $user->id) }}" method="POST">
+            @csrf
+            <button 
+                class="p-2 rounded-lg 
+                {{ $user->status 
+                    ? 'bg-red-50 hover:bg-red-100 text-red-600' 
+                    : 'bg-green-50 hover:bg-green-100 text-green-600' 
+                }} transition"
+                title="{{ $user->status ? 'Deactivate User' : 'Activate User' }}">
+                
+                <span class="material-symbols-outlined text-lg">
+                    {{ $user->status ? 'person_off' : 'person' }}
+                </span>
+
+            </button>
+        </form>
+
+    </div>
 </td>
+
+   
+
 </tr>
-<!-- Row 2 -->
-<tr class="group hover:bg-surface-container-low/30 transition-colors">
-<td class="px-6 py-5">
-<div class="flex items-center gap-4">
-<img class="w-10 h-10 rounded-full object-cover" data-alt="Portrait of a young woman student with glasses holding a notebook in a library with soft blurred backgrounds" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdRXxbSiuLcz-TOkmciRdDGncvz5M9SQSzXmH965kwxQ6g4PbsS-Epzl6Z4KcbN4i9DO1inrvKvgLoszqjee0xMvSdPhL5UfRQmO60MlkmUe1nbPWZL3-N5ZtZGOIPIoMHt0t_ZfGyX-LuupaT7lC4WINYNof7hnGyNfVj0oEq76O6EYBb50u58fCZN-paIW2N-lLqyYyVr0yE87-aioAn3tWE-udtDZpEIWzzJ5Go5pKv3YzQ4xazFxyFnXfwQ1YcBNeO-nmTARki"/>
-<div>
-<p class="font-bold text-primary Newsreader text-lg">Maya Chen</p>
-<p class="text-xs text-slate-400 font-mono tracking-tighter">ID: AM-2024-4122</p>
-<p class="text-xs text-slate-500">m.chen@academy.mindcare</p>
-</div>
-</div>
-</td>
-<td class="px-6 py-5">
-<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-700 text-xs font-semibold">
-<span class="material-symbols-outlined text-sm" data-icon="school">school</span>
-                                Post-Grad Student
-                            </span>
-</td>
-<td class="px-6 py-5">
-<span class="inline-flex items-center gap-1 text-slate-400 text-xs font-bold uppercase tracking-widest">
-<span class="w-2 h-2 rounded-full bg-slate-300"></span>
-                                On Leave
-                            </span>
-</td>
-<td class="px-6 py-5">
-<p class="text-sm text-slate-600">3 Days Ago</p>
-<p class="text-[10px] text-slate-400">Section: Neural Research</p>
-</td>
-<td class="px-6 py-5 text-right">
-<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-<button class="p-2 text-slate-400 hover:text-primary transition-colors" title="View Profile">
-<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
-</button>
-<button class="p-2 text-slate-400 hover:text-primary transition-colors" title="Edit">
-<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
-</button>
-<button class="p-2 text-slate-400 hover:text-error transition-colors" title="Deactivate">
-<span class="material-symbols-outlined" data-icon="person_off">person_off</span>
-</button>
-</div>
-</td>
+
+@empty
+
+<tr>
+    <td colspan="5" class="text-center py-10 text-slate-400">
+        No users found
+    </td>
 </tr>
-<!-- Row 3 -->
-<tr class="group hover:bg-surface-container-low/30 transition-colors">
-<td class="px-6 py-5">
-<div class="flex items-center gap-4">
-<img class="w-10 h-10 rounded-full object-cover" data-alt="Portrait of a middle-aged male professional in a smart casual shirt against a clean minimal background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpqEs0hRJcRJwvwQS5LdSq843Dy8GlKB8Sy2Gg5pkpDMmY-je7EQ77FMOzNWcrj_Xuw79nGRPjPb0S_gxdb4Y71nYNu8h17q96ft6SxjCRDULlaj4ybe1nXOfM6JsEaw66mCxZOTYQZav9-ptgSppigQ2P7Hq8P0boWvyKyO_3fu9Gh60gLEYEHtmbE9Mh3HtvydmSOH_IQH_aQ5M9t1wPY08237SSem6lJ0tQTqHC1xlKEQd8FtpnwF_qlDLvKuWkKKTGo_6kQznB"/>
-<div>
-<p class="font-bold text-primary Newsreader text-lg">Marcus Holloway</p>
-<p class="text-xs text-slate-400 font-mono tracking-tighter">ID: AM-2024-0012</p>
-<p class="text-xs text-slate-500">m.holloway@mindcare.edu</p>
-</div>
-</div>
-</td>
-<td class="px-6 py-5">
-<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-semibold">
-<span class="material-symbols-outlined text-sm" data-icon="biotech">biotech</span>
-                                Research Professional
-                            </span>
-</td>
-<td class="px-6 py-5">
-<span class="inline-flex items-center gap-1 text-green-600 text-xs font-bold uppercase tracking-widest">
-<span class="w-2 h-2 rounded-full bg-green-500"></span>
-                                Active
-                            </span>
-</td>
-<td class="px-6 py-5">
-<p class="text-sm text-slate-600">Yesterday, 4:15 PM</p>
-<p class="text-[10px] text-slate-400">Section: Lab Admin</p>
-</td>
-<td class="px-6 py-5 text-right">
-<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-<button class="p-2 text-slate-400 hover:text-primary transition-colors" title="View Profile">
-<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
-</button>
-<button class="p-2 text-slate-400 hover:text-primary transition-colors" title="Edit">
-<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
-</button>
-<button class="p-2 text-slate-400 hover:text-error transition-colors" title="Deactivate">
-<span class="material-symbols-outlined" data-icon="person_off">person_off</span>
-</button>
-</div>
-</td>
-</tr>
-<!-- Row 4 -->
-<tr class="group hover:bg-surface-container-low/30 transition-colors">
-<td class="px-6 py-5">
-<div class="flex items-center gap-4">
-<img class="w-10 h-10 rounded-full object-cover" data-alt="Headshot of a serious male professional in a white coat with a stethoscope around his neck" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgTEtRBZmH4xAyh8TjKqMzFBqsmU6iMbfvv-ysRCjiylXM6tD2bprbcBW8OzQELHFLdMbRVNmlAzG2C9kEKf87Vz2zB4NtMuvYq1JyfX8eCvm9dYokNkPQb1YBCRrvfH992lV91fPs59VpZ36EjieSJey-hrIWSYnC7gub94M02_y3jJNNnQPnY0_un9NXAMGnaL6JbyXBAD28iN-5wLW3S3FDEe5bYTDKiLI2ddbkgTtKk2tFUFUW3t7KuEFrWMNCCD5ZaoxvN3bb"/>
-<div>
-<p class="font-bold text-primary Newsreader text-lg">Dr. Simon Vane</p>
-<p class="text-xs text-slate-400 font-mono tracking-tighter">ID: AM-2024-9981</p>
-<p class="text-xs text-slate-500">s.vane@mindcare.edu</p>
-</div>
-</div>
-</td>
-<td class="px-6 py-5">
-<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold">
-<span class="material-symbols-outlined text-sm" data-icon="medical_services">medical_services</span>
-                                Senior Resident
-                            </span>
-</td>
-<td class="px-6 py-5">
-<span class="inline-flex items-center gap-1 text-red-600 text-xs font-bold uppercase tracking-widest">
-<span class="w-2 h-2 rounded-full bg-red-500"></span>
-                                Inactive
-                            </span>
-</td>
-<td class="px-6 py-5">
-<p class="text-sm text-slate-600">2 Weeks Ago</p>
-<p class="text-[10px] text-slate-400">Section: External Consult</p>
-</td>
-<td class="px-6 py-5 text-right">
-<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-<button class="p-2 text-slate-400 hover:text-primary transition-colors" title="View Profile">
-<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
-</button>
-<button class="p-2 text-slate-400 hover:text-primary transition-colors" title="Edit">
-<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
-</button>
-<button class="p-2 text-slate-400 hover:text-error transition-colors" title="Deactivate">
-<span class="material-symbols-outlined" data-icon="person_off">person_off</span>
-</button>
-</div>
-</td>
-</tr>
+
+@endforelse
+
 </tbody>
 </table>
-<div class="px-6 py-4 bg-surface-container-low/30 border-t border-outline-variant/10 flex justify-between items-center">
+<div class="px-6 py-4">
+    {{ $users->links() }}
+</div>
+
+<!-- <div class="px-6 py-4 bg-surface-container-low/30 border-t border-outline-variant/10 flex justify-between items-center">
 <p class="text-xs text-slate-500 font-medium">Showing <span class="text-on-surface">1-4</span> of <span class="text-on-surface">1,284</span> academic members</p>
 <div class="flex gap-2">
 <button class="p-1.5 rounded-lg border border-outline-variant/20 hover:bg-white text-slate-400 disabled:opacity-30" disabled="">
@@ -259,7 +233,7 @@
 <span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
 </button>
 </div>
-</div>
+</div> -->
 </div>
 <!-- Footer Editorial Section -->
 <div class="mt-16 pt-12 border-t border-outline-variant/10">

@@ -53,12 +53,12 @@ class UserAuthController extends Controller
 
         // 🔹 Try Admin Login First
     if (Auth::guard('admin')->attempt($credentials)) {
-        return redirect()->route('admin.dashboard');
+       return redirect()->intended(route('admin.dashboard'));
     }
 
     // 🔹 Try User Login
     if (Auth::guard('web')->attempt($credentials)) {
-        return redirect()->route('user.dashboard');
+        return redirect()->intended(route('user.dashboard'));
     }
 
         return back()->with('error', 'Invalid credentials');
@@ -96,6 +96,95 @@ class UserAuthController extends Controller
     return back()->with('success', 'User created with default password: '.$defaultPassword);
 }
 
+public function show($id)
+{
+    $user = User::with(['courses', 'appointments'])->findOrFail($id);
+
+    return view('pages.dasboard.admin.users_show', compact('user'));
+}
+public function edit($id)
+{
+    $user = User::findOrFail($id);
+    return view('pages.dasboard.admin.add_user', compact('user'));
+}
+
+
+public function update(Request $request, $id)
+{
+    $user = User::findOrFail($id);
+
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $user->id,
+    ]);
+
+    $user->update([
+        'name' => $request->name,
+        'email' => $request->email,
+        'phone' => $request->phone,
+        'role' => $request->role,
+        'specialization' => $request->specialization,
+        'license_number' => $request->license_number,
+        'address' => $request->address,
+        'city' => $request->city,
+        'state' => $request->state,
+        'zip' => $request->zip,
+        'status' => $request->status ?? 1,
+    ]);
+
+    return redirect()->route('admin.users')
+        ->with('success', 'User updated successfully');
+}
+
+public function toggle($id)
+{
+    $user = User::findOrFail($id);
+
+    $user->status = !$user->status;
+    $user->save();
+
+    return back()->with('success', 'User status updated');
+}
+
+public function usersIndex()
+{
+    $users = User::with(['enrollments', 'appointments'])->paginate(10);
+
+$users->getCollection()->transform(function ($user) {
+
+    $lastEnrollment = $user->enrollments->sortByDesc('created_at')->first();
+    $lastAppointment = $user->appointments->sortByDesc('created_at')->first();
+
+    $latestActivity = collect([
+        optional($lastEnrollment)->created_at,
+        optional($lastAppointment)->created_at
+    ])->filter()->sortDesc()->first();
+
+    $user->last_activity = $latestActivity;
+
+    return $user;
+});
+
+    $totalUsers = User::count();
+    $activeUsers = User::where('status', 1)->count();
+    $inactiveUsers = User::where('status', 0)->count();
+
+    return view('pages.dasboard.admin.users', [
+        'users' => $users,
+        'totalUsers' => $totalUsers,
+        'activeUsers' => $activeUsers,
+        'inactiveUsers' => $inactiveUsers,
+    ]);
+}
+
+public function toggleStatus($id)
+{
+    $user = User::findOrFail($id);
+    $user->status = !$user->status;
+    $user->save();
+
+    return back();
+}
     // 🔹 Logout
     public function logout(Request $request)
     {

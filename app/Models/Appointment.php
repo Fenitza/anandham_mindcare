@@ -19,6 +19,7 @@ class Appointment extends Model
         'urgency',
         'user_id', 
         'status',
+        'doctor_name', 
     ];
     public function user()
     {

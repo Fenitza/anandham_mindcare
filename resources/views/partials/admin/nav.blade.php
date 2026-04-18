@@ -19,7 +19,7 @@
             <span class="material-symbols-outlined mr-3">school</span>
             <span class="text-sm tracking-wide font-label">Courses</span>
         </a>
-        <a href="{{ route('admin.appointments') }}"
+        <a href="{{ route('admin.appointments.list') }}"
            class="flex items-center px-6 py-3 font-semibold border-r-4 transition-all opacity-90 {{ Request::is('admin/appointments') || Request::is('admin/appointments/*') ? 'text-blue-900 border-yellow-700 bg-slate-200' : 'text-slate-600 hover:text-blue-900 hover:bg-slate-200/50 border-transparent' }}">
             <span class="material-symbols-outlined mr-3">calendar_today</span>
             <span class="text-sm tracking-wide font-label">Appointments</span>
