@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Enrollment;
-
+use App\Models\Course;
+use App\Models\User;
+use Carbon\Carbon;
 class EnrollmentController extends Controller
 {
     /*
@@ -238,4 +240,87 @@ public function reject($id)
 
     return back()->with('error', 'Payment rejected');
 }
+
+
+public function attendanceInsights()
+{
+    // ✅ Single source of truth (IST)
+    $date = request('date')
+        ? Carbon::parse(request('date'), 'Asia/Kolkata')->startOfMonth()
+        : now('Asia/Kolkata')->startOfMonth();
+
+    $month = $date->month;
+    $year = $date->year;
+
+    // ✅ Calendar range (IST)
+    $startOfCalendar = $date->copy()->startOfMonth()->startOfWeek(Carbon::SUNDAY);
+    $endOfCalendar = $date->copy()->endOfMonth()->endOfWeek(Carbon::SATURDAY);
+
+    $days = [];
+    $current = $startOfCalendar->copy();
+
+    while ($current <= $endOfCalendar) {
+        $days[] = $current->copy();
+        $current->addDay();
+    }
+
+   $today = now('Asia/Kolkata')->startOfDay();
+
+    $activeCourses = \App\Models\Course::whereDate('course_date', '>=', $today)
+    ->count();
+    $totalUsers = User::count();
+    $totalEnrollments = Enrollment::count();
+
+    $enrollmentRate = $totalUsers > 0
+        ? round(($totalEnrollments / $totalUsers) * 100)
+        : 0;
+
+    $totalCapacity = Course::sum('capacity');
+    $capacityUtil = $totalCapacity > 0
+        ? round(($totalEnrollments / $totalCapacity) * 100)
+        : 0;
+
+    // ✅ Month-filtered courses (IMPORTANT for performance)
+    $monthlyCourses = Course::withCount('enrollments')
+        ->whereMonth('course_date', $month)
+        ->whereYear('course_date', $year)
+        ->get();
+
+    // ✅ Calendar grouping (IST safe)
+    $calendarCourses = $monthlyCourses->groupBy(function ($course) {
+        return Carbon::parse($course->course_date, 'UTC')
+            ->timezone('Asia/Kolkata')
+            ->toDateString();
+    });
+
+    // ✅ Completed
+    $completedCourses = $monthlyCourses
+        ->filter(fn($c) => Carbon::parse($c->course_date)->lt($today))
+        ->values();
+
+    // ✅ Upcoming
+    $upcomingCourses = $monthlyCourses
+        ->filter(fn($c) => Carbon::parse($c->course_date)->gte($today))
+        ->values();
+
+    // ✅ Course dates for calendar dots
+    $courseDates = $calendarCourses->map->count();
+
+    return view('pages.dasboard.admin.attendance', compact(
+        'days',
+        'date',
+        'month',
+        'year',
+        'courseDates',
+        'activeCourses',
+        'completedCourses',
+        'upcomingCourses',
+        'totalUsers',
+        'totalEnrollments',
+        'enrollmentRate',
+        'capacityUtil',
+        'calendarCourses'
+    ));
+}
+
 }

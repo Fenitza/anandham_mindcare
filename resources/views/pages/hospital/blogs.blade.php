@@ -108,7 +108,7 @@
 <div class="absolute inset-0 bg-gradient-to-b from-primary/60 via-primary/40 to-surface"></div>
 </div>
 <div class="relative z-10 max-w-4xl mx-auto px-8 text-center">
-<div class="glass-card p-12 rounded-3xl animate-fade-in-up shadow-2xl">
+<div class="glass-card p-12 rounded-3xl animate-fade-in-up shadow-2xl"> 
 <!-- <nav class="flex items-center justify-center gap-2 text-on-primary/80 text-sm font-label mb-6">
 <a class="hover:text-secondary transition-colors" href="#">Home</a>
 <span class="material-symbols-outlined text-xs">chevron_right</span>
@@ -138,96 +138,50 @@
 <!-- Clinical Insights Grid -->
 <section class="max-w-7xl mx-auto px-8">
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-<!-- Blog Card 1 -->
-<article class="reveal group flex flex-col bg-white rounded-xl overflow-hidden border border-slate-200 transition-all duration-500 hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(0,37,85,0.15)]">
-<div class="h-64 overflow-hidden relative">
-<img alt="Clinical environment" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Modern clinical research laboratory with high-tech equipment and soft blue ambient lighting reflecting institutional excellence" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDT0vYMDlkE6nt18be_0-dnvuZ-qqjUhLyT0-RRkOWegzLVY1TgAsJhhRrOjKBkaChqJWkVjccwVHTLI7_2F0PG37BLiZOPrebq1jwkElDJdn7RSqh8DfnAtBtajQcGGp7kwjdyVTdatT6C8Rzrwi_pzY3jizvtR8Cggrfeh4cUqKOA05_-FqnC_FRm7YYEiDDmj1OsKdDv3SEcEyFXEPeut0CA7sEfFF8WhM_WbWBrMUrNS-6xEAn47NngA7G9dWlJkF_MCFpVGdvC"/>
-<div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors duration-500"></div>
-</div>
-<div class="p-8 flex flex-col flex-grow">
-<span class="text-xs font-bold font-label text-secondary uppercase tracking-widest mb-3">Clinical Research</span>
-<h3 class="text-2xl font-headline font-bold text-primary mb-4 leading-snug group-hover:text-secondary transition-colors duration-300">The Future of Restorative Neuro-Psychiatry</h3>
-<p class="text-on-surface-variant font-body text-sm leading-relaxed mb-6 flex-grow">
-                            Recent breakthroughs in neuroplasticity are reshaping our understanding of long-term recovery in clinical mindcare settings...
-                        </p>
-<a class="inline-flex items-center gap-2 text-primary font-bold group-hover:gap-4 transition-all duration-300" href="#">
-                            Read More 
-                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
-</a>
-</div>
+
+@foreach($blogs as $blog)
+
+<article class="group flex flex-col bg-white rounded-xl overflow-hidden border transition hover:-translate-y-2 hover:shadow-xl">
+
+    <!-- IMAGE -->
+    <div class="h-64 overflow-hidden">
+        @if($blog->media)
+            <img src="{{ asset('storage/'.$blog->media) }}"
+                 class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+        @else
+            <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                No Image
+            </div>
+        @endif
+    </div>
+
+    <!-- CONTENT -->
+    <div class="p-6 flex flex-col flex-grow">
+
+        <span class="text-xs font-bold text-secondary uppercase mb-2">
+            {{ $blog->category ?? 'General' }}
+        </span>
+
+        <h3 class="text-xl font-bold text-primary mb-3 group-hover:text-secondary transition">
+            {{ $blog->name }}
+        </h3>
+
+        <p class="text-sm text-on-surface-variant mb-4 flex-grow">
+            {{ Str::limit($blog->description, 120) }}
+        </p>
+
+        <a href="{{ route('blogs.show', $blog->id) }}"
+           class="text-primary font-semibold flex items-center gap-2">
+            Read More
+            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        </a>
+
+    </div>
+
 </article>
-<!-- Blog Card 2 -->
-<article class="reveal group flex flex-col bg-white rounded-xl overflow-hidden border border-slate-200 transition-all duration-500 hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(0,37,85,0.15)]" style="animation-delay: 0.1s">
-<div class="h-64 overflow-hidden relative">
-<img alt="Professional care" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Compassionate healthcare professional talking to a patient in a sunlit modern clinic setting with warm soft tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOJNiy7UveTMOFRqv3aBb55UXRh9XN49oe7oQOVwfVQj7Vm8U967hVhlXGZeqXbh9uUFAdjpajs054o8ajuJBuo66CrV-T_TcJwzGW6I0dDrxo6dwysRCg9Qu7qU9AaOxgMuQGHeWB4HrtB8ovUg-_pF3iTZXEU0w3fgKNTCckrqaII2SFiQTrz9CNACWUnuMFRNnuzxuVQuffxhzZwR69qeK74BDYbnUxuj75yQ1rtrG0anapSx3zjxJZn4BRU1IFvLV4PJLPg4fq"/>
-<div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors duration-500"></div>
-</div>
-<div class="p-8 flex flex-col flex-grow">
-<span class="text-xs font-bold font-label text-secondary uppercase tracking-widest mb-3">Patient Perspectives</span>
-<h3 class="text-2xl font-headline font-bold text-primary mb-4 leading-snug group-hover:text-secondary transition-colors duration-300">Compassionate Care in Acute Settings</h3>
-<p class="text-on-surface-variant font-body text-sm leading-relaxed mb-6 flex-grow">
-                            Balancing clinical efficiency with the fundamental human need for connection remains the cornerstone of our restorative mission...
-                        </p>
-<a class="inline-flex items-center gap-2 text-primary font-bold group-hover:gap-4 transition-all duration-300" href="#">
-                            Read More 
-                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
-</a>
-</div>
-</article>
-<!-- Blog Card 3 -->
-<article class="reveal group flex flex-col bg-white rounded-xl overflow-hidden border border-slate-200 transition-all duration-500 hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(0,37,85,0.15)]" style="animation-delay: 0.2s">
-<div class="h-64 overflow-hidden relative">
-<img alt="Academic hub" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="High-resolution close-up of medical textbooks and a digital tablet showing brain scans in a bright academic study room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUgXz0AySTvWEhazvCXNkDbR668itEnh1-44GV745eygV2kRUEIFsyATdKSWY45Hc-KGaPxnMch4XMNg23PQGAOrqINWKmqDev9bY_cQBMbd808xIhuQysjdsRe4U84GsBJ3ehIDXbUwYBJ58sPJzVk1ee9LDP0S47l_VftWlN0mN3YClwgXIAy98erOTkLfLXdWdX_zQ76nB8mNcHLxaxLESY6mYSOaxAGwflYvd3kObaU4wJPiVrmh_-cHbxmHn1p_3hjjDvq_Zi"/>
-<div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors duration-500"></div>
-</div>
-<div class="p-8 flex flex-col flex-grow">
-<span class="text-xs font-bold font-label text-secondary uppercase tracking-widest mb-3">Academic Hub</span>
-<h3 class="text-2xl font-headline font-bold text-primary mb-4 leading-snug group-hover:text-secondary transition-colors duration-300">Integrative Models of Mental Wellness</h3>
-<p class="text-on-surface-variant font-body text-sm leading-relaxed mb-6 flex-grow">
-                            A collaborative review of the latest multidisciplinary approaches to adolescent development and geriatric cognitive health...
-                        </p>
-<a class="inline-flex items-center gap-2 text-primary font-bold group-hover:gap-4 transition-all duration-300" href="#">
-                            Read More 
-                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
-</a>
-</div>
-</article>
-<!-- Blog Card 4 (Large Featured) -->
-<article class="reveal md:col-span-2 group flex flex-col md:flex-row bg-white rounded-xl overflow-hidden border border-slate-200 transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(0,37,85,0.15)]">
-<div class="md:w-1/2 overflow-hidden relative">
-<img alt="Restorative space" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Serene zen-like garden within a hospital atrium, featuring lush greenery, bamboo, and soft morning light filtering through glass" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMWcC9xDMZc6ALGXTfOmXfD6iyNgP5teZGcBdc8LkejCRkgX1jfXb8UGL0wOekNgmQvdcDRmSKzkLelrGn_khLwpHptcj3NHK1kSk_kDCYgqqPlzPg4EIhMPx3L0UOBF9c7j17nf_xfdSdrSV7QOC_NVTmoSYyCsBIx1-ciU3iwoVxf3FeSd8XbqXIjlLyC6XzZzYRSTYPm6Yir5CksFC9sWaf3bfu3IwAaH7ovbGpAjWTXbib3WLqGusX4PqNkremTCZXARVDFpda"/>
-<div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/5 transition-colors duration-500"></div>
-</div>
-<div class="md:w-1/2 p-12 flex flex-col justify-center bg-surface-container-lowest">
-<span class="text-xs font-bold font-label text-secondary uppercase tracking-widest mb-3">Architecture of Healing</span>
-<h3 class="text-3xl md:text-4xl font-headline font-bold text-primary mb-6 leading-tight group-hover:text-secondary transition-colors duration-300">Environment as Medicine: The Design of Anandham</h3>
-<p class="text-on-surface-variant font-body text-md leading-relaxed mb-8">
-                            How we designed our clinical spaces to reduce cortisol levels and promote autonomous patient recovery through intentional architectural stimuli.
-                        </p>
-<a class="inline-flex items-center gap-2 text-primary font-bold group-hover:gap-4 transition-all duration-300 text-lg" href="#">
-                            Explore the Full Feature
-                            <span class="material-symbols-outlined">arrow_forward</span>
-</a>
-</div>
-</article>
-<!-- Blog Card 5 -->
-<article class="reveal group flex flex-col bg-white rounded-xl overflow-hidden border border-slate-200 transition-all duration-500 hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(0,37,85,0.15)]">
-<div class="h-64 overflow-hidden relative">
-<img alt="Child care" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Gentle pediatric care interaction with colorful medical tools and friendly professional staff in a warm child-friendly ward" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCw-a1PWnMsL5YBWjMqx2CM9dluoD_zOUSj9_hdXHFvFP0Glw3ZR51GVbsBtd9WtmHg1f6ZvVHcH-q4ZlcB8SximWhTJ-uVyqEE4LZRGPOF9fxTjI2bmbX4FYgULLeSVquo8CmrRHoMCSbtljgHcUhqNxRyzPV8Wi-6zcYBh8qFK00D-DeBiYWIRd2IfYURFa8ZmUO479zIUYf2nrDqP3dH35KBwO31ymoCZosZxThLAF1hb99PiIen4DUzZcSwhxDg1wLKtI6TB_QA"/>
-<div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors duration-500"></div>
-</div>
-<div class="p-8 flex flex-col flex-grow">
-<span class="text-xs font-bold font-label text-secondary uppercase tracking-widest mb-3">Child Care</span>
-<h3 class="text-2xl font-headline font-bold text-primary mb-4 leading-snug group-hover:text-secondary transition-colors duration-300">Early Intervention in Neuro-Diversity</h3>
-<p class="text-on-surface-variant font-body text-sm leading-relaxed mb-6 flex-grow">
-                            Identifying the critical windows for developmental support and the impact of early institutional guidance on lifetime wellness...
-                        </p>
-<a class="inline-flex items-center gap-2 text-primary font-bold group-hover:gap-4 transition-all duration-300" href="#">
-                            Read More 
-                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
-</a>
-</div>
-</article>
+
+@endforeach
+
 </div>
 <!-- Pagination/Load More -->
 <div class="mt-20 flex justify-center reveal">
@@ -255,6 +209,30 @@
 </section>
 </div>
 
+<script>
+const buttons = document.querySelectorAll('.filter-btn');
+const items = document.querySelectorAll('article');
 
+buttons.forEach(btn => {
+  btn.addEventListener('click', () => {
+
+    const filter = btn.dataset.filter;
+
+    buttons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    items.forEach(item => {
+      const category = item.querySelector('span').innerText.trim();
+
+      if (filter === 'all' || category === filter) {
+        item.style.display = 'flex';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+
+  });
+});
+</script>
 
 @endsection

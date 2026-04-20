@@ -16,6 +16,17 @@ class GalleryController extends Controller
         return view('pages.dasboard.admin.gallery', compact('galleries'));
     }
 
+    public function publicGallery()
+{
+    $galleries = Gallery::latest()->get();
+
+    $categories = Gallery::select('category')
+        ->whereNotNull('category')
+        ->distinct()
+        ->pluck('category');
+
+    return view('pages.hospital.gallery', compact('galleries', 'categories'));
+}
 
     /**
      * Store a newly created resource in storage.

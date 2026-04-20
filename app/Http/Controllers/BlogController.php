@@ -13,6 +13,25 @@ class BlogController extends Controller
         return view('pages.dasboard.admin.blogs', compact('blogs'));
     }
 
+    public function publicBlogs()
+{
+    $blogs = Blog::latest()->paginate(6);
+
+    $categories = Blog::select('category')
+        ->whereNotNull('category')
+        ->distinct()
+        ->pluck('category');
+
+    return view('pages.hospital.blogs', compact('blogs','categories'));
+}
+
+    public function show($id)
+{
+    $blog = Blog::findOrFail($id);
+
+    return view('pages.hospital.blogs_show', compact('blog'));
+}
+
     public function store(Request $request)
     {
         $request->validate([
@@ -61,7 +80,7 @@ class BlogController extends Controller
             $mediaPath = $request->file('media')->store('blogs', 'public');
         }
 
-        $blog->update([
+         $blog->update([
             'name' => $request->name,
             'description' => $request->description,
             'media' => $mediaPath,

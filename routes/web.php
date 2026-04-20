@@ -24,8 +24,9 @@ Route::post('/course/{id}/enroll', [EnrollmentController::class, 'submit'])->nam
 Route::get('/course/enroll/{id}', [EnrollmentController::class, 'handleEnrollment'])->name('course.enroll.handle');
 Route::view('/courses/syllabus', 'pages.courses.course_syllabus')->name('courses.syllabus');
 Route::view('/services', 'pages.hospital.services')->name('services');
-Route::view('/gallery', 'pages.hospital.gallery')->name('gallery'); 
-Route::view('/blogs', 'pages.hospital.blogs')->name('blogs');
+Route::get('/gallery', [GalleryController::class, 'publicGallery'])->name('gallery');
+Route::get('/blogs', [BlogController::class, 'publicBlogs'])->name('blogs');
+Route::get('/blogs/{id}', [BlogController::class, 'show'])->name('blogs.show');
 Route::view('/about-us', 'pages.hospital.about')->name('about-us');
 Route::view('/contact-us', 'pages.hospital.contact')->name('contact-us');
 
@@ -120,8 +121,8 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::post('/payments/reject/{id}', [EnrollmentController::class, 'reject'])->name('admin.payments.reject');
     Route::post('/payments/revert/{id}', [EnrollmentController::class, 'revert'])->name('admin.payments.revert');
     
-    Route::view('/attendance', 'pages.dasboard.admin.attendance')->name('admin.attendance');
-    
+    Route::get('/attendance', [EnrollmentController::class, 'attendanceInsights'])->name('admin.attendance');
+    Route::get('/calendar/{date}', [EnrollmentController::class, 'calendarDay'])->name('calendar.day');
     
 });
 

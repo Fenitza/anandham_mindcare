@@ -17,22 +17,28 @@
 </div>
 <div class="grid grid-cols-3 gap-8">
 <div class="space-y-2">
-<p class="text-sm text-on-surface-variant">Average Daily Rate</p>
-<p class="text-5xl font-headline text-primary">92<span class="text-2xl">%</span></p>
+<p class="text-sm text-on-surface-variant">Enrollment Rate</p>
+<p class="text-5xl font-headline text-primary">
+    {{ $enrollmentRate }}<span class="text-2xl">%</span>
+</p>
 <div class="h-1 w-full bg-surface-container rounded-full overflow-hidden">
-<div class="h-full bg-primary w-[92%]"></div>
+<div class="h-full bg-primary w-[92%]" style="width: {{ $enrollmentRate }}%"></div>
 </div>
 </div>
 <div class="space-y-2">
 <p class="text-sm text-on-surface-variant">Active Courses</p>
-<p class="text-5xl font-headline text-primary">14</p>
+<p class="text-5xl font-headline text-primary">
+    {{ $activeCourses }}
+</p>
 <p class="text-xs text-secondary-fixed-dim font-semibold italic">Clinical &amp; Theory</p>
 </div>
 <div class="space-y-2">
 <p class="text-sm text-on-surface-variant">Capacity Util.</p>
-<p class="text-5xl font-headline text-primary">78<span class="text-2xl">%</span></p>
+<p class="text-5xl font-headline text-primary">
+    {{ $capacityUtil }}<span class="text-2xl">%</span>
+</p>
 <div class="h-1 w-full bg-surface-container rounded-full overflow-hidden">
-<div class="h-full bg-secondary w-[78%]"></div>
+<div class="h-full bg-secondary w-[78%]" style="width: {{ $capacityUtil }}%"></div>
 </div>
 </div>
 </div>
@@ -59,151 +65,312 @@
 </section>
 <!-- Calendar & Active Sessions -->
 <section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+
 <!-- Left: Upcoming Sessions List -->
-<div class="lg:col-span-7 space-y-6">
-<div class="flex items-center justify-between">
-<h3 class="text-2xl text-primary font-headline">Upcoming Clinical Sessions</h3>
-<div class="flex items-center gap-2">
-<button class="p-1 hover:bg-surface-container rounded-md"><span class="material-symbols-outlined">chevron_left</span></button>
-<span class="text-sm font-medium">May 24, 2024</span>
-<button class="p-1 hover:bg-surface-container rounded-md"><span class="material-symbols-outlined">chevron_right</span></button>
+<div class="lg:col-span-7 space-y-6 min-w-0">
+  <!-- HEADER -->
+        <div class="flex items-center justify-between">
+            <h3 class="text-2xl text-primary font-headline">
+                Upcoming Clinical Sessions
+            </h3>
+
+            <div class="flex items-center gap-2">
+
+                <a href="?date={{ $date->copy()->subMonth()->toDateString() }}"
+                  class="p-1 hover:bg-surface-container rounded-md">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </a>
+
+                <span class="text-sm font-medium">
+                    {{ $date->format('F Y') }}
+                </span>
+
+                <a href="?date={{ $date->copy()->addMonth()->toDateString() }}"
+                  class="p-1 hover:bg-surface-container rounded-md">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </a>
+
+            </div>
+        </div>
+
+@forelse($upcomingCourses as $course)
+
+<div class="group bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/10 flex items-center hover:border-secondary transition-all">
+
+    <!-- LEFT -->
+    <div class="flex items-center gap-4 flex-1">
+        <div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+            <span class="material-symbols-outlined">school</span>
+        </div>
+
+        <div>
+            <h4 class="font-semibold text-on-surface">
+                {{ $course->title }}
+            </h4>
+
+            <p class="text-xs text-on-surface-variant">
+                {{ $course->description ?? 'Course Module' }}
+            </p>
+        </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="flex items-center gap-6">
+
+        <div class="text-right">
+            <p class="text-xs text-on-surface-variant uppercase font-semibold">Enrolled</p>
+
+            <p class="text-lg font-headline text-primary">
+                {{ $course->enrollments_count }}
+                <span class="text-xs text-outline">
+                    / {{ $course->capacity ?? '—' }}
+                </span>
+            </p>
+        </div>
+
+        <a href="{{ route('courses.detail', $course->id) }}"
+           class="whitespace-nowrap px-5 py-2.5 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary-container transition-all">
+           View Course
+        </a>
+
+    </div>
+
+</div>
+
+@empty
+
+<!-- EMPTY STATE -->
+<div class="bg-surface-container-lowest border border-dashed border-outline-variant/30 rounded-xl p-10 text-center">
+
+    <div class="flex flex-col items-center gap-4">
+
+        <span class="material-symbols-outlined text-5xl text-outline-variant">
+            event_busy
+        </span>
+
+        <h4 class="text-lg font-semibold text-on-surface">
+            No Sessions This Month
+        </h4>
+
+        <p class="text-sm text-on-surface-variant max-w-sm">
+            There are no courses scheduled for {{ $date->format('F Y') }}.
+            Try switching to another month or create a new course.
+        </p>
+
+        <a href="{{ route('admin.courses.add') }}"
+           class="mt-2 px-5 py-2.5 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary-container transition-all">
+           + Add Course
+        </a>
+
+    </div>
+
+</div>
+
+@endforelse
+
+
+
+<!-- COMPLETED SECTION -->
+<div class="pt-6 border-t border-outline-variant/20 space-y-6">
+
+    <!-- HEADER -->
+    <div class="flex items-center justify-between">
+        <h3 class="text-xl text-primary font-headline">
+            Completed Sessions
+        </h3>
+
+       
+
+            <div class="flex items-center gap-2">
+
+                <a href="?date={{ $date->copy()->subMonth()->toDateString() }}"
+                  class="p-1 hover:bg-surface-container rounded-md">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </a>
+
+                <span class="text-sm font-medium">
+                    {{ $date->format('F Y') }}
+                </span>
+
+                <a href="?date={{ $date->copy()->addMonth()->toDateString() }}"
+                  class="p-1 hover:bg-surface-container rounded-md">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </a>
+
+            </div>
+        
+    </div>
+
+    <div class="space-y-4 max-h-[400px] overflow-y-auto pr-2">
+
+        @forelse($completedCourses as $course)
+
+        <div class="group bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/10 flex items-center opacity-70 hover:opacity-100 transition-all">
+
+            <!-- LEFT -->
+            <div class="flex items-center gap-4 flex-1 min-w-0">
+                <div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center text-primary shrink-0">
+                    <span class="material-symbols-outlined">task_alt</span>
+                </div>
+
+                <div class="min-w-0">
+                    <h4 class="font-semibold text-on-surface truncate">
+                        {{ $course->title }}
+                    </h4>
+
+                    <p class="text-xs text-on-surface-variant truncate">
+                        Completed on {{ \Carbon\Carbon::parse($course->course_date)->format('M d, Y') }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- RIGHT -->
+            <div class="flex items-center gap-6 shrink-0">
+
+                <div class="text-right">
+                    <p class="text-xs text-on-surface-variant uppercase font-semibold">Enrolled</p>
+
+                    <p class="text-lg font-headline text-primary">
+                        {{ $course->enrollments_count }}
+                        <span class="text-xs text-outline">
+                            / {{ $course->capacity ?? '—' }}
+                        </span>
+                    </p>
+                </div>
+
+                <a href="{{ route('courses.detail', $course->id) }}"
+                   class="whitespace-nowrap px-5 py-2.5 bg-secondary text-white text-sm font-medium rounded-lg hover:opacity-90 transition-all">
+                   View Summary
+                </a>
+
+            </div>
+
+        </div>
+
+        @empty
+
+        <div class="text-sm text-on-surface-variant text-center py-6">
+            No completed sessions this month.
+        </div>
+
+        @endforelse
+
 </div>
 </div>
-<div class="space-y-4">
-<!-- Session Row -->
-<div class="group bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/10 flex items-center justify-between hover:border-secondary transition-all">
-<div class="flex items-center gap-4">
-<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
-<span class="material-symbols-outlined">psychology</span>
 </div>
-<div>
-<h4 class="font-semibold text-on-surface">Cognitive Behavioral Therapy - Advanced</h4>
-<p class="text-xs text-on-surface-variant flex items-center gap-2">
-<span class="material-symbols-outlined text-xs">schedule</span> 09:00 AM - 11:30 AM • Hall B
-                  </p>
-</div>
-</div>
-<div class="flex items-center gap-8">
-<div class="text-right">
-<p class="text-xs text-on-surface-variant uppercase font-semibold">Registered</p>
-<p class="text-lg font-headline text-primary">28 <span class="text-xs text-outline">/ 30</span></p>
-</div>
-<button class="px-5 py-2.5 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary-container transition-all">
-                  Mark Attendance
-                </button>
-</div>
-</div>
-<!-- Session Row -->
-<div class="group bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/10 flex items-center justify-between hover:border-secondary transition-all">
-<div class="flex items-center gap-4">
-<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
-<span class="material-symbols-outlined">spa</span>
-</div>
-<div>
-<h4 class="font-semibold text-on-surface">Mindfulness &amp; Stress Management</h4>
-<p class="text-xs text-on-surface-variant flex items-center gap-2">
-<span class="material-symbols-outlined text-xs">schedule</span> 01:00 PM - 02:30 PM • Zen Garden
-                  </p>
-</div>
-</div>
-<div class="flex items-center gap-8">
-<div class="text-right">
-<p class="text-xs text-on-surface-variant uppercase font-semibold">Registered</p>
-<p class="text-lg font-headline text-primary">12 <span class="text-xs text-outline">/ 15</span></p>
-</div>
-<button class="px-5 py-2.5 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary-container transition-all">
-                  Mark Attendance
-                </button>
-</div>
-</div>
-<!-- Session Row -->
-<div class="group bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/10 flex items-center justify-between hover:border-secondary transition-all">
-<div class="flex items-center gap-4">
-<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
-<span class="material-symbols-outlined">diversity_3</span>
-</div>
-<div>
-<h4 class="font-semibold text-on-surface">Group Therapy: Trauma Recovery</h4>
-<p class="text-xs text-on-surface-variant flex items-center gap-2">
-<span class="material-symbols-outlined text-xs">schedule</span> 04:00 PM - 06:00 PM • Room 402
-                  </p>
-</div>
-</div>
-<div class="flex items-center gap-8">
-<div class="text-right">
-<p class="text-xs text-on-surface-variant uppercase font-semibold">Registered</p>
-<p class="text-lg font-headline text-primary">08 <span class="text-xs text-outline">/ 12</span></p>
-</div>
-<button class="px-5 py-2.5 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary-container transition-all">
-                  Mark Attendance
-                </button>
-</div>
-</div>
-</div>
-</div>
+
+
+
+
+
+
 <!-- Right: Calendar View -->
 <div class="lg:col-span-5 bg-surface-container-low p-6 rounded-xl space-y-6">
 <div class="flex items-center justify-between px-2">
-<h4 class="font-headline text-xl text-primary">Academic Calendar</h4>
-<span class="text-sm font-bold text-secondary">MAY 2024</span>
-</div>
-<div class="grid grid-cols-7 gap-1 text-center text-[10px] font-bold tracking-widest text-on-surface-variant opacity-50 uppercase">
-<div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
+    <h4 class="font-headline text-xl text-primary">Academic Calendar</h4>
+
+    <div class="flex items-center gap-2">
+        <a href="?month={{ $date->copy()->subMonth()->month }}&year={{ $date->copy()->subMonth()->year }}">
+            <span class="material-symbols-outlined">chevron_left</span>
+        </a>
+
+        <span class="text-sm font-bold text-secondary">
+            {{ $date->format('F Y') }}
+        </span>
+
+        <a href="?month={{ $date->copy()->addMonth()->month }}&year={{ $date->copy()->addMonth()->year }}">
+            <span class="material-symbols-outlined">chevron_right</span>
+        </a>
+    </div>
 </div>
 <div class="grid grid-cols-7 gap-1 text-sm font-medium">
-<!-- Simplified Calendar Mock -->
-<div class="h-10 flex items-center justify-center text-outline-variant">28</div>
-<div class="h-10 flex items-center justify-center text-outline-variant">29</div>
-<div class="h-10 flex items-center justify-center text-outline-variant">30</div>
-<div class="h-10 flex items-center justify-center">1</div>
-<div class="h-10 flex items-center justify-center">2</div>
-<div class="h-10 flex items-center justify-center">3</div>
-<div class="h-10 flex items-center justify-center">4</div>
-<div class="h-10 flex items-center justify-center">5</div>
-<div class="h-10 flex items-center justify-center">6</div>
-<div class="h-10 flex items-center justify-center">7</div>
-<div class="h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-primary ring-1 ring-primary/20">8</div>
-<div class="h-10 flex items-center justify-center">9</div>
-<div class="h-10 flex items-center justify-center">10</div>
-<div class="h-10 flex items-center justify-center">11</div>
-<div class="h-10 flex items-center justify-center">12</div>
-<div class="h-10 flex items-center justify-center">13</div>
-<div class="h-10 flex items-center justify-center">14</div>
-<div class="h-10 flex items-center justify-center">15</div>
-<div class="h-10 flex items-center justify-center relative after:content-[''] after:absolute after:bottom-1 after:w-1 after:h-1 after:bg-secondary after:rounded-full">16</div>
-<div class="h-10 flex items-center justify-center">17</div>
-<div class="h-10 flex items-center justify-center">18</div>
-<div class="h-10 flex items-center justify-center">19</div>
-<div class="h-10 flex items-center justify-center">20</div>
-<div class="h-10 flex items-center justify-center">21</div>
-<div class="h-10 flex items-center justify-center">22</div>
-<div class="h-10 flex items-center justify-center bg-secondary text-white rounded-full">23</div>
-<div class="h-10 flex items-center justify-center">24</div>
-<div class="h-10 flex items-center justify-center">25</div>
+@foreach($days as $day)
+
+@php
+    $isCurrentMonth = $day->month == $month;
+    $isToday = $day->copy()->timezone('Asia/Kolkata')->isSameDay(now('Asia/Kolkata'));
+    $hasCourse = isset($calendarCourses[$day->toDateString()]);
+@endphp
+
+@php
+    $dateKey = $day->toDateString();
+    $coursesForDay = $calendarCourses[$dateKey] ?? collect();
+@endphp
+
+<div class="relative group">
+
+    <!-- Day Cell -->
+    <div class="h-10 flex items-center justify-center rounded-md transition-all
+        {{ !$isCurrentMonth ? 'text-outline-variant' : '' }}
+        {{ $isToday ? 'bg-white ring-1 ring-primary text-primary' : '' }}
+        {{ $coursesForDay->count() ? 'bg-secondary/30' : '' }}
+    ">
+        {{ $day->day }}
+    </div>
+
+    <!-- Hover Popup -->
+    @if($coursesForDay->count())
+    <div class="absolute z-50 hidden group-hover:block transition opacity-0 group-hover:opacity-100
+                bottom-full mb-2 left-1/2 -translate-x-1/2
+                w-56 bg-white border border-outline-variant/20
+                rounded-lg shadow-lg p-3 text-xs">
+
+        <p class="font-semibold text-primary mb-2">
+            {{ $coursesForDay->count() }} Courses
+        </p>
+
+        <div class="space-y-1 max-h-32 overflow-y-auto">
+            @foreach($coursesForDay as $course)
+                <div class="flex justify-between gap-2">
+                    <span class="truncate">{{ $course->title }}</span>
+                    <span class="text-secondary text-[10px]">
+                        {{ $course->enrollments_count }}
+                    </span>
+                </div>
+            @endforeach
+        </div>
+
+    </div>
+    @endif
+
 </div>
+
+@endforeach
+</div>
+
+
 <div class="mt-8 border-t border-outline-variant/20 pt-6">
-<h5 class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-4">Course Attendance Rate</h5>
+<h5 class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-4">
+    Course Enrollment Rate
+</h5>
+
 <div class="space-y-4">
+
+@foreach($upcomingCourses as $course)
+@php
+    $rate = $course->capacity > 0 
+        ? round(($course->enrollments_count / $course->capacity) * 100)
+        : 0;
+@endphp
+
 <div class="flex items-center gap-4">
-<span class="text-xs font-medium w-32 truncate">Psychopathology</span>
-<div class="flex-1 h-1.5 bg-surface-container rounded-full overflow-hidden">
-<div class="h-full bg-secondary w-[96%]"></div>
+    <span class="text-xs font-medium w-32 truncate">
+        {{ $course->title }}
+    </span>
+
+    <div class="flex-1 h-1.5 bg-surface-container rounded-full overflow-hidden">
+        <div class="h-full bg-secondary" style="width: {{ $rate }}%"></div>
+    </div>
+
+    <span class="text-xs font-bold text-primary">
+        {{ $rate }}%
+    </span>
 </div>
-<span class="text-xs font-bold text-primary">96%</span>
+
+@endforeach
+
 </div>
-<div class="flex items-center gap-4">
-<span class="text-xs font-medium w-32 truncate">Clinical Neurology</span>
-<div class="flex-1 h-1.5 bg-surface-container rounded-full overflow-hidden">
-<div class="h-full bg-secondary w-[82%]"></div>
-</div>
-<span class="text-xs font-bold text-primary">82%</span>
-</div>
-<div class="flex items-center gap-4">
-<span class="text-xs font-medium w-32 truncate">Ethics in Care</span>
-<div class="flex-1 h-1.5 bg-surface-container rounded-full overflow-hidden">
-<div class="h-full bg-secondary w-[89%]"></div>
-</div>
-<span class="text-xs font-bold text-primary">89%</span>
 </div>
 </div>
 </div>

@@ -81,6 +81,32 @@
 
 </nav>
 
+<!-- STICKY CTA BAR -->
+<div id="ctaBar"
+     class="fixed top-20 left-0 w-full z-40 bg-white/95 backdrop-blur-md border-b border-outline-variant/10 shadow-md transition-all duration-300">
+
+  <div class="max-w-7xl mx-auto px-4 md:px-8 py-3 flex items-center justify-between">
+
+    <p class="text-sm md:text-base font-medium text-primary">
+      Start your mental wellness journey today
+    </p>
+
+    <div class="flex items-center gap-3">
+
+      <a href="{{ route('user.appointment.add') }}"
+         class="px-4 py-2 text-sm rounded-lg border border-primary text-primary hover:bg-primary hover:text-white transition">
+        Book Appointment
+      </a>
+
+      <a href="{{ route('courses') }}"
+         class="px-4 py-2 text-sm rounded-lg bg-primary text-white hover:opacity-90 transition shadow">
+        Enroll Courses
+      </a>
+      
+    </div>
+  </div>
+</div>
+
 <script>
   const menuBtn = document.getElementById('menuBtn');
   const mobileMenu = document.getElementById('mobileMenu');

@@ -15,10 +15,9 @@
     </style>
     
 
-    <!-- <header class="mb-20"> -->
-<!-- <h2 class="font-headline text-5xl text-primary font-bold mb-4">Schedule New Clinical Session</h2> -->
 
-</header>
+
+<h2 class="text-4xl font-['Newsreader'] font-bold text-primary mb-4 leading-tight">Book Appointment</h2>
 <form 
     action="{{ isset($appointment) ? route('appointment.update',$appointment->id) : route('appointment.store') }}"
     method="POST"
