@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\Auth\UserAuthController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\BlogController;
@@ -31,7 +33,6 @@ Route::view('/about-us', 'pages.hospital.about')->name('about-us');
 Route::view('/contact-us', 'pages.hospital.contact')->name('contact-us');
 
 
-
 /*
 |--------------------------------------------------------------------------
 | Auth Pages
@@ -43,6 +44,20 @@ Route::get('/register', function () {
     return view('pages.auth.register');
 })->name('register');
 
+Route::get('/email/verify', function () {
+    return view('pages.auth.verify_email');
+})->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    return redirect()->route('user.dashboard');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('success', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
 // Handle form submit
 Route::post('/register', [UserAuthController::class, 'register'])
     ->name('register.store');
@@ -50,12 +65,18 @@ Route::post('/register', [UserAuthController::class, 'register'])
 Route::post('/login', [UserAuthController::class, 'login'])->name('login');
 Route::post('/logout', [UserAuthController::class, 'logout'])->name('logout');
 
+Route::get('/forgot-password', [UserAuthController::class, 'showForgotForm'])->name('password.request');
+Route::post('/forgot-password', [UserAuthController::class, 'sendResetLink'])->name('password.email');
+
+Route::get('/reset-password/{token}', [UserAuthController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [UserAuthController::class, 'resetPassword'])->name('password.update');
+
 // Prevent direct /login access
 Route::get('/login', fn() => redirect()->route('signin'));
 
 
 Route::prefix('user')->group(function () {
-    Route::middleware('auth:web')->group(function () {
+    Route::middleware(['auth:web', 'verified'])->group(function () {
         Route::view('/dashboard', 'pages.dasboard.users.dashboard')->name('user.dashboard');
 
         Route::get('/appointments/list', [AppointmentController::class, 'index'])->name('user.appointments.list');

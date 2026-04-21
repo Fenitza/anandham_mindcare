@@ -124,7 +124,7 @@
 <label class="block text-xs font-semibold text-on-surface-variant tracking-widest uppercase" for="password">
                                 Password
                             </label>
-<a class="text-xs font-semibold text-secondary hover:text-on-secondary-fixed-variant transition-colors tracking-tight" href="#">
+<a class="text-xs font-semibold text-secondary hover:text-on-secondary-fixed-variant transition-colors tracking-tight" href="{{ route('password.request') }}">
                                 Forgot Password?
                             </a>
 </div>
