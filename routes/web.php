@@ -86,6 +86,43 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::post('/users/store', [UserAuthController::class, 'storeUser'])->name('users.store');
     Route::post('/users/toggle/{id}', [UserAuthController::class, 'toggleStatus'])->name('admin.users.toggle');
     Route::get('/users/show/{id}', [UserAuthController::class, 'show'])->name('admin.users.show');
+    
+    Route::get('/assign-courses', [UserAuthController::class, 'assignCourses'])
+    ->name('admin.users.assign');
+
+    Route::post('/assign-courses', [UserAuthController::class, 'assignCoursesToUser'])
+        ->name('admin.users.assign.submit');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Group Management
+    |--------------------------------------------------------------------------
+    */
+
+    // View groups + users
+    Route::get('/groups', [UserAuthController::class, 'manageGroups'])
+        ->name('admin.groups');
+
+    // Create group
+    Route::post('/groups', [UserAuthController::class, 'storeGroup'])
+        ->name('admin.groups.store');
+
+    // Update group
+    Route::put('/groups/{id}', [UserAuthController::class, 'updateGroup'])
+        ->name('admin.groups.update');
+
+    // Delete group
+    Route::delete('/groups/{id}', [UserAuthController::class, 'deleteGroup'])
+        ->name('admin.groups.delete');
+
+    // Assign users to group
+    Route::post('/groups/{groupId}/assign-users', [UserAuthController::class, 'assignUsersToGroup'])
+        ->name('admin.groups.assign');
+
+    // Remove user from group
+    Route::delete('/groups/{groupId}/remove-user/{userId}', [UserAuthController::class, 'removeUserFromGroup'])
+        ->name('admin.groups.removeUser');
 
 
     Route::get('/courses', [CourseController::class, 'index'])->name('admin.courses');
@@ -123,6 +160,8 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     
     Route::get('/attendance', [EnrollmentController::class, 'attendanceInsights'])->name('admin.attendance');
     Route::get('/calendar/{date}', [EnrollmentController::class, 'calendarDay'])->name('calendar.day');
+
+
     
 });
 

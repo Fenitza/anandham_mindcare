@@ -103,8 +103,9 @@
 
                         <span>{{ $user->name }}</span>
 
-                        <form method="POST" action="{{ route('admin.groups.removeUser', [$group->id, $user->id]) }}">
+                        <form method="POST" action="{{ route('admin.groups.removeUser', [$group->id, $user->id]) }}"method="POST">
                             @csrf
+                            @method('DELETE')
                             <button class="text-[10px] hover:text-red-500">
                                 ✕
                             </button>
