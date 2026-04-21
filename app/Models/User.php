@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -69,6 +69,11 @@ class User extends Authenticatable
 public function courses()
 {
     return $this->belongsToMany(Course::class, 'enrollments', 'user_id', 'course_id');
+}
+
+public function groups()
+{
+    return $this->belongsToMany(Group::class, 'group_user');
 }
 
 

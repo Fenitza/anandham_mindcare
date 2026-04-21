@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Course;
+use App\Models\Enrollment;
+use App\Models\Group;
 
 class UserAuthController extends Controller
 {
@@ -204,4 +207,158 @@ public function toggleStatus($id)
 
         return redirect()->route('signin');
     }
+
+    public function assignCourses()
+{
+    $users = User::where('status', 1)->get(); // only active users
+
+    $courses = Course::where('course_type', 'specialised') // 🔥 important
+        ->orderBy('title')
+        ->get();
+
+    $groups = Group::with('users')->get();
+
+
+    return view('pages.dasboard.admin.assign_courses', compact('users', 'courses', 'groups'));
+}
+
+
+
+public function assignCoursesToUser(Request $request)
+{
+    $request->validate([
+        'user_ids'   => 'array|nullable',
+        'group_ids'  => 'array|nullable',
+        'role'       => 'nullable|string',
+        'course_ids' => 'array'
+    ]);
+
+    $courseIds = $request->course_ids ?? [];
+
+    $users = collect();
+
+    // 1. Direct users
+    if (!empty($request->user_ids)) {
+        $users = $users->merge(
+            User::whereIn('id', $request->user_ids)->get()
+        );
+    }
+
+    // 2. Role-based users
+    if (!empty($request->role)) {
+        $users = $users->merge(
+            User::where('role', $request->role)
+                ->where('status', 1)
+                ->get()
+        );
+    }
+
+    // 3. Group-based users 🔥 NEW
+    if (!empty($request->group_ids)) {
+        $groupUsers = User::whereHas('groups', function ($q) use ($request) {
+            $q->whereIn('groups.id', $request->group_ids);
+        })->get();
+
+        $users = $users->merge($groupUsers);
+    }
+
+    // remove duplicates
+    $users = $users->unique('id');
+
+    if ($users->isEmpty()) {
+        return back()->with('error', 'Select users, role, or groups');
+    }
+
+    foreach ($users as $user) {
+
+        Enrollment::where('user_id', $user->id)
+            ->whereNotIn('course_id', $courseIds)
+            ->update(['status' => 'inactive']);
+
+        foreach ($courseIds as $courseId) {
+
+            Enrollment::updateOrCreate(
+                [
+                    'user_id'   => $user->id,
+                    'course_id' => $courseId,
+                ],
+                [
+                    'user_name' => $user->name,
+                    'email'     => $user->email,
+                    'status'    => 'approved'
+                ]
+            );
+        }
+    }
+
+    return back()->with('success', 'Courses assigned successfully');
+}
+
+public function manageGroups()
+{
+    $groups = Group::with('users')->latest()->get();
+    $users = User::whereNull('group_id')->get(); // unassigned users
+
+    return view('pages.dasboard.admin.manage_groups', compact('groups', 'users'));
+}
+
+public function storeGroup(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string|max:255'
+    ]);
+
+    Group::create([
+        'name' => $request->name
+    ]);
+
+    return back()->with('success', 'Group created');
+}
+
+public function assignUsersToGroup(Request $request, $groupId)
+{
+    $request->validate([
+        'user_ids' => 'array'
+    ]);
+
+    $group = Group::findOrFail($groupId);
+
+    if (!empty($request->user_ids)) {
+        $group->users()->syncWithoutDetaching($request->user_ids);
+    }
+
+    return back()->with('success', 'Users assigned');
+}
+
+public function updateGroup(Request $request, $id)
+{
+    $group = Group::findOrFail($id);
+
+    $group->update([
+        'name' => $request->name
+    ]);
+
+    return back()->with('success', 'Group updated');
+}
+
+public function deleteGroup($id)
+{
+    $group = Group::findOrFail($id);
+
+    // remove users from group
+    User::where('group_id', $group->id)->update(['group_id' => null]);
+
+    $group->delete();
+
+    return back()->with('success', 'Group deleted');
+}
+
+public function removeUserFromGroup($groupId, $userId)
+{
+    $group = Group::findOrFail($groupId);
+
+    $group->users()->detach($userId);
+
+    return back()->with('success', 'User removed from group');
+}
 }

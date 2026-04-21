@@ -48,14 +48,32 @@
     Add New User
 
 </a>
-<button class="border border-outline-variant/30 hover:bg-surface-container-low px-6 py-2.5 rounded-lg flex items-center gap-2 transition-all font-medium text-sm text-on-surface-variant">
+
+<a href="{{ route('admin.users.assign') }}"
+   class="bg-primary hover:bg-primary-container text-white px-6 py-2.5 rounded-lg flex items-center gap-2 transition-all font-medium text-sm">
+    
+    <span class="material-symbols-outlined text-lg">school</span>
+    Assign Courses
+
+</a>
+
+<a href="{{ route('admin.groups') }}"
+   class="bg-primary hover:bg-primary-container text-white px-6 py-2.5 rounded-lg flex items-center gap-2 transition-all font-medium text-sm">
+    
+    <span class="material-symbols-outlined text-lg">group</span>
+    Create Groups
+
+</a>
+
+
+<!-- <button class="border border-outline-variant/30 hover:bg-surface-container-low px-6 py-2.5 rounded-lg flex items-center gap-2 transition-all font-medium text-sm text-on-surface-variant">
 <span class="material-symbols-outlined text-lg" data-icon="filter_list">filter_list</span>
                     Filter View
-                </button>
-<button class="border border-outline-variant/30 hover:bg-surface-container-low px-4 py-2.5 rounded-lg flex items-center gap-2 transition-all font-medium text-sm text-on-surface-variant">
+                </button> -->
+<!-- <button class="border border-outline-variant/30 hover:bg-surface-container-low px-4 py-2.5 rounded-lg flex items-center gap-2 transition-all font-medium text-sm text-on-surface-variant">
 <span class="material-symbols-outlined text-lg" data-icon="file_download">file_download</span>
                     Export
-                </button>
+                </button> -->
 </div>
 <div class="flex items-center gap-2 bg-surface-container-low p-1 rounded-lg">
 <button class="px-4 py-1.5 rounded-md bg-white shadow-sm text-sm font-medium text-primary">All Users</button>
