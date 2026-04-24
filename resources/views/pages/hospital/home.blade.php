@@ -24,10 +24,12 @@
                         <span class="material-symbols-outlined">calendar_month</span>
 </button>
 </a>
+<a href= "{{ route('courses') }}">
 <button class="border border-white/30 backdrop-blur-md bg-white/10 text-white px-8 py-4 rounded-xl font-semibold flex items-center gap-3 hover:bg-white/20 transition-all">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_circle</span>
-                        Watch Video
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">school</span>
+                        Explore Courses
                     </button>
+</a>
 </div>
 </div>
 <!-- Floating Stats: Perfectly fits bottom right -->
@@ -152,13 +154,17 @@
                     "Help Today Because Tomorrow you may be Needs someone help"
                 </p>
 <div class="flex flex-wrap justify-center gap-6">
+<a href="{{ route('contact-us') }}">
 <button class="bg-white text-primary px-10 py-4 rounded-xl font-bold hover:bg-tertiary-fixed-dim hover:text-on-tertiary-fixed transition-colors">
-                        Call NOW
+                        Contact NOW
                     </button>
+</a>
+<a href="{{ route('user.appointments.list') }}">
 <button class="bg-secondary text-white px-10 py-4 rounded-xl font-bold flex items-center gap-3 hover:bg-secondary-container hover:text-on-secondary-container transition-colors">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">live_tv</span>
-                        Watch Live
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+                        Book Appointment
                     </button>
+</a>
 </div>
 </div>
 </div>

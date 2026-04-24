@@ -408,4 +408,52 @@ public function removeUserFromGroup($groupId, $userId)
 
     return back()->with('success', 'User removed from group');
 }
+
+public function profile()
+{
+    $user = auth()->user();
+    return view('pages.dasboard.users.profile', compact('user'));
+}
+
+public function updateProfile(Request $request)
+{
+    $user = auth()->user();
+
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $user->id,
+        'phone' => 'nullable'
+    ]);
+
+    $user->update($request->only('name', 'email', 'phone'));
+
+    return back()->with('success', 'Profile updated successfully');
+}
+
+public function settings()
+{
+    return view('pages.dasboard.users.settings');
+}
+
+
+public function updatePassword(Request $request)
+{
+    $request->validate([
+        'current_password' => 'required',
+        'password' => 'required|min:6|confirmed'
+    ]);
+
+    $user = auth()->user();
+
+    if (!Hash::check($request->current_password, $user->password)) {
+        return back()->with('error', 'Current password is incorrect');
+    }
+
+    $user->update([
+        'password' => Hash::make($request->password)
+    ]);
+
+    return back()->with('success', 'Password updated successfully');
+}
+
 }

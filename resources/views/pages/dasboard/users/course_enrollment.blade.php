@@ -2,7 +2,7 @@
 @section('title', 'Appointments - Anandham Mindcare')
 @section('content')
 
-<div class="p-8 lg:p-12 max-w-7xl mx-auto w-full">
+<div class="p-4 lg:p-6 max-w-7xl mx-auto w-full">
 <!-- Header Section -->
 <section class="mb-12">
 <h2 class="text-4xl md:text-4xl font-headline font-bold text-primary mb-4 leading-tight">My Courses</h2>
@@ -220,7 +220,9 @@
 @endif
 
 </div>
+
 </div>
+
 
 @empty
 
@@ -241,5 +243,19 @@
 @endforelse
 
 </div>
+
+@if($enrollments->count() > 0)
+    <div class="text-center mt-16">
+
+        <a href="{{ route('courses.list') }}"
+           class="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-bold text-sm hover:scale-105 transition-all shadow-md hover:shadow-lg">
+            
+            <span class="material-symbols-outlined text-base">school</span>
+            Browse More Courses
+        </a>
+
+    </div>
+@endif
+
 
 @endsection

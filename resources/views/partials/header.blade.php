@@ -82,6 +82,7 @@
 </nav>
 
 <!-- STICKY CTA BAR -->
+ @unless (Route::is('courses.detail', 'signin', 'register'))
 <div id="ctaBar"
      class="fixed top-20 left-0 w-full z-40 bg-white/95 backdrop-blur-md border-b border-outline-variant/10 shadow-md transition-all duration-300">
 
@@ -106,6 +107,7 @@
     </div>
   </div>
 </div>
+@endunless
 
 <script>
   const menuBtn = document.getElementById('menuBtn');

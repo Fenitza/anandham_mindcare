@@ -241,13 +241,18 @@
 <h2 class="font-headline text-4xl text-white mb-6">Need Immediate Clinical Assistance?</h2>
 <p class="text-on-primary-container text-lg mb-8">Our expert panel is available for emergency psychiatric evaluations and crisis intervention. Start your healing process today.</p>
 <div class="flex flex-wrap gap-4">
+<a href="{{ route('user.appointments.list') }}">
 <button class="bg-secondary text-white px-8 py-4 rounded-xl font-bold flex items-center gap-2 shadow-lg hover:bg-[#8a6c00] transition-all">
 <span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span> Book Appointment
                         </button>
+</a>
+<a href="{{ route('contact-us') }}">
 <button class="border border-outline-variant/30 text-white px-8 py-4 rounded-xl font-bold flex items-center gap-2 hover:bg-white/10 transition-all">
-<span class="material-symbols-outlined" data-icon="call">call</span> Emergency Line
+<span class="material-symbols-outlined" data-icon="call">call</span> Contact Us
                         </button>
+</a>
 </div>
+
 </div>
 <div class="md:w-1/3 relative">
 <div class="aspect-square rounded-full border-[20px] border-white/5 absolute -top-12 -right-12 animate-pulse"></div>

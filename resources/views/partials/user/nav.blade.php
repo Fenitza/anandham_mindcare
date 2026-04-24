@@ -15,7 +15,7 @@
     <nav class="flex-1 space-y-1">
 
         <!-- MY LEARNING -->
-        <a href="#"
+        <a href="{{ route('user.dashboard') }}"
            class="flex items-center gap-4 py-3 pl-5 transition-all
            {{ request()->is('dashboard') ? 'text-blue-900 font-bold border-l-4 border-yellow-500 bg-slate-200' : 'text-slate-500 hover:bg-slate-200' }}">
            

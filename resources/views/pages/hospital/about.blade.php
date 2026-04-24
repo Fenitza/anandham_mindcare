@@ -28,7 +28,7 @@
 <div class="relative group max-w-sm mx-auto lg:max-w-none">
 <div class="absolute -inset-4 bg-surface-container rounded-xl -rotate-2 transition-transform duration-500 group-hover:rotate-0"></div>
 <div class="relative bg-white p-3 md:p-4 shadow-xl shadow-primary/5 rounded-xl border border-outline-variant/10 overflow-hidden">
-<img alt="Dr. M. Helena Selvakodi professional portrait" class="w-full aspect-[4/5] object-cover rounded-lg transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLqhJNEDl1Mr_5nn8HMwVgizTbVh7b0hgPRAp6d_XyYxV8RFOK-jkKWfc2PrNHz8l52xg1es21AMAIEfQHeNlfZnlG3BcS7wXcQNQq1MyszLgQLdkMBnmlsWX_4-JACXTG38UMQx8rNPuORffwpGgwUrATEPbGWLOU2JheUcJecalL31ayy0RP8RGXWOXEZewWCWwJWBb4tL4VR-Y0PQ6iTyiRr7WHDHi3UC1Seir0uIsElqCydaP0j_2LgRThcN8G3p5i1-H8wPVO"/>
+<img alt="Dr. M. Helena Selvakodi professional portrait" class="w-full aspect-[4/5] object-cover rounded-lg transition-transform duration-700 group-hover:scale-105" src="{{ asset('assets/images/doctor.jpeg') }}"/>
 </div>
 <div class="absolute bottom-6 md:bottom-12 -right-4 md:-right-8 bg-primary-container p-4 md:p-6 rounded-xl shadow-2xl max-w-[180px] md:max-w-[240px] transition-transform duration-500 group-hover:translate-x-2">
 <p class="text-on-primary-container text-xs md:text-sm leading-relaxed italic">
@@ -199,16 +199,16 @@
 <p class="text-white/70 text-sm">Ensuring patient privacy and ethical excellence in every clinical interaction.</p>
 </div>
 <!-- Interior Block -->
-<div class="bg-surface-container-high p-8 md:p-12 rounded-2xl flex flex-col justify-between group overflow-hidden">
+<!-- <div class="bg-surface-container-high p-8 md:p-12 rounded-2xl flex flex-col justify-between group overflow-hidden">
 <p class="text-primary font-serif text-lg md:text-xl italic leading-snug">
                         "A sanctuary designed for clarity and modern research journals."
                     </p>
 <div class="overflow-hidden rounded-lg mt-6 md:mt-8">
 <img alt="Interior of a calm clinical space" class="w-full h-32 object-cover opacity-60 transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuByC4ZumPaIMe3etxLahDjsyVuvIIrOJPx2K5p4GDW3dNzgzzHH_YMBBBNR_cAP750_iSrTcVZZnQ9U7ECyzCfppkxbSU8fxMfn4tURTlUCnzCKAhMi3CTd6PqeEOpQ1p3nCVbrUGLNRaJVMS1T0LmOlRY8D-ogWrAW7tk-AeblufRlpNTdwRJAdyXWGcugiUXlSq05PoW9v7DYdtTWIEK6us9bzrwAKqwtNYm7wRmY0yejQd8gpfJKPZxWyKnt0q7wtLEu-sLkMdfL"/>
 </div>
-</div>
+</div> -->
 <!-- Ethics Block -->
-<div class="md:col-span-2 bg-secondary p-8 md:p-12 rounded-2xl text-white flex flex-col md:flex-row gap-6 md:gap-8 items-center shadow-lg">
+<!-- <div class="md:col-span-2 bg-secondary p-8 md:p-12 rounded-2xl text-white flex flex-col md:flex-row gap-6 md:gap-8 items-center shadow-lg">
 <div class="md:w-2/3 text-center md:text-left">
 <h3 class="text-2xl md:text-3xl font-serif mb-4 italic">Commitment to Ethics</h3>
 <p class="text-white/90 text-sm md:text-base leading-relaxed">
@@ -221,7 +221,7 @@
                         </button>
 </div>
 </div>
-</div>
+</div> -->
 </div>
 </section>
 </main>

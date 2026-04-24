@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Notifications\CustomResetPasswordNotification;
 
 class User extends Authenticatable implements MustVerifyEmail 
 {
@@ -75,6 +76,13 @@ public function courses()
 public function groups()
 {
     return $this->belongsToMany(Group::class, 'group_user');
+}
+
+
+
+public function sendPasswordResetNotification($token)
+{
+    $this->notify(new CustomResetPasswordNotification($token));
 }
 
 }

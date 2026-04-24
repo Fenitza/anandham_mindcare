@@ -55,6 +55,7 @@
                 <!-- NAME EDIT -->
                 <form method="POST" action="{{ route('admin.groups.update', $group->id) }}" class="flex items-center gap-2 flex-1">
                     @csrf
+                    @method('PUT')
 
                     <input type="text" name="name"
                         value="{{ $group->name }}"

@@ -1,7 +1,7 @@
 <aside class="admin-sidebar fixed left-0 top-0 h-screen w-64 py-6 z-50">
     <div class="px-6 mb-10">
-        <h1 class="text-xl font-bold font-headline text-blue-900">Anandham Mindcare</h1>
-        <p class="text-xs tracking-wide font-label text-slate-500 mt-1 uppercase">Academic Administration</p>
+        <h1 class="text-xl font-bold font-headline text-blue-900">Anandham Mindcare </h1>
+        <p class="text-xs tracking-wide font-label text-slate-500 mt-1 uppercase"></p>
     </div>
     <nav class="flex-1 space-y-1">
         <a href="{{ route('admin.dashboard') }}"
@@ -32,7 +32,8 @@
         <a href="{{ route('admin.gallery') }}"
            class="flex items-center px-6 py-3 font-semibold border-r-4 transition-all opacity-90 {{ Request::is('admin/gallery') || Request::is('admin/gallery/*') ? 'text-blue-900 border-yellow-700 bg-slate-200' : 'text-slate-600 hover:text-blue-900 hover:bg-slate-200/50 border-transparent' }}">
             <span class="material-symbols-outlined mr-3">photo_library</span>
-            <span class="text-sm tracking-wide font-label">Gallery</span>
+            <span class="text-sm tracking-wide font-label">Gallery</span>           
+            
         </a>
         <a href="{{ route('admin.attendance') }}"
            class="flex items-center px-6 py-3 font-semibold border-r-4 transition-all opacity-90 {{ Request::is('admin/attendance') || Request::is('admin/attendance/*') ? 'text-blue-900 border-yellow-700 bg-slate-200' : 'text-slate-600 hover:text-blue-900 hover:bg-slate-200/50 border-transparent' }}">

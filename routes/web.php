@@ -5,10 +5,12 @@ use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\Auth\UserAuthController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\ContactController;
 
 Route::get('/', function () {
     return view('pages.home');
@@ -31,6 +33,7 @@ Route::get('/blogs', [BlogController::class, 'publicBlogs'])->name('blogs');
 Route::get('/blogs/{id}', [BlogController::class, 'show'])->name('blogs.show');
 Route::view('/about-us', 'pages.hospital.about')->name('about-us');
 Route::view('/contact-us', 'pages.hospital.contact')->name('contact-us');
+Route::post('/contact-send', [ContactController::class, 'send'])->name('contact.send');
 
 
 /*
@@ -77,7 +80,7 @@ Route::get('/login', fn() => redirect()->route('signin'));
 
 Route::prefix('user')->group(function () {
     Route::middleware(['auth:web', 'verified'])->group(function () {
-        Route::view('/dashboard', 'pages.dasboard.users.dashboard')->name('user.dashboard');
+        Route::get('/dashboard', [DashboardController::class, 'userDashboard'])->name('user.dashboard');
 
         Route::get('/appointments/list', [AppointmentController::class, 'index'])->name('user.appointments.list');
         Route::view('/appointment/add', 'pages.dasboard.users.appointments')->name('user.appointment.add');
@@ -86,6 +89,12 @@ Route::prefix('user')->group(function () {
         Route::get('/courses/enrollments', [EnrollmentController::class, 'index'])->name('user.course.enrollments');
         Route::get('/courses/enrollments/{id}', [EnrollmentController::class, 'show'])->name('user.course.enrollment.show');
         
+        Route::get('/profile', [UserAuthController::class, 'profile'])->name('profile');
+        Route::post('/profile/update', [UserAuthController::class, 'updateProfile'])->name('profile.update');
+
+        Route::get('/settings', [UserAuthController::class, 'settings'])->name('settings');
+        Route::post('/settings/password', [UserAuthController::class, 'updatePassword'])->name('settings.password');
+
     });
     }); 
 
