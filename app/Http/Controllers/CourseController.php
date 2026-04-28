@@ -10,6 +10,7 @@ use App\Models\Module;
 use App\Models\Topic;
 use App\Models\Bonus;
 use App\Models\Mentor;
+use App\Models\Tag;
 use Illuminate\Support\Facades\DB;
 
 class CourseController extends Controller
@@ -41,6 +42,7 @@ class CourseController extends Controller
                 'course_type' => $request->course_type,
                 'course_image' => $request->hasFile('course_image') ? $request->file('course_image')->store('courses', 'public') : null,
                 'specialisation' => $request->specialisation,
+                
                 'duration' => $request->duration,
                 'fee' => $request->price,
                 'capacity' => $request->capacity, 
@@ -52,6 +54,34 @@ class CourseController extends Controller
                 'zoom_link' => $request->zoom_link,
                 'enable_qr' => $request->enable_qr ? true : false,
             ]);
+
+            // ✅ Handle Tags (many-to-many)
+            if ($request->tags) {
+
+                // If tags come as comma string → convert to array
+                $tagNames = is_array($request->tags)
+                    ? $request->tags
+                    : explode(',', $request->tags);
+
+                $tagIds = [];
+
+                foreach ($tagNames as $tagName) {
+
+                    $tagName = trim($tagName);
+
+                    if (!$tagName) continue;
+
+                    // 🔥 Create or get existing tag
+                    $tag = Tag::firstOrCreate([
+                        'name' => $tagName
+                    ]);
+
+                    $tagIds[] = $tag->id;
+                }
+
+                // 🔥 Attach to pivot table
+                $course->tags()->sync($tagIds);
+            }
             // dd($request->all());
             // ✅ 2. Save Modules + Topics
             if ($request->modules) {
@@ -149,6 +179,7 @@ class CourseController extends Controller
             'title' => $request->title,
             'course_type' => $request->course_type,
             'specialisation' => $request->specialisation,
+            
             'duration' => $request->duration,
             'fee' => $request->price,
             'capacity' => $request->capacity,
@@ -160,6 +191,42 @@ class CourseController extends Controller
             'zoom_link' => $request->zoom_link,
             'enable_qr' => $request->enable_qr ? true : false,
         ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | 2.1 SYNC TAGS (IMPORTANT)
+        |--------------------------------------------------------------------------
+        */
+        if ($request->tags !== null) {
+
+            $tagNames = is_array($request->tags)
+                ? $request->tags
+                : explode(',', $request->tags);
+
+            $tagIds = [];
+
+            foreach ($tagNames as $tagName) {
+
+                $tagName = trim($tagName);
+                if (!$tagName) continue;
+
+                // normalize (optional but recommended)
+                $tagName = strtolower($tagName);
+
+                $tag = Tag::firstOrCreate([
+                    'name' => $tagName
+                ]);
+
+                $tagIds[] = $tag->id;
+            }
+
+            // 🔥 sync replaces old + adds new
+            $course->tags()->sync($tagIds);
+
+        } else {
+            // if no tags sent → remove all
+            $course->tags()->detach();
+        }
         // dd($request->all());
 
         /*
@@ -313,81 +380,93 @@ class CourseController extends Controller
     }
 
         public function list(Request $request)
-    {   // 🔹 Filters
-     
-        $selectedType = $request->type ?? 'All Courses';
-        $selectedSpecialization = $request->specialization;
+{
+    $selectedType = $request->type ?? 'All Courses';
+    $selectedSpecialization = $request->specialization;
+    $selectedTags = $request->tags ?? []; // ✅ MULTIPLE
 
-        // 🔹 Base Query
-        $query = Course::query()->where('status', 'active');
+    $query = Course::with('tags')
+        ->where('status', 'active');
 
-        // 🔹 Course Type Filter
-        if ($selectedType !== 'All Courses') {
+    // 🔹 Type filter
+    if ($selectedType !== 'All Courses') {
+        match ($selectedType) {
+            'Free' => $query->where('course_type', 'free'),
+            'Premium' => $query->where('course_type', 'premium'),
+            'Specialised' => $query->where('course_type', 'specialised'),
+            default => null
+        };
+    }
 
-            match ($selectedType) {
-                'Free Modules' => $query->where('course_type', 'free'),
-                'Premium Tracks' => $query->where('course_type', 'premium'),
-                'Specialised Fellowships' => $query->where('course_type', 'specialised'),
-                default => null
-            };
-        }
+    // 🔹 Specialization filter
+    if (!empty($selectedSpecialization)) {
+        $query->where('specialisation', $selectedSpecialization);
+    }
 
-        // 🔹 Specialization Filter
-        if ($selectedSpecialization) {
-            $query->where('specialisation', $selectedSpecialization);
-        }
+    // 🔹 MULTI TAG FILTER ✅
+    if (!empty($selectedTags)) {
+        $query->whereHas('tags', function ($q) use ($selectedTags) {
+            $q->whereIn('tags.id', $selectedTags);
+        });
+    }
 
-        // 🔹 Get Courses
-        $courses = $query->orderBy('course_date', 'desc')->get();
+    $courses = $query->orderBy('course_date', 'desc')->get();
 
-        // 🔹 Specializations
-        $specializations = Course::select('specialisation')
-            ->distinct()
-            ->get()
-            ->map(function ($item) {
-                return (object)[
-                    'id' => $item->specialisation,
-                    'name' => ucfirst($item->specialisation),
-                    'icon' => $this->getIcon($item->specialisation)
-                ];
-            });
+    // 🔹 Specializations
+    $specializations = Course::select('specialisation')
+        ->whereNotNull('specialisation')
+        ->distinct()
+        ->get();
 
-        // 🔹 Timeline Grouping
-        $timelineGroups = $courses->groupBy(function ($course) {
-            return Carbon::parse($course->course_date)->format('M Y');
-        })->map(function ($group, $key) {
+    // 🔥 Tags grouped by specialization
+    $tagsBySpecialization = Tag::with(['courses' => function ($q) {
+        $q->select('courses.id', 'specialisation');
+    }])->get()->groupBy(function ($tag) {
+        return optional($tag->courses->first())->specialisation;
+    });
+
+    // 🔹 Timeline
+    $timelineGroups = $courses
+        ->groupBy(fn ($course) => Carbon::parse($course->course_date)->format('M Y'))
+        ->map(function ($group, $key) {
 
             return [
                 'label' => Carbon::parse($key)->format('M y'),
                 'title' => $this->getPhaseTitle($key),
-                'courses' => $group->map(function ($course) {
 
-                    return (object)[
-                        'id' => $course->id,
-                        'title' => $course->title,
-                        'price' => $course->fee > 0 ? '₹' . number_format($course->fee) : 'Free',
-                        'description' => $course->description,
-                        'image' => $course->course_image,
-                        'duration' => $course->duration ?? $course->course_time,
-                        'category' => ucfirst($course->specialisation),
-                        'type' => match ($course->course_type) {
-                            'free' => 'Free Module',
-                            'premium' => 'Premium Track',
-                            'specialised' => 'Fellowship',
-                            default => 'Unknown'
-                        }
-                    ];
-                })->values()
+                'courses' => $group->map(fn ($course) => (object)[
+                    'id' => $course->id,
+                    'title' => $course->title,
+                    'price' => $course->fee > 0 ? '₹' . number_format($course->fee) : 'Free',
+                    'description' => $course->description,
+                    'image' => $course->course_image,
+                    'duration' => $course->duration ?? $course->course_time,
+                    'category' => ucfirst($course->specialisation),
+
+                    'type' => match ($course->course_type) {
+                        'free' => 'Free',
+                        'premium' => 'Premium',
+                        'specialised' => 'Specialised',
+                        default => 'Unknown'
+                    },
+
+                    // ✅ FIXED TAGS
+                    'tags' => $course->tags->pluck('name')->toArray()
+
+                ])->values()
             ];
-        })->values();
+        })
+        ->values();
 
-        return view('pages.courses.course_list', compact(
-            'specializations',
-            'selectedType',
-            'selectedSpecialization',
-            'timelineGroups'
-        ));
-    }
+    return view('pages.courses.course_list', compact(
+        'specializations',
+        'tagsBySpecialization',
+        'selectedType',
+        'selectedSpecialization',
+        'selectedTags',
+        'timelineGroups'
+    ));
+}
     private function getIcon($specialisation)
 {
     return match (strtolower($specialisation)) {
@@ -411,7 +490,19 @@ private function getPhaseTitle($date)
         return 'Global Research Practicum';
     }
 }
-
+private function getTagIcon($tagName)
+{
+    return match (strtolower($tagName)) {
+        'mental health' => 'psychology',
+        'child care' => 'child_care',
+        'adolescent care' => 'groups',
+        'therapy' => 'healing',
+        'neuro' => 'neurology',
+        'wellness' => 'spa',
+        'counselling' => 'support_agent',
+        default => 'label' // fallback icon
+    };
+}
 public function detail($id)
 {
     $course = Course::with(['modules.topics', 'bonuses', 'mentor'])

@@ -20,15 +20,16 @@
 
 </header>
 <form 
-    action="{{ isset($appointment) ? route('appointment.update',$appointment->id) : route('appointment.store') }}"
+    action="{{ auth()->check() 
+        ? (isset($appointment) ? route('appointment.update',$appointment->id) : route('appointment.store')) 
+        : route('appointment.store.guest') }}"
     method="POST"
-    class="space-y-12"
 >
 @csrf
 @if(isset($appointment)) @method('PUT') @endif
 <!-- Section 1: Patient Details (Bento-style Grid) -->
 <section class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-    
+ 
 <div class="md:col-span-4">
 <h3 class="font-headline text-2xl text-primary font-bold">Patient Details</h3>
 <p class="text-on-surface-variant text-sm mt-2 leading-relaxed">Identify the recipient of care. Ensure the Patient ID matches the medical records for seamless integration.</p>

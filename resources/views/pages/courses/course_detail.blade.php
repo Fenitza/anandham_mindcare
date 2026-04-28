@@ -121,48 +121,47 @@ function toggleModule(index) {
         .delay-500 { animation-delay: 500ms; }
     </style>
 
-@php
+
+
+<!-- Scrolling Marquee -->
+<div class=" w-full bg-secondary z-[90] overflow-hidden whitespace-nowrap py-2 border-b border-secondary-container">
+    @php
     $marqueeItems = [];
 
     if (!empty($course->marquee_text)) {
         // Split using bullet separator
-        $marqueeItems = explode('•', $course->marquee_text);
+        $marqueeItems = explode(',', $course->marquee_text);
+        $marqueeItems = array_map('trim', $marqueeItems);
 
         // Trim spaces
         $marqueeItems = array_map('trim', $marqueeItems);
     }
 @endphp
-
-<!-- Scrolling Marquee -->
-<div class="fixed top-[68px] w-full bg-secondary z-[90] overflow-hidden whitespace-nowrap py-2 border-b border-secondary-container">
-    
     <div class="flex animate-marquee">
 
-        {{-- FIRST LOOP --}}
-        <div class="flex items-center space-x-12 px-4">
-            @foreach($marqueeItems as $item)
-                @if($item)
-                <span class="text-surface font-bold text-xs uppercase tracking-widest flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-                    {{ $item }}
-                </span>
-                @endif
-            @endforeach
-        </div>
-
-        {{-- DUPLICATE FOR INFINITE LOOP --}}
-        <div class="flex items-center space-x-12 px-4">
-            @foreach($marqueeItems as $item)
-                @if($item)
-                <span class="text-surface font-bold text-xs uppercase tracking-widest flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-primary"></span>
-                    {{ $item }}
-                </span>
-                @endif
-            @endforeach
-        </div>
-
+    <div class="flex items-center space-x-12 px-4 min-w-max">
+        @foreach($marqueeItems as $item)
+            @if($item)
+            <span class="text-surface font-bold text-xs uppercase tracking-widest flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                {{ $item }}
+            </span>
+            @endif
+        @endforeach
     </div>
+
+    <div class="flex items-center space-x-12 px-4 min-w-max">
+        @foreach($marqueeItems as $item)
+            @if($item)
+            <span class="text-surface font-bold text-xs uppercase tracking-widest flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-primary"></span>
+                {{ $item }}
+            </span>
+            @endif
+        @endforeach
+    </div>
+
+</div>
 </div>
 <header class="relative pt-16 md:pt-20 pb-12 md:pb-16 overflow-hidden bg-primary min-h-[55vh] flex items-center">
     <!-- Background -->

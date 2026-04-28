@@ -2,7 +2,7 @@
 
 @section('content')
 
-<header class="relative min-h-[716px] flex items-center overflow-hidden bg-surface py-20 px-8">
+<!-- <header class="relative min-h-[716px] flex items-center overflow-hidden bg-surface py-20 px-8">
 <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 <div class="lg:col-span-7 z-10 reveal">
 <div class="inline-flex items-center gap-2 mb-6 text-secondary font-medium tracking-wide uppercase text-xs">
@@ -23,9 +23,9 @@ Empowering the Next Generation of Mental Health Professionals through evidence-b
 Explore More
 </button>
 </div>
-</div>
+</div> -->
 
-<div class="lg:col-span-5 relative z-10 reveal">
+<!-- <div class="lg:col-span-5 relative z-10 reveal">
 <div class="aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl relative z-0">
 <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1dGG54lj6HBhBA7yT6pvSVoVDKkZnPKDTZKX3qZUYydcTc9kJj-fCbwXep-OkW49UIUfLXl4ojas2AhRXm5NRbdQp2YgB0wi7R-TvT1drbk_I0_wYdIIhliEGdOQeYXYO11hOpq6IqWPIsnRovBv93DZoqAgEDoYEyL2mb1EbJhsF9Br9_6871LjUNGTcDO24Q5sVp72wlVjvaPNjlzQp7NXA4HDiEtQN7rLgaTjjSQIknjxLWM90S7lZbqz90TeqEIUVxsKR65wh"/>
 <div class="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent"></div>
@@ -38,7 +38,7 @@ Explore More
 </div>
 </div>
 <div class="absolute right-0 top-0 w-1/3 h-full bg-surface-container-low -z-10 opacity-50"></div>
-</header>
+</header> -->
 
 
 <!-- Upcoming -->

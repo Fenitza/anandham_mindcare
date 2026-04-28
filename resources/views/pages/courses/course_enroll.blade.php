@@ -118,8 +118,28 @@ h1, h2, h3 { font-family: 'Newsreader', serif; }
 
         <div class="bg-white p-7 rounded-2xl shadow-md border">
 
+            @php
+                $tagNames = $course->tags->pluck('name')->toArray();
+            @endphp
+
+            <div class="mb-4">
+                <label class="flex items-center gap-2 text-sm text-gray-700">
+                    <input type="checkbox" id="tagConfirm" class="w-4 h-4">
+
+                    @if(count($tagNames))
+                        I confirm I belong to 
+                        <span class="font-semibold text-primary">
+                            {{ implode(' / ', array_map('ucfirst', $tagNames)) }}
+                        </span>
+                        category
+                    @else
+                        I confirm I meet the course eligibility
+                    @endif
+                </label>
+            </div>
+
             <!-- QR + PRICE -->
-            <div class="flex gap-6 items-center mb-8">
+            <div id="qrSection" class="flex gap-6 items-center mb-8 hidden">
 
                 <!-- QR -->
                 <div class="p-3 border rounded-xl">
@@ -167,6 +187,7 @@ h1, h2, h3 { font-family: 'Newsreader', serif; }
 
             <!-- CTA -->
             <button type="submit"
+                onclick="return validateCheckbox()"
                 class="w-full bg-primary text-white py-4 rounded-lg text-sm font-bold uppercase hover:opacity-90">
                 Confirm Payment
             </button>
@@ -187,6 +208,19 @@ document.getElementById('paymentInput').addEventListener('change', function (e) 
     if (file) {
         preview.src = URL.createObjectURL(file);
         preview.classList.remove('hidden');
+    }
+});
+</script>
+
+<script>
+const checkbox = document.getElementById('tagConfirm');
+const qrSection = document.getElementById('qrSection');
+
+checkbox.addEventListener('change', function () {
+    if (this.checked) {
+        qrSection.classList.remove('hidden');
+    } else {
+        qrSection.classList.add('hidden');
     }
 });
 </script>

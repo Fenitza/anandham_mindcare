@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Clinical Pathways</title>
+    <title>Courses List - Anandham Mindcare Foundation</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -38,31 +38,71 @@
     {{-- SIDEBAR --}}
     <aside class="w-64 min-h-screen bg-white border-r p-5 hidden lg:block">
 
+    <form method="GET">
+
+        {{-- KEEP TYPE --}}
+        <input type="hidden" name="type" value="{{ request('type') }}">
+
+        {{-- SPECIALIZATIONS --}}
         <h2 class="text-xs font-bold uppercase text-gray-400 mb-4">Specializations</h2>
 
         @foreach($specializations as $spec)
-            <a href="{{ request()->fullUrlWithQuery(['specialization' => $spec->id]) }}"
-               class="flex items-center gap-2 p-2 rounded mb-1
-               {{ request('specialization') == $spec->id ? 'bg-blue-50 text-blue-700 font-bold' : 'text-gray-600' }}">
 
-                <span class="material-symbols-outlined text-sm">{{ $spec->icon }}</span>
-                {{ $spec->name }}
-            </a>
+            <div class="mb-4">
+
+                <a href="{{ request()->fullUrlWithQuery(['specialization' => $spec->specialisation]) }}"
+                   class="block font-semibold mb-2
+                   {{ request('specialization') == $spec->specialisation ? 'text-blue-700' : '' }}">
+                    {{ ucfirst($spec->specialisation) }}
+                </a>
+
+                {{-- TAGS UNDER SPECIALIZATION --}}
+                @if(isset($tagsBySpecialization[$spec->specialisation]))
+
+                    <div class="ml-3 space-y-1">
+
+                        @foreach($tagsBySpecialization[$spec->specialisation] as $tag)
+
+                            <label class="flex items-center gap-2 text-sm text-gray-600">
+
+                                <input type="checkbox"
+                                       name="tags[]"
+                                       value="{{ $tag->id }}"
+                                       onchange="this.form.submit()"
+                                       {{ in_array($tag->id, request('tags', [])) ? 'checked' : '' }}>
+
+                                {{ ucfirst($tag->name) }}
+
+                            </label>
+
+                        @endforeach
+
+                    </div>
+
+                @endif
+
+            </div>
+
         @endforeach
 
-    </aside>
+    </form>
+
+</aside>
+
+    
 
     {{-- MAIN --}}
     <main class="flex-1 p-8">
 
         {{-- HEADER --}}
-        <h1 class="text-4xl font-bold text-primary mb-6">Clinical Pathways</h1>
+        <h1 class="text-4xl font-bold text-primary mb-6">Upcoming Courses</h1>
+        
 
         {{-- TABS --}}
         <div class="flex gap-6 border-b mb-10 overflow-x-auto">
 
             @php
-                $types = ['All Courses', 'Free Modules', 'Premium Tracks', 'Specialised Fellowships'];
+                $types = ['All Courses', 'Free', 'Premium', 'Specialised'];
             @endphp
 
             @foreach($types as $type)
@@ -75,12 +115,23 @@
 
         </div>
 
+            @php
+                $hasCourses = collect($timelineGroups)->flatMap(fn($g) => $g['courses'])->isNotEmpty();
+            @endphp
+
+            
+        
+        
         {{-- TIMELINE --}}
         <div class="relative">
 
             <div class="absolute left-6 top-0 bottom-0 w-px bg-gray-200 hidden md:block"></div>
 
             @foreach($timelineGroups as $group)
+
+             @if(collect($group['courses'])->isEmpty())
+                @continue
+            @endif
 
                 <div class="mb-10">
 
@@ -117,6 +168,13 @@
         {{ $course->type }}
     </span>
 
+    {{-- Tags --}}
+    @foreach($course->tags as $tag)
+    <span class="inline-flex items-center text-xs font-medium bg-green-50 text-green-700 px-3 py-1 rounded-full border border-green-200">
+        {{ ucfirst($tag) }}
+    </span>
+@endforeach
+
     {{-- Duration --}}
     <span class="inline-flex items-center gap-1 text-xs text-gray-600 ml-auto">
         <span class="material-symbols-outlined text-sm">schedule</span>
@@ -140,7 +198,7 @@
                                 </span>   
                                 <a href="{{ route('courses.detail', $course->id) }}"
                                        class="bg-primary text-white px-4 py-2 text-xs rounded">
-                                        Begin Module
+                                        Details
                                     </a>
 
                                     
@@ -155,6 +213,22 @@
                 </div>
 
             @endforeach
+
+            @if(!$hasCourses)
+                <div class="text-center py-20">
+                    <span class="material-symbols-outlined text-5xl text-gray-300 mb-4">
+                        school
+                    </span>
+
+                    <h2 class="text-xl font-semibold text-gray-600 mb-2">
+                        No courses available
+                    </h2>
+
+                    <p class="text-sm text-gray-500">
+                        Try changing filters or check back later.
+                    </p>
+                </div>
+            @endif
 
         </div>
 

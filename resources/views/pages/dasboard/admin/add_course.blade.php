@@ -218,6 +218,11 @@ placeholder="Write a short engaging description about the course...">{{ old('des
 <label class=" text-xs font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 transition-colors group-focus-within:text-secondary">Specialisation</label>
 <input class="w-full bg-surface-container-low border-b-2 border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 text-2xl font-headline text-primary py-4 px-0 transition-all placeholder:text-outline-variant" name="specialisation" value="{{ old('specialisation', $course->specialisation ?? '') }}" placeholder="e.g., Clinical Neuropsychiatry" type="text"/>
 </div>
+
+<div class="group">
+<label class=" text-xs font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 transition-colors group-focus-within:text-secondary">Tags</label>
+<input class="w-full bg-surface-container-low border-b-2 border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 text-2xl font-headline text-primary py-4 px-0 transition-all placeholder:text-outline-variant" name="tags" value="{{ old('tags', isset($course) ? $course->tags->pluck('name')->implode(', ') : '') }}" placeholder="e.g., Students" type="text"/>
+</div>
 <div class="group mt-6">
     <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3">
         Course Type

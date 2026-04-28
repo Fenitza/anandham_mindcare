@@ -114,7 +114,7 @@ if ($request->date_range) {
         'user_id' => auth()->id(), // ✅ attach user
     ]);
 
-        return redirect()->back()->with('success', 'Appointment created');
+        return redirect()->route('user.appointments.list')->with('success', 'Appointment created');
     }
 
     public function edit($id)
@@ -155,5 +155,25 @@ if ($request->date_range) {
 
     return redirect()->route('admin.appointments.list')->with('success', 'Appointment updated');
 }
+
+public function storeGuest(Request $request)
+{
+    $request->validate([
+        'first_name' => 'required',
+        'phone' => 'required',
+        'date' => 'required|date',
+        'start_time' => 'required',
+        'end_time' => 'required',
+    ]);
+
+    Appointment::create([
+        ...$request->all(),
+        'user_id' => null, // ❗ important
+        'status' => 'pending', // optional but useful
+    ]);
+
+    return redirect()->back()->with('success', 'Appointment request submitted. We will contact you.');
+}
+
 }
 

@@ -35,6 +35,13 @@ Route::view('/about-us', 'pages.hospital.about')->name('about-us');
 Route::view('/contact-us', 'pages.hospital.contact')->name('contact-us');
 Route::post('/contact-send', [ContactController::class, 'send'])->name('contact.send');
 
+Route::get('/book-appointment', function () {
+    return view('pages.hospital.appointments'); // your current form page
+})->name('appointment.create.guest');
+
+Route::post('/book-appointment', [AppointmentController::class, 'storeGuest'])
+    ->name('appointment.store.guest');
+
 
 /*
 |--------------------------------------------------------------------------

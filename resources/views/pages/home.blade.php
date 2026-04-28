@@ -13,7 +13,7 @@
 
     <div class="content parallax-content">
 
-        <h2 class="title">Anandham Mindcare Institute & Research Foundation</h2>
+        <h2 class="title">Anandham Mindcare Foundation</h2>
 
         <p class="subtitle">Advanced Psychiatric & Mental Health Care</p>
 
@@ -57,7 +57,7 @@
 
     <div class="content parallax-content">
 
-        <h2 class="title">Anandham Academy</h2>
+        <h2 class="title"> Anandham Mindcare Institute & Research Foundation</h2>
 
         <p class="subtitle">Training Future Mental Health Professionals</p>
 

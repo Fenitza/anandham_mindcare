@@ -1,5 +1,5 @@
 @extends('layouts.user')
-@section('title', 'Appointments - Anandham Mindcare')
+@section('title', 'Courses - Anandham Mindcare')
 @section('content')
 
 <div class="p-4 lg:p-6 max-w-7xl mx-auto w-full">

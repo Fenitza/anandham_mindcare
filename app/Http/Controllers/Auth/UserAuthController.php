@@ -100,7 +100,8 @@ class UserAuthController extends Controller
         'status' => $request->status ?? 1,
     ]);
 
-    return back()->with('success', 'User created with default password: '.$defaultPassword);
+    return redirect()->route('admin.users')
+        ->with('success', 'User created with default password: '.$defaultPassword);
 }
 
 public function show($id)

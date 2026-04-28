@@ -10,6 +10,7 @@ class Course extends Model
         'title',
         'course_type',
         'specialisation',
+        'tags',
         'description',
         'course_image',
         'course_time',
@@ -42,4 +43,9 @@ class Course extends Model
     {
         return $this->hasMany(Enrollment::class);
     }
+
+    public function tags()
+{
+    return $this->belongsToMany(Tag::class);
+}
 }
