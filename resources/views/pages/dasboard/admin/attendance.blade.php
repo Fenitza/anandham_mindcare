@@ -276,7 +276,7 @@
         </a>
 
         <span class="text-sm font-bold text-secondary">
-            {{ $date->format('F Y') }}
+            {{ $date->format('F Y') }} 
         </span>
 
         <a href="?month={{ $date->copy()->addMonth()->month }}&year={{ $date->copy()->addMonth()->year }}">

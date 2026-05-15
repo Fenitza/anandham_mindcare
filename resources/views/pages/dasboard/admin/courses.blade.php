@@ -16,7 +16,7 @@
         <p class="text-on-surface-variant text-lg leading-relaxed font-body mb-2 md:mb-0">
             Refine the academic excellence of Anandham Mindcare. Organize restorative mindfulness paths and advanced clinical foundations with editorial precision.
         </p>
-        <div class="flex gap-4">
+        <!-- <div class="flex gap-4">
             <div class="flex bg-surface-container-high rounded-xl p-1">
                 <button class="px-4 py-2 bg-white shadow-sm rounded-lg text-primary">
                     <span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
@@ -25,7 +25,7 @@
                     <span class="material-symbols-outlined" data-icon="list">list</span>
                 </button>
             </div>
-        </div>
+        </div> -->
     </div>
 </section>
 <!-- Perspective Quote Component

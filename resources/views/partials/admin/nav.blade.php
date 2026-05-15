@@ -1,7 +1,7 @@
 <aside class="admin-sidebar fixed left-0 top-0 h-screen w-64 py-6 z-50">
     <div class="px-6 mb-10">
-        <h1 class="text-xl font-bold font-headline text-blue-900">Anandham Mindcare </h1>
-        <p class="text-xs tracking-wide font-label text-slate-500 mt-1 uppercase"></p>
+        <!-- <h1 class="text-xl font-bold font-headline text-blue-900">Anandham Mindcare Foundation</h1> -->
+        <p class="text-xs tracking-wide font-label text-slate-500 mt-1 uppercase">administrative portal</p>
     </div>
     <nav class="flex-1 space-y-1">
         <a href="{{ route('admin.dashboard') }}"
@@ -19,7 +19,7 @@
             <span class="material-symbols-outlined mr-3">school</span>
             <span class="text-sm tracking-wide font-label">Courses</span>
         </a>
-        <a href="{{ route('admin.appointments.list') }}"
+        <a href="{{ route('admin.appointments.slots') }}"
            class="flex items-center px-6 py-3 font-semibold border-r-4 transition-all opacity-90 {{ Request::is('admin/appointments') || Request::is('admin/appointments/*') ? 'text-blue-900 border-yellow-700 bg-slate-200' : 'text-slate-600 hover:text-blue-900 hover:bg-slate-200/50 border-transparent' }}">
             <span class="material-symbols-outlined mr-3">calendar_today</span>
             <span class="text-sm tracking-wide font-label">Appointments</span>
@@ -46,7 +46,7 @@
             <span class="text-sm tracking-wide font-label">Payments</span>
         </a>
     </nav>
-    <div class="mt-auto px-6 space-y-1 border-t border-slate-200 pt-6">
+    <!-- <div class="mt-auto px-6 space-y-1 border-t border-slate-200 pt-6">
         <a class="flex items-center py-2 text-slate-600 hover:text-blue-900 transition-colors" href="#">
             <span class="material-symbols-outlined mr-3">settings</span>
             <span class="text-sm tracking-wide font-label">Settings</span>
@@ -62,5 +62,5 @@
                 <p class="text-xs text-on-surface-variant truncate">Principal Lead</p>
             </div>
         </div>
-    </div>
+    </div> -->
 </aside>

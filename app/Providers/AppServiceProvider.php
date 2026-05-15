@@ -22,6 +22,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer('*', function ($view) {
+        if ($view->offsetExists('upcomingCourses')) {
+            return;
+        }
+
         $upcomingCourses = Course::whereDate('course_date', '>=', now())
             ->orderBy('course_date')
             ->take(10)

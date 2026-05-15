@@ -25,7 +25,7 @@ Route::get('/courses/enroll/{id}', [CourseController::class, 'enroll'])->name('c
 Route::get('/courses/reserve/{id}', [CourseController::class, 'reserve'])->middleware('auth')
     ->name('courses.reserve');
 Route::post('/course/{id}/enroll', [EnrollmentController::class, 'submit'])->name('course.enroll.submit');
-Route::get('/course/enroll/{id}', [EnrollmentController::class, 'handleEnrollment'])->name('course.enroll.handle');
+Route::get('/course/enroll/{id}', [EnrollmentController::class, 'handleEnrollment'])->name('course.enroll.handle')->middleware('auth');
 Route::view('/courses/syllabus', 'pages.courses.course_syllabus')->name('courses.syllabus');
 Route::view('/services', 'pages.hospital.services')->name('services');
 Route::get('/gallery', [GalleryController::class, 'publicGallery'])->name('gallery');
@@ -189,6 +189,11 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::post('/appointment/store', [AppointmentController::class, 'store'])->name('appointment.store');
     Route::get('/appointment/{id}/edit', [AppointmentController::class, 'edit'])->name('appointment.edit');
     Route::put('/appointment/{id}', [AppointmentController::class, 'update'])->name('appointment.update');
+    Route::get('/appointments/slots', [AppointmentController::class, 'adminSlots'])->name('admin.appointments.slots');
+    Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('appointment.create');
+    Route::post('/appointments/store', [AppointmentController::class, 'adminStore'])->name('appointment.admin.store');
+    Route::delete('/appointments/{id}', [AppointmentController::class, 'destroy'])->name('appointment.destroy');
+    
 
     Route::get('/payments', [EnrollmentController::class, 'paymentVerifications'])->name('admin.payments');
     Route::post('/payments/approve/{id}', [EnrollmentController::class, 'approve'])->name('admin.payments.approve');

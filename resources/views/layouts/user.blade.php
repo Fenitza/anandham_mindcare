@@ -89,8 +89,8 @@
 <!-- TopAppBar Implementation -->
 @include('partials.user.header')
 <!-- Main Canvas -->
-<main class="ml-64 pt-28 px-12 pb-20 max-w-7xl">
-@yield('content')
+<main class="pt-24 px-4 sm:px-6 md:px-10 lg:ml-64 lg:px-12 pb-20 max-w-7xl mx-auto">
+  @yield('content')
 </main>
 <script src="{{ asset('js/dashboard.js') }}"></script>
 @stack('scripts')

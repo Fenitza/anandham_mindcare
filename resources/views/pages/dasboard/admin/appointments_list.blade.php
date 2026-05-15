@@ -3,7 +3,7 @@
 @section('content')
 
    <div class="pt-20 px-6 pb-8 space-y-12">
-    @include('partials.alerts')
+    @include('partials.alerts') 
 <!-- <div class="flex flex-col md:flex-row md:items-end justify-between mb-2 gap-4">
 <div class="max-w-2xl">
 <h2 class="text-4xl font-['Newsreader'] font-bold text-primary mb-4 leading-tight"> Appointments</h2>

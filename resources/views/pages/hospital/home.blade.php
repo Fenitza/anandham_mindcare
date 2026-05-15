@@ -24,7 +24,7 @@
                         <span class="material-symbols-outlined">calendar_month</span>
 </button>
 </a>
-<a href= "{{ route('courses') }}">
+<a href= "{{ route('courses.list') }}">
 <button class="border border-white/30 backdrop-blur-md bg-white/10 text-white px-8 py-4 rounded-xl font-semibold flex items-center gap-3 hover:bg-white/20 transition-all">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">school</span>
                         Explore Courses
@@ -36,7 +36,7 @@
 <div class="absolute bottom-12 right-6 hidden xl:flex gap-8 stats-wrapper">
 
 <div class="stat-card reveal">
-    <div class="stat-number" data-target="100">100+</div>
+    <div class="stat-number" data-target="1000">1000+</div>
     <div class="stat-label">Happy Patients</div>
 </div>
 
@@ -148,18 +148,21 @@
 <div class="relative z-10 max-w-screen-2xl mx-auto px-6 text-center text-white">
 <div class="reveal">
 <h2 class="font-headline text-4xl md:text-6xl mb-8 leading-tight max-w-4xl mx-auto">
-                    Weekly Webinars &amp; Workshops in Schools, Colleges, Offices &amp; Companies
+                    Bring Impactful Workshops to Your Institution
+                    
                 </h2>
 <p class="italic font-headline text-2xl mb-12 text-tertiary-fixed-dim opacity-90">
-                    "Help Today Because Tomorrow you may be Needs someone help"
+    Schedule webinars & programs for your school, college, or workplace.
+                    
                 </p>
+                
 <div class="flex flex-wrap justify-center gap-6">
 <a href="{{ route('contact-us') }}">
 <button class="bg-white text-primary px-10 py-4 rounded-xl font-bold hover:bg-tertiary-fixed-dim hover:text-on-tertiary-fixed transition-colors">
                         Contact NOW
                     </button>
 </a>
-<a href="{{ route('user.appointments.list') }}">
+<a href="{{ auth()->check() ? route('user.appointments.list') : route('appointment.create.guest') }}">
 <button class="bg-secondary text-white px-10 py-4 rounded-xl font-bold flex items-center gap-3 hover:bg-secondary-container hover:text-on-secondary-container transition-colors">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
                         Book Appointment

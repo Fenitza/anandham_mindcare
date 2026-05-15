@@ -1,4 +1,4 @@
-@extends('layouts.hosp')
+@extends('layouts.course')
 
 @section('content')
 <script id="tailwind-config">
@@ -67,7 +67,7 @@
                         "label": ["Work Sans"]
                     },
                                 animation: {
-                marquee: "marquee 25s linear infinite",
+                marquee: "marquee 20s linear infinite",
                 "fade-in-up": "fadeInUp 0.8s ease-out forwards",
                 "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
                 pop: "pop 2s ease-in-out infinite"
@@ -75,9 +75,9 @@
 
             keyframes: {
                 marquee: {
-                    "0%": { transform: "translateX(0%)" },
-                    "100%": { transform: "translateX(-50%)" }
-                },
+        "0%": { transform: "translateX(0)" },
+        "100%": { transform: "translateX(-100%)" }
+    },
                 fadeInUp: {
                     "0%": { opacity: "0", transform: "translateY(20px)" },
                     "100%": { opacity: "1", transform: "translateY(0)" }
@@ -124,45 +124,40 @@ function toggleModule(index) {
 
 
 <!-- Scrolling Marquee -->
-<div class=" w-full bg-secondary z-[90] overflow-hidden whitespace-nowrap py-2 border-b border-secondary-container">
+<!-- Scrolling Marquee (Seamless Infinite) -->
+<div class="w-full bg-secondary overflow-hidden py-2 border-b border-secondary-container">
+
     @php
-    $marqueeItems = [];
+        $marqueeItems = [];
 
-    if (!empty($course->marquee_text)) {
-        // Split using bullet separator
-        $marqueeItems = explode(',', $course->marquee_text);
-        $marqueeItems = array_map('trim', $marqueeItems);
+        if (!empty($course->marquee_text)) {
+            $marqueeItems = array_filter(array_map('trim', explode(',', $course->marquee_text)));
+        }
+    @endphp
 
-        // Trim spaces
-        $marqueeItems = array_map('trim', $marqueeItems);
-    }
-@endphp
-    <div class="flex animate-marquee">
+    <div class="relative flex overflow-hidden">
 
-    <div class="flex items-center space-x-12 px-4 min-w-max">
-        @foreach($marqueeItems as $item)
-            @if($item)
-            <span class="text-surface font-bold text-xs uppercase tracking-widest flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-                {{ $item }}
-            </span>
-            @endif
-        @endforeach
+        <!-- Track -->
+        <div class="flex animate-marquee min-w-max">
+
+            <!-- Repeat content multiple times for seamless loop -->
+            @for ($i = 0; $i < 3; $i++)
+                <div class="flex items-center gap-10 pr-10">
+                    @foreach($marqueeItems as $item)
+                        <span class="text-surface font-bold text-xs uppercase tracking-widest flex items-center gap-2 whitespace-nowrap">
+                            <span class="w-2 h-2 rounded-full bg-primary"></span>
+                            {{ $item }}
+                        </span>
+                    @endforeach
+                </div>
+            @endfor
+
+        </div>
+
     </div>
-
-    <div class="flex items-center space-x-12 px-4 min-w-max">
-        @foreach($marqueeItems as $item)
-            @if($item)
-            <span class="text-surface font-bold text-xs uppercase tracking-widest flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-primary"></span>
-                {{ $item }}
-            </span>
-            @endif
-        @endforeach
-    </div>
-
 </div>
-</div>
+
+
 <header class="relative pt-16 md:pt-20 pb-12 md:pb-16 overflow-hidden bg-primary min-h-[55vh] flex items-center">
     <!-- Background -->
     <div class="absolute inset-0 z-0">

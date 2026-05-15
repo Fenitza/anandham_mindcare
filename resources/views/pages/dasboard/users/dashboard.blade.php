@@ -3,120 +3,117 @@
 
 @section('content')
 
-<!-- Welcome Header -->
-<section class="mb-16">
-    <div class="flex items-end justify-between">
+<!-- 🔷 Welcome Header -->
+<section class="mb-10 md:mb-14">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+
         <div>
-            <h2 class="text-5xl font-headline font-medium text-primary mb-2">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-headline font-medium text-primary mb-2 leading-tight">
                 Welcome back, {{ $user->name }}
             </h2>
-            <p class="text-on-surface-variant max-w-2xl text-lg italic">
+
+            <p class="text-sm sm:text-base text-on-surface-variant max-w-xl italic">
                 "The art of healing comes from nature, not from the physician."
             </p>
         </div>
-        <div class="hidden lg:block">
-            <span class="text-sm uppercase tracking-widest text-secondary font-bold">
-                Academic Session 
+
+        <div class="hidden md:block">
+            <span class="text-xs sm:text-sm uppercase tracking-widest text-secondary font-bold">
+                Academic Session
             </span>
         </div>
+
     </div>
 </section>
 
-<!-- Stats -->
-<section class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16">
+<!-- 🔷 Stats -->
+<section class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12 md:mb-16">
 
-    <!-- Active -->
-    <div class="bg-surface-container-lowest p-8 rounded-xl">
-        <p class="text-4xl font-bold text-primary">
+    <div class="bg-surface-container-lowest p-4 md:p-6 rounded-xl">
+        <p class="text-2xl md:text-3xl font-bold text-primary">
             {{ $activeCourses->count() }}
         </p>
-        <p class="text-sm text-on-surface-variant">Courses in Progress</p>
+        <p class="text-xs md:text-sm text-on-surface-variant">Courses in Progress</p>
     </div>
 
-    <!-- Today -->
-    <div class="bg-surface-container-lowest p-8 rounded-xl">
-        <p class="text-4xl font-bold text-primary">
+    <div class="bg-surface-container-lowest p-4 md:p-6 rounded-xl">
+        <p class="text-2xl md:text-3xl font-bold text-primary">
             {{ $todaySessions }}
         </p>
-        <p class="text-sm text-on-surface-variant">Live Sessions Today</p>
+        <p class="text-xs md:text-sm text-on-surface-variant">Live Sessions Today</p>
     </div>
 
-    <!-- Completed -->
-    <div class="bg-surface-container-lowest p-8 rounded-xl">
-        <p class="text-4xl font-bold text-primary">
+    <div class="bg-surface-container-lowest p-4 md:p-6 rounded-xl">
+        <p class="text-2xl md:text-3xl font-bold text-primary">
             {{ $completedCourses }}
         </p>
-        <p class="text-sm text-on-surface-variant">Courses Completed</p>
+        <p class="text-xs md:text-sm text-on-surface-variant">Courses Completed</p>
     </div>
 
-    <!-- CME -->
-    <div class="bg-surface-container-lowest p-8 rounded-xl">
-        <p class="text-4xl font-bold text-primary">18.5 / 30</p>
-        <p class="text-sm text-on-surface-variant">CME Credits</p>
+    <div class="bg-surface-container-lowest p-4 md:p-6 rounded-xl">
+        <p class="text-2xl md:text-3xl font-bold text-primary">18.5 / 30</p>
+        <p class="text-xs md:text-sm text-on-surface-variant">CME Credits</p>
     </div>
 
 </section>
 
-<!-- Active Learning -->
-<section class="mb-24">
+<!-- 🔷 Active Learning -->
+<section class="mb-16 md:mb-24">
 
-    <h3 class="text-3xl font-bold text-primary mb-10">Active Learning</h3>
+    <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-primary mb-6 md:mb-10">
+        Active Learning
+    </h3>
 
-    <!-- TOP GRID -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
 
         @php $featured = $activeCourses->first(); @endphp
 
-        <!-- Featured -->
-        <!-- Featured -->
-<div class="lg:col-span-8 bg-primary text-white rounded-2xl overflow-hidden relative">
+        <!-- ⭐ Featured -->
+        <div class="lg:col-span-8 bg-primary text-white rounded-2xl overflow-hidden relative">
 
-    @if($featured && $featured->course)
+            @if($featured && $featured->course)
 
-        <!-- Background Image -->
-        <div class="absolute inset-0">
-            <img src="{{ asset('storage/' . $featured->course->course_image) }}"
-                 class="w-full h-full object-cover opacity-40">
+                <div class="absolute inset-0">
+                    <img src="{{ asset('storage/' . $featured->course->course_image) }}"
+                         class="w-full h-full object-cover opacity-40">
+                </div>
+
+                <div class="relative p-6 md:p-8 lg:p-10 flex flex-col justify-end min-h-[220px] md:min-h-[300px] lg:min-h-[400px]">
+
+                    <h4 class="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold mb-3">
+                        {{ $featured->course->title }}
+                    </h4>
+
+                    <p class="text-xs sm:text-sm text-white/80">
+                        {{ \Carbon\Carbon::parse($featured->course->course_date)->format('M d, Y') }}
+                    </p>
+
+                    <p class="text-xs sm:text-sm text-white/70">
+                        {{ \Carbon\Carbon::parse($featured->course->course_date)->format('h:i A') }}
+                    </p>
+
+                </div>
+
+            @else
+                <div class="p-6 md:p-10">
+                    <p>No active courses yet</p>
+                </div>
+            @endif
+
         </div>
 
-        <!-- Content -->
-        <div class="relative p-10 flex flex-col justify-end min-h-[400px]">
-
-            <h4 class="text-3xl font-bold mb-4">
-                {{ $featured->course->title }}
-            </h4>
-
-            <!-- Date & Time -->
-            <p class="text-sm text-white/80 mb-1">
-                {{ \Carbon\Carbon::parse($featured->course->course_date)->format('M d, Y') }}
-            </p>
-
-            <p class="text-sm text-white/70">
-                {{ \Carbon\Carbon::parse($featured->course->course_date)->format('h:i A') }}
-            </p>
-
-        </div>
-
-    @else
-        <div class="p-10">
-            <p>No active courses yet</p>
-        </div>
-    @endif
-
-</div>
-
-        <!-- Upcoming -->
-        <div class="lg:col-span-4 space-y-4">
+        <!-- 📅 Upcoming -->
+        <div class="lg:col-span-4 space-y-3 md:space-y-4">
 
             @forelse($upcomingSessions as $session)
 
-                <div class="p-4 bg-surface-container-low rounded-lg border-l-4 border-secondary">
+                <div class="p-3 md:p-4 bg-surface-container-low rounded-lg border-l-4 border-secondary">
 
                     <span class="text-xs text-primary/60">
                         {{ \Carbon\Carbon::parse($session->course_date)->format('M d, h:i A') }}
                     </span>
 
-                    <p class="font-bold text-primary mt-1">
+                    <p class="font-bold text-primary mt-1 text-sm md:text-base">
                         {{ $session->title }}
                     </p>
 
@@ -137,22 +134,22 @@
 
     </div>
 
-    <!-- 🔥 COURSE CARDS (SEPARATE GRID) -->
-    <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <!-- 🔷 Course Cards -->
+    <div class="mt-10 md:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
 
         @forelse($activeCourses as $enrollment)
 
-        <div class="bg-surface-container-lowest rounded-xl p-6 shadow hover:shadow-lg transition">
+        <div class="bg-surface-container-lowest rounded-xl p-4 md:p-6 shadow hover:shadow-lg transition">
 
             <span class="text-xs text-secondary uppercase">
                 {{ $enrollment->course->category ?? 'General' }}
             </span>
 
-            <h6 class="text-lg font-bold text-primary mt-2">
+            <h6 class="text-base md:text-lg font-bold text-primary mt-2">
                 {{ $enrollment->course->title }}
             </h6>
 
-            <p class="text-sm text-on-surface-variant mt-2">
+            <p class="text-xs md:text-sm text-on-surface-variant mt-2">
                 {{ Str::limit($enrollment->course->description, 80) }}
             </p>
 
@@ -162,7 +159,7 @@
                 </span>
 
                 <a href="{{ route('courses.detail', $enrollment->course->id) }}"
-                   class="text-primary text-sm font-bold">
+                   class="text-primary text-xs md:text-sm font-bold">
                     View →
                 </a>
             </div>

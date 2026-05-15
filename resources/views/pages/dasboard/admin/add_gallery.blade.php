@@ -46,7 +46,7 @@
 </div>
 
 <!-- Description -->
-<div class="space-y-2">
+<!-- <div class="space-y-2">
 <label class="block text-sm font-label font-semibold text-primary uppercase tracking-wider">Media Description</label>
 <textarea 
     name="description"
@@ -54,7 +54,7 @@
     placeholder="Detailed captions and clinical context..." 
     rows="4"
 >{{ old('description', $gallery->description ?? '') }}</textarea>
-</div>
+</div> -->
 
 <!-- Media Upload -->
 <div class="space-y-4">

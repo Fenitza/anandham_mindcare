@@ -1,4 +1,4 @@
-@extends('layouts.hosp')
+@extends('layouts.course')
 
 @section('content')
 <div class="max-w-3xl mx-auto py-16 px-4">

@@ -1,4 +1,4 @@
-@extends('layouts.user')
+@extends('layouts.admin')
 @section('title', 'Appointments - Anandham Mindcare')
 @section('content')
 
@@ -15,12 +15,12 @@
     </style>
     
 
-    <!-- <header class="mb-20"> -->
+    <header class="mb-20">
 <!-- <h2 class="font-headline text-5xl text-primary font-bold mb-4">Schedule New Clinical Session</h2> -->
 
 </header>
 <form 
-    action="{{ isset($appointment) ? route('appointment.update',$appointment->id) : route('appointment.store') }}"
+    action="{{ isset($appointment) ? route('appointment.update',$appointment->id) : route('appointment.admin.store') }}"
     method="POST"
     class="space-y-12"
 >
@@ -64,16 +64,50 @@
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 <div class="relative">
 <label class="block text-xs font-semibold text-secondary uppercase tracking-widest mb-1">Date</label>
-<input class="w-full bg-surface-container-lowest border-none border-b-2 border-transparent focus:border-secondary focus:ring-0 transition-all px-4 py-3 font-body" name="date" value="{{ old('date', $appointment->date ?? '') }}" type="date"/>
+<input class="w-full bg-surface-container-lowest border-none border-b-2 border-transparent focus:border-secondary focus:ring-0 transition-all px-4 py-3 font-body" name="date"     value="{{ old('date', $appointment->date ?? request('date')) }}" type="date"/>
 </div>
 <div class="relative">
-<label class="block text-xs font-semibold text-secondary uppercase tracking-widest mb-1">Start Time</label>
-<input class="w-full bg-surface-container-lowest border-none border-b-2 border-transparent focus:border-secondary focus:ring-0 transition-all px-4 py-3 font-body" name="start_time" value="{{ old('start_time', $appointment->start_time ?? '') }}" type="time"/>
+    <label class="block text-xs font-semibold text-secondary uppercase tracking-widest mb-1">
+        Start Time
+    </label>
+
+    <select name="start_time" class="w-full px-4 py-3">
+
+    <option value="">Select Time Slot</option>
+
+    @php
+        $start = \Carbon\Carbon::parse('16:00', 'Asia/Kolkata');
+        $end = \Carbon\Carbon::parse('21:00', 'Asia/Kolkata');
+
+        $selectedTime = old(
+            'start_time',
+            isset($appointment->start_time)
+                ? \Carbon\Carbon::parse($appointment->start_time)->format('H:i')
+                : request('time')
+        );
+    @endphp
+
+    @while($start < $end)
+
+        @php
+            $timeValue = $start->format('H:i');
+            $label = $start->format('h:i A');
+        @endphp
+
+        <option value="{{ $timeValue }}"
+            {{ $selectedTime == $timeValue ? 'selected' : '' }}>
+            {{ $label }}
+        </option>
+
+        @php $start->addMinutes(30); @endphp
+    @endwhile
+
+</select>
 </div>
-<div class="relative">
+<!-- <div class="relative">
 <label class="block text-xs font-semibold text-secondary uppercase tracking-widest mb-1">End Time</label>
 <input class="w-full bg-surface-container-lowest border-none border-b-2 border-transparent focus:border-secondary focus:ring-0 transition-all px-4 py-3 font-body" name="end_time" value="{{ old('end_time', $appointment->end_time ?? '') }}" type="time"/>
-</div>
+</div> -->
 </div>
 
 </div>
@@ -100,19 +134,19 @@
 <label class="block text-xs font-semibold text-secondary uppercase tracking-widest mb-1">Status</label>
 <select class="w-full bg-surface-container-high border-none border-b-2 border-transparent focus:border-secondary focus:ring-0 transition-all px-4 py-3 font-body appearance-none" name="status">
 <option value="">Select Status...</option>
-<option value="Scheduled" {{ old('status', $appointment->status ?? '') == 'Scheduled' ? 'selected' : '' }}>Scheduled</option>
-<option value="Rescheduled" {{ old('status', $appointment->status ?? '') == 'Rescheduled' ? 'selected' : '' }}>Rescheduled</option>
-<option value="Pending" {{ old('status', $appointment->status ?? '') == 'Pending' ? 'selected' : '' }}>Pending</option>
-<option value="Completed" {{ old('status', $appointment->status ?? '') == 'Completed' ? 'selected' : '' }}>Completed</option>
-<option value="Cancelled" {{ old('status', $appointment->status ?? '') == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
+<option value="scheduled" {{ old('status', $appointment->status ?? '') == 'scheduled' ? 'selected' : '' }}>Scheduled</option>
+<option value="rescheduled" {{ old('status', $appointment->status ?? '') == 'rescheduled' ? 'selected' : '' }}>Rescheduled</option>
+<option value="pending" {{ old('status', $appointment->status ?? '') == 'pending' ? 'selected' : '' }}>Pending</option>
+<option value="completed" {{ old('status', $appointment->status ?? '') == 'completed' ? 'selected' : '' }}>Completed</option>
+<option value="cancelled" {{ old('status', $appointment->status ?? '') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
 </select>
 </div>
 
-<div class="relative">
+<!-- <div class="relative">
 <label class="block text-xs font-semibold text-secondary uppercase tracking-widest mb-1">Assigned Physician</label>
 <input class="w-full bg-surface-container-lowest border-none border-b-2 border-transparent focus:border-secondary focus:ring-0 transition-all px-4 py-3 font-body" name="doctor_name" value="{{ old('doctor_name', $appointment->doctor_name ?? '') }}" type="text"/>
 </div>
-</div>
+</div> -->
 
 
 

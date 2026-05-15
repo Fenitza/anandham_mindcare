@@ -42,9 +42,9 @@
                 {{ $gallery->name }}
             </h3>
 
-            <p class="text-on-surface-variant text-sm font-['Work_Sans'] leading-relaxed mb-6 line-clamp-2">
+            <!-- <p class="text-on-surface-variant text-sm font-['Work_Sans'] leading-relaxed mb-6 line-clamp-2">
                 {{ $gallery->description }}
-            </p>
+            </p> -->
 
             <div class="flex items-center justify-between pt-6 border-t border-outline-variant/10">
                 <div class="flex items-center space-x-4">

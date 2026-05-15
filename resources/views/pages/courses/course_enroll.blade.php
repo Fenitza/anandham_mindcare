@@ -1,4 +1,4 @@
-@extends('layouts.hosp')
+@extends('layouts.course')
 
 @section('content')
 

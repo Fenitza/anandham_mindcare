@@ -1,258 +1,220 @@
 @extends('layouts.user')
 @section('title', 'Appointments - Anandham Mindcare')
+
 @section('content')
 
+@include('partials.alerts')
 
-   <!-- <div class="pt-28 px-8 pb-12 space-y-12"> -->
-    @include('partials.alerts')
-<div class="flex flex-col md:flex-row md:items-end justify-between mb-4 gap-8">
-<div class="max-w-2xl">
-<h2 class="text-4xl font-['Newsreader'] font-bold text-primary mb-4 leading-tight">My Appointments</h2>
+<!-- 🔷 Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+
+    <div>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-headline font-bold text-primary">
+            My Appointments
+        </h2>
+    </div>
+
+    <a href="{{ route('user.appointment.add') }}"
+       class="inline-flex items-center gap-2 bg-primary text-white px-5 py-3 rounded-xl text-sm md:text-base font-semibold shadow hover:bg-primary-container transition">
+        
+        <span class="material-symbols-outlined text-base">add</span>
+        Add Appointment
+    </a>
 
 </div>
-<div>
-<a href="{{ route('user.appointment.add') }}">
-<button class="flex items-center space-x-3 bg-primary text-white px-8 py-4 rounded-xl font-['Work_Sans'] font-semibold shadow-xl hover:bg-primary-container transition-all group">
-<span class="material-symbols-outlined group-hover:rotate-90 transition-transform" data-icon="add">add</span>
-<span>Add New Appointment</span>
-</button>
-</a>
-</div>
-</div>
-    
-<!-- Filters Section -->
+
+<!-- 🔷 Filters -->
 <form method="GET" action="{{ route('user.appointments.list') }}">
-<div class="bg-surface-container-low rounded-xl p-6 mb-8 flex flex-wrap items-end gap-6 shadow-sm">
+<div class="bg-surface-container-low rounded-xl p-4 md:p-6 mb-6 flex flex-col md:flex-row flex-wrap gap-4 md:items-end">
 
     <!-- Search -->
-    <div class="flex-1 min-w-[240px]">
-        <label class="block text-xs font-bold text-primary uppercase mb-2">Search</label>
-        <input 
-            type="text" 
-            name="search"
-            value="{{ request('search') }}"
-            placeholder="Patient name or ID..."
-            class="w-full bg-white rounded-lg py-2.5 px-4 text-sm"
-        />
+    <div class="flex-1 min-w-[200px]">
+        <label class="text-xs font-bold text-primary uppercase mb-1 block">Search</label>
+        <input type="text" name="search"
+               value="{{ request('search') }}"
+               placeholder="Name or ID..."
+               class="w-full bg-white rounded-lg px-3 py-2 text-sm">
     </div>
 
     <!-- Service -->
-    <div class="w-48">
-    <label class="block text-xs font-bold text-primary uppercase mb-2">Service</label>
-
-    <select name="service" class="w-full bg-white rounded-lg py-2.5 px-4 text-sm">
-        
-        <option value="">All Services</option>
-
-        @foreach($services as $service)
-            <option value="{{ $service }}" 
-                {{ request('service') == $service ? 'selected' : '' }}>
-                {{ $service }}
-            </option>
-        @endforeach
-
-    </select>
-</div>
+    <div class="w-full md:w-48">
+        <label class="text-xs font-bold text-primary uppercase mb-1 block">Service</label>
+        <select name="service" class="w-full bg-white rounded-lg px-3 py-2 text-sm">
+            <option value="">All</option>
+            @foreach($services as $service)
+                <option value="{{ $service }}" {{ request('service') == $service ? 'selected' : '' }}>
+                    {{ $service }}
+                </option>
+            @endforeach
+        </select>
+    </div>
 
     <!-- Date -->
-    <div class="w-48">
-    <label class="block text-xs font-bold text-primary uppercase mb-2">Date</label>
+    <div class="w-full md:w-48">
+        <label class="text-xs font-bold text-primary uppercase mb-1 block">Date</label>
+        <select name="date_range" class="w-full bg-white rounded-lg px-3 py-2 text-sm">
+            <option value="">All</option>
+            <option value="today" {{ request('date_range') == 'today' ? 'selected' : '' }}>Today</option>
+            <option value="7" {{ request('date_range') == '7' ? 'selected' : '' }}>Next 7 Days</option>
+            <option value="30" {{ request('date_range') == '30' ? 'selected' : '' }}>Next 30 Days</option>
+        </select>
+    </div>
 
-    <select name="date_range" class="w-full bg-white rounded-lg py-2.5 px-4 text-sm">
-        <option value="">All</option>
-
-        <option value="today" {{ request('date_range') == 'today' ? 'selected' : '' }}>
-            Today
-        </option>
-
-        <option value="7" {{ request('date_range') == '7' ? 'selected' : '' }}>
-            Next 7 Days
-        </option>
-
-        <option value="30" {{ request('date_range') == '30' ? 'selected' : '' }}>
-            Next 30 Days
-        </option>
-    </select>
-</div>
-
-    <button class="bg-secondary text-white px-6 py-2.5 rounded-lg">
+    <!-- Button -->
+    <button class="bg-secondary text-white px-4 py-2 rounded-lg text-sm">
         Apply
     </button>
 
 </div>
 </form>
-<!-- Appointments Table Container -->
-<div class="bg-surface-container-lowest rounded-xl overflow-hidden ghost-border shadow-sm">
-<table class="w-full text-left border-collapse">
-<thead>
-<tr class="bg-surface-container-low/50">
-<th class="px-6 py-5 text-xs font-bold text-primary uppercase tracking-widest font-body">Patient Name</th>
-<th class="px-6 py-5 text-xs font-bold text-primary uppercase tracking-widest font-body">Specialized Service</th>
-<th class="px-6 py-5 text-xs font-bold text-primary uppercase tracking-widest font-body">Consulting Physician</th>
-<th class="px-6 py-5 text-xs font-bold text-primary uppercase tracking-widest font-body">Date &amp; Time</th>
-<th class="px-6 py-5 text-xs font-bold text-primary uppercase tracking-widest font-body">Status</th>
-<!-- <th class="px-6 py-5 text-xs font-bold text-primary uppercase tracking-widest font-body text-right">Actions</th> -->
-</tr>
-</thead>
-<tbody class="divide-y divide-surface-container">
-@forelse($appointments as $appointment)
-<tr class="group hover:bg-surface-container-low transition-colors duration-200">
 
-    <!-- Patient -->
-    <td class="px-6 py-6">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold text-sm">
-                {{ strtoupper(substr($appointment->first_name,0,1) . substr($appointment->last_name,0,1)) }}
-            </div>
+<!-- 🔷 MOBILE VIEW (Cards) -->
+<div class="md:hidden space-y-4">
+
+@forelse($appointments as $appointment)
+
+    <div class="bg-white rounded-xl p-4 shadow">
+
+        <div class="flex justify-between items-start">
+
             <div>
-                <div class="font-semibold text-on-surface">
+                <p class="font-semibold text-primary">
+                    {{ $appointment->first_name }} {{ $appointment->last_name }}
+                </p>
+                <p class="text-xs text-gray-500">
+                    #AM-{{ $appointment->id }}
+                </p>
+            </div>
+
+            @php
+                $colors = [
+                    'pending' => 'bg-amber-100 text-amber-800',
+                    'scheduled' => 'bg-emerald-100 text-emerald-800',
+                    'completed' => 'bg-slate-100 text-slate-600',
+                    'cancelled' => 'bg-red-100 text-red-800',
+                ];
+            @endphp
+
+            <span class="px-2 py-1 text-xs rounded-full {{ $colors[$appointment->status] ?? '' }}">
+                {{ ucfirst($appointment->status) }}
+            </span>
+
+        </div>
+
+        <div class="mt-3 text-sm text-gray-600 space-y-1">
+            <p><strong>Service:</strong> {{ $appointment->service }}</p>
+            <p><strong>Doctor:</strong> {{ $appointment->doctor_name ?? 'Not Assigned' }}</p>
+            <p>
+                <strong>Date:</strong> 
+                {{ \Carbon\Carbon::parse($appointment->date)->format('M d, Y') }}
+            </p>
+            <p>
+                <strong>Time:</strong> 
+                {{ $appointment->start_time }}
+            </p>
+        </div>
+
+    </div>
+
+@empty
+    <p class="text-center text-gray-500 py-10">No appointments found</p>
+@endforelse
+
+</div>
+
+<!-- 🔷 DESKTOP TABLE -->
+<div class="hidden md:block bg-white rounded-xl shadow overflow-x-auto">
+
+<table class="w-full text-sm">
+
+    <thead class="bg-gray-50 text-xs uppercase text-gray-600">
+        <tr>
+            <th class="p-4 text-left">Patient</th>
+            <th class="p-4 text-left">Service</th>
+            <th class="p-4 text-left">Doctor</th>
+            <th class="p-4 text-left">Date & Time</th>
+            <th class="p-4 text-left">Status</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    @forelse($appointments as $appointment)
+
+        <tr class="border-t hover:bg-gray-50">
+
+            <td class="p-4">
+                <div class="font-semibold">
                     {{ $appointment->first_name }} {{ $appointment->last_name }}
                 </div>
-                <div class="text-xs text-on-surface-variant">
-                    ID: #AM-{{ $appointment->id }}
+                <div class="text-xs text-gray-500">#AM-{{ $appointment->id }}</div>
+            </td>
+
+            <td class="p-4">{{ $appointment->service }}</td>
+
+            <td class="p-4">{{ $appointment->doctor_name ?? 'Not Assigned' }}</td>
+
+            <td class="p-4">
+                {{ \Carbon\Carbon::parse($appointment->date)->format('M d, Y') }}
+                <div class="text-xs text-gray-500">
+                    {{ $appointment->start_time }}
                 </div>
-            </div>
-        </div>
-    </td>
+            </td>
 
-    <!-- Service -->
-    <td class="px-6 py-6 text-sm">
-        {{ $appointment->service }}
-    </td>
+            <td class="p-4">
+                <span class="px-2 py-1 text-xs rounded-full {{ $colors[$appointment->status] ?? '' }}">
+                    {{ ucfirst($appointment->status) }}
+                </span>
+            </td>
 
-    <!-- Doctor -->
-    <td class="px-6 py-6">
-        <span class="text-sm font-medium">
-            {{ $appointment->doctor_name ?? 'Not Assigned' }}
-        </span>
-    </td>
+        </tr>
 
-    <!-- Date & Time -->
-    <td class="px-6 py-6">
-        <div class="text-sm font-semibold">
-            {{ \Carbon\Carbon::parse($appointment->date)->format('M d, Y') }}
-        </div>
-        <div class="text-xs text-on-surface-variant">
-            {{ $appointment->start_time }} — {{ $appointment->end_time }}
-        </div>
-    </td>
+    @empty
+        <tr>
+            <td colspan="5" class="text-center py-10 text-gray-500">
+                No appointments found
+            </td>
+        </tr>
+    @endforelse
+    </tbody>
 
-    <!-- Status -->
-    <td class="px-6 py-6">
-        @php
-            $status = $appointment->status;
-
-            $colors = [
-                'pending' => 'bg-amber-100 text-amber-800',
-                'scheduled' => 'bg-emerald-100 text-emerald-800',
-                'completed' => 'bg-slate-100 text-slate-600',
-                'cancelled' => 'bg-red-100 text-red-800',
-            ];
-        @endphp
-
-        <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold {{ $colors[$status] ?? 'bg-gray-100' }}">
-            {{ ucfirst($status) }}
-        </span>
-    </td>
-
-    <!-- Actions -->
-    <!-- <td class="px-6 py-6 text-right">
-        <div class="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity"> -->
-
-            <!-- Edit -->
-            <!-- <a href="{{ route('appointment.edit', $appointment->id) }}">
-                <button class="p-2 text-slate-400 hover:text-primary">
-                    <span class="material-symbols-outlined">edit</span>
-                </button>
-            </a> -->
-
-            <!-- Cancel -->
-            <!-- <form action="{{ route('appointment.update', $appointment->id) }}" method="POST">
-                @csrf
-                @method('PUT')
-                <input type="hidden" name="status" value="cancelled">
-                <button class="p-2 text-slate-400 hover:text-error">
-                    <span class="material-symbols-outlined">cancel</span>
-                </button>
-            </form>
-
-        </div>
-    </td> -->
-
-</tr>
-@empty
-<tr>
-    <td colspan="6" class="text-center py-10 text-gray-500">
-        No appointments found
-    </td>
-</tr>
-@endforelse
-</tbody>
 </table>
-<!-- Table Footer / Pagination -->
-<div class="px-6 py-4 bg-surface-container-low/30 border-t border-surface-container flex items-center justify-between">
 
-    <!-- Showing text -->
-    <span class="text-sm text-on-surface-variant">
-        Showing 
-        <span class="font-bold text-primary">
-            {{ $appointments->firstItem() ?? 0 }} - {{ $appointments->lastItem() ?? 0 }}
-        </span> 
-        of {{ $appointments->total() }} appointments
+</div>
+
+<!-- 🔷 Pagination -->
+<div class="mt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+
+    <span class="text-sm text-gray-500">
+        Showing {{ $appointments->firstItem() ?? 0 }} - {{ $appointments->lastItem() ?? 0 }}
+        of {{ $appointments->total() }}
     </span>
 
-    <!-- Custom Pagination -->
-    <div class="flex gap-2 items-center">
+    <div class="flex gap-2">
 
-        {{-- Previous --}}
         @if ($appointments->onFirstPage())
-            <span class="w-8 h-8 flex items-center justify-center text-gray-300 border rounded-lg">
-                ‹
-            </span>
+            <span class="px-3 py-1 border rounded text-gray-300">‹</span>
         @else
-            <a href="{{ $appointments->previousPageUrl() }}"
-               class="w-8 h-8 flex items-center justify-center border rounded-lg hover:bg-white transition">
-                ‹
-            </a>
+            <a href="{{ $appointments->previousPageUrl() }}" class="px-3 py-1 border rounded">‹</a>
         @endif
 
-        {{-- Page Numbers (LIMITED for UX) --}}
-        @foreach ($appointments->getUrlRange(
-            max(1, $appointments->currentPage() - 2),
-            min($appointments->lastPage(), $appointments->currentPage() + 2)
-        ) as $page => $url)
-
-            <a href="{{ $url }}"
-               class="w-8 h-8 flex items-center justify-center text-sm rounded-lg border transition
-               {{ $appointments->currentPage() == $page 
-                    ? 'bg-primary text-white border-primary' 
-                    : 'text-slate-600 hover:bg-white' }}">
-                {{ $page }}
-            </a>
-
-        @endforeach
-
-        {{-- Next --}}
         @if ($appointments->hasMorePages())
-            <a href="{{ $appointments->nextPageUrl() }}"
-               class="w-8 h-8 flex items-center justify-center border rounded-lg hover:bg-white transition">
-                ›
-            </a>
+            <a href="{{ $appointments->nextPageUrl() }}" class="px-3 py-1 border rounded">›</a>
         @else
-            <span class="w-8 h-8 flex items-center justify-center text-gray-300 border rounded-lg">
-                ›
-            </span>
+            <span class="px-3 py-1 border rounded text-gray-300">›</span>
         @endif
 
     </div>
-</div>
-<script>
-document.querySelector('input[name="search"]').addEventListener('keyup', function () {
-    clearTimeout(window.searchTimer);
 
+</div>
+
+<!-- 🔷 Auto Search -->
+<script>
+document.querySelector('input[name="search"]')?.addEventListener('keyup', function () {
+    clearTimeout(window.searchTimer);
     window.searchTimer = setTimeout(() => {
         this.form.submit();
-    }, 500); // delay typing
+    }, 500);
 });
 </script>
+
 @endsection

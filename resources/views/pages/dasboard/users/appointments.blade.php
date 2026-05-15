@@ -66,13 +66,47 @@
 <input class="w-full bg-surface-container-lowest border-none border-b-2 border-transparent focus:border-secondary focus:ring-0 transition-all px-4 py-3 font-body" name="date" value="{{ old('date', $appointment->date ?? '') }}" type="date"/>
 </div>
 <div class="relative">
-<label class="block text-xs font-semibold text-secondary uppercase tracking-widest mb-1">Start Time</label>
-<input class="w-full bg-surface-container-lowest border-none border-b-2 border-transparent focus:border-secondary focus:ring-0 transition-all px-4 py-3 font-body" name="start_time" value="{{ old('start_time', $appointment->start_time ?? '') }}" type="time"/>
+    <label class="block text-xs font-semibold text-secondary uppercase tracking-widest mb-1">
+        Start Time
+    </label>
+
+    <select name="start_time" class="w-full px-4 py-3">
+
+    <option value="">Select Time Slot</option>
+
+    @php
+        $start = \Carbon\Carbon::parse('16:00', 'Asia/Kolkata');
+        $end = \Carbon\Carbon::parse('21:00', 'Asia/Kolkata');
+
+        $selectedTime = old(
+            'start_time',
+            isset($appointment->start_time)
+                ? \Carbon\Carbon::parse($appointment->start_time)->format('H:i')
+                : request('time')
+        );
+    @endphp
+
+    @while($start < $end)
+
+        @php
+            $timeValue = $start->format('H:i');
+            $label = $start->format('h:i A');
+        @endphp
+
+        <option value="{{ $timeValue }}"
+            {{ $selectedTime == $timeValue ? 'selected' : '' }}>
+            {{ $label }}
+        </option>
+
+        @php $start->addMinutes(30); @endphp
+    @endwhile
+
+</select>
 </div>
-<div class="relative">
+<!-- <div class="relative">
 <label class="block text-xs font-semibold text-secondary uppercase tracking-widest mb-1">End Time</label>
 <input class="w-full bg-surface-container-lowest border-none border-b-2 border-transparent focus:border-secondary focus:ring-0 transition-all px-4 py-3 font-body" name="end_time" value="{{ old('end_time', $appointment->end_time ?? '') }}" type="time"/>
-</div>
+</div> -->
 </div>
 
 </div>
