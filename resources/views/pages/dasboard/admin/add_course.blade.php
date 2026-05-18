@@ -174,6 +174,16 @@ name="description"
 rows="3"
 placeholder="Write a short engaging description about the course...">{{ old('description', $course->description ?? '') }}</textarea>
 </div>
+
+<!-- Organised By -->
+ <div class="group">
+<label class="block text-xs font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 transition-colors group-focus-within:text-secondary">
+Organised By
+</label>
+<input class="w-full bg-surface-container-low border-b-2 border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 text-base text-primary py-4 px-0 transition-all placeholder:text-outline-variant" name="organised_by" value="{{ old('organised_by', $course->organised_by ?? '') }}" placeholder="e.g., Department of Clinical Psychology" type="text"/>
+</div>
+
+
 <!-- HERO IMAGE -->
 <div class="flex flex-col items-center mb-10">
     
@@ -223,29 +233,500 @@ placeholder="Write a short engaging description about the course...">{{ old('des
 <label class=" text-xs font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 transition-colors group-focus-within:text-secondary">Tags</label>
 <input class="w-full bg-surface-container-low border-b-2 border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 text-2xl font-headline text-primary py-4 px-0 transition-all placeholder:text-outline-variant" name="tags" value="{{ old('tags', isset($course) ? $course->tags->pluck('name')->implode(', ') : '') }}" placeholder="e.g., Students" type="text"/>
 </div>
+
+<!-- COURSE TYPE -->
 <div class="group mt-6">
+
     <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3">
         Course Type
     </label>
 
-    <div class="flex gap-3">
+    <div class="flex gap-3 flex-wrap">
+
         <label class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container-low transition-all">
-            <input type="radio" name="course_type" value="free"{{ old('course_type', $course->course_type ?? '') == 'free' ? 'checked' : '' }} class="text-secondary focus:ring-secondary">
+            <input
+                type="radio"
+                name="course_type"
+                value="free"
+                class="course-type-radio text-secondary focus:ring-secondary"
+                {{ old('course_type', $course->course_type ?? '') == 'free' ? 'checked' : '' }}
+            >
             <span class="text-sm font-body text-primary">Free</span>
         </label>
 
         <label class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container-low transition-all">
-            <input type="radio" name="course_type" value="premium"{{ old('course_type', $course->course_type ?? '') == 'premium' ? 'checked' : '' }} class="text-secondary focus:ring-secondary">
+            <input
+                type="radio"
+                name="course_type"
+                value="premium"
+                class="course-type-radio text-secondary focus:ring-secondary"
+                {{ old('course_type', $course->course_type ?? '') == 'premium' ? 'checked' : '' }}
+            >
             <span class="text-sm font-body text-primary">Premium</span>
         </label>
 
         <label class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container-low transition-all">
-            <input type="radio" name="course_type" value="specialised"{{ old('course_type', $course->course_type ?? '') == 'specialised' ? 'checked' : '' }} class="text-secondary focus:ring-secondary">
+            <input
+                type="radio"
+                name="course_type"
+                value="specialised"
+                class="course-type-radio text-secondary focus:ring-secondary"
+                {{ old('course_type', $course->course_type ?? '') == 'specialised' ? 'checked' : '' }}
+            >
             <span class="text-sm font-body text-primary">Specialised</span>
         </label>
+
     </div>
+
 </div>
+
+<!-- ========================= -->
+<!-- PRICING WRAPPER -->
+<!-- ========================= -->
+<div id="pricing-wrapper">
+
+    <!-- PRICING SECTION -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+
+        <!-- INDIAN FEE -->
+        <div class="group">
+
+            <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 group-focus-within:text-secondary">
+                Indian Registration Fee (₹)
+            </label>
+
+            <div class="relative">
+
+                <span class="absolute left-0 top-1/2 -translate-y-1/2 text-secondary font-bold text-sm">
+                    ₹
+                </span>
+
+                <input
+                    class="w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 pl-4 text-sm font-bold"
+                    name="price"
+                    value="{{ old('price', $course->fee ?? '') }}"
+                    placeholder="2500"
+                    type="number"
+                />
+
+            </div>
+
+        </div>
+
+        <!-- EARLY BIRD -->
+        <div class="group">
+
+            <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 group-focus-within:text-secondary">
+                Early Bird Offer Fee (₹)
+            </label>
+
+            <div class="relative">
+
+                <span class="absolute left-0 top-1/2 -translate-y-1/2 text-secondary font-bold text-sm">
+                    ₹
+                </span>
+
+                <input
+                    class="w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 pl-4 text-sm font-bold"
+                    name="early_bird_fee"
+                    value="{{ old('early_bird_fee', $course->early_bird_fee ?? '') }}"
+                    placeholder="1999"
+                    type="number"
+                />
+
+            </div>
+
+            <p class="text-[11px] text-outline mt-2">
+                Optional discounted fee for early registrations
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- INTERNATIONAL FEE -->
+    <!-- INTERNATIONAL PRICING -->
+<div class="group mt-8">
+
+    <div class="flex items-center justify-between mb-4">
+
+        <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold">
+            International Registration Fees
+        </label>
+
+        <button
+            type="button"
+            id="add-international-fee"
+            class="text-xs px-3 py-2 border border-dashed border-secondary rounded-lg text-secondary hover:bg-secondary/5 transition-all"
+        >
+            + Add Currency
+        </button>
+
+    </div>
+
+    <div id="international-fees-wrapper" class="space-y-6">
+
+        
+            @php
+
+            $internationalFees = old(
+                'international_fees',
+                isset($course) && $course->international_pricing
+                    ? (
+                        is_array($course->international_pricing)
+                            ? $course->international_pricing
+                            : json_decode($course->international_pricing, true)
+                    )
+                    : [
+                        [
+                            'currency' => '',
+                            'fee' => '',
+                            'early_bird_fee' => ''
+                        ]
+                    ]
+            );
+
+        @endphp
+
+        @foreach($internationalFees as $index => $fee)
+
+        <div class="international-fee-item border border-outline-variant rounded-xl p-4">
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
+
+                <!-- CURRENCY -->
+                <div>
+
+                    <label class="block text-xs text-outline mb-2">
+                        Currency
+                    </label>
+
+                    <select
+                        name="international_fees[{{ $index }}][currency]"
+                        class="w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 text-sm"
+                    >
+
+                        <option value="">Select Currency</option>
+
+                        <option value="USD" {{ ($fee['currency'] ?? '') == 'USD' ? 'selected' : '' }}>
+                            USD ($)
+                        </option>
+
+                        <option value="EUR" {{ ($fee['currency'] ?? '') == 'EUR' ? 'selected' : '' }}>
+                            EUR (€)
+                        </option>
+
+                        <option value="GBP" {{ ($fee['currency'] ?? '') == 'GBP' ? 'selected' : '' }}>
+                            GBP (£)
+                        </option>
+
+                        <option value="AUD" {{ ($fee['currency'] ?? '') == 'AUD' ? 'selected' : '' }}>
+                            AUD (A$)
+                        </option>
+
+                        <option value="CAD" {{ ($fee['currency'] ?? '') == 'CAD' ? 'selected' : '' }}>
+                            CAD (C$)
+                        </option>
+
+                        <option value="SGD" {{ ($fee['currency'] ?? '') == 'SGD' ? 'selected' : '' }}>
+                            SGD (S$)
+                        </option>
+
+                        <option value="AED" {{ ($fee['currency'] ?? '') == 'AED' ? 'selected' : '' }}>
+                            AED (د.إ)
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <!-- FEE -->
+                <div>
+
+                    <label class="block text-xs text-outline mb-2">
+                        Registration Fee
+                    </label>
+
+                    <input
+                        type="number"
+                        name="international_fees[{{ $index }}][fee]"
+                        value="{{ $fee['fee'] ?? '' }}"
+                        placeholder="99"
+                        class="w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 text-sm font-bold"
+                    />
+
+                </div>
+
+                <!-- EARLY BIRD -->
+                <div>
+
+                    <label class="block text-xs text-outline mb-2">
+                        Early Bird Fee
+                    </label>
+
+                    <input
+                        type="number"
+                        name="international_fees[{{ $index }}][early_bird_fee]"
+                        value="{{ $fee['early_bird_fee'] ?? '' }}"
+                        placeholder="89"
+                        class="w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 text-sm font-bold"
+                    />
+
+                </div>
+
+                <!-- REMOVE -->
+                <div>
+
+                    <button
+                        type="button"
+                        class="remove-international-fee w-full px-4 py-3 border border-error text-error rounded-lg hover:bg-error/5 transition-all text-sm"
+                    >
+                        Remove
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        @endforeach
+
+    </div>
+
+</div>
+
+<!-- TEMPLATE -->
+<template id="international-fee-template">
+
+    <div class="international-fee-item border border-outline-variant rounded-xl p-4">
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
+
+            <!-- CURRENCY -->
+            <div>
+
+                <label class="block text-xs text-outline mb-2">
+                    Currency
+                </label>
+
+                <select
+                    name=""
+                    class="currency-input w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 text-sm"
+                >
+
+                    <option value="">Select Currency</option>
+
+                    <option value="USD">USD ($)</option>
+                    <option value="EUR">EUR (€)</option>
+                    <option value="GBP">GBP (£)</option>
+                    <option value="AUD">AUD (A$)</option>
+                    <option value="CAD">CAD (C$)</option>
+                    <option value="SGD">SGD (S$)</option>
+                    <option value="AED">AED (د.إ)</option>
+
+                </select>
+
+            </div>
+
+            <!-- FEE -->
+            <div>
+
+                <label class="block text-xs text-outline mb-2">
+                    Registration Fee
+                </label>
+
+                <input
+                    type="number"
+                    name=""
+                    placeholder="99"
+                    class="fee-input w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 text-sm font-bold"
+                />
+
+            </div>
+
+            <!-- EARLY BIRD -->
+            <div>
+
+                <label class="block text-xs text-outline mb-2">
+                    Early Bird Fee
+                </label>
+
+                <input
+                    type="number"
+                    name=""
+                    placeholder="89"
+                    class="earlybird-input w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 text-sm font-bold"
+                />
+
+            </div>
+
+            <!-- REMOVE -->
+            <div>
+
+                <button
+                    type="button"
+                    class="remove-international-fee w-full px-4 py-3 border border-error text-error rounded-lg hover:bg-error/5 transition-all text-sm"
+                >
+                    Remove
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</template>
+
+
+
+    </div>
+
+</div>
+
+<!-- ========================= -->
+<!-- SCRIPT -->
+<!-- ========================= -->
+<script>
+
+    const pricingWrapper = document.getElementById('pricing-wrapper');
+    const courseTypeRadios = document.querySelectorAll('.course-type-radio');
+
+    function togglePricingSection() {
+
+        const selectedType = document.querySelector('input[name="course_type"]:checked')?.value;
+
+        if (selectedType === 'free') {
+
+            pricingWrapper.classList.add('hidden');
+
+        } else {
+
+            pricingWrapper.classList.remove('hidden');
+
+        }
+    }
+
+    // Initial Load
+    togglePricingSection();
+
+    // Change Event
+    courseTypeRadios.forEach(radio => {
+        radio.addEventListener('change', togglePricingSection);
+    });
+
+</script>
+
+<!-- MODE OF COURSE -->
+<div class="group mt-6">
+
+    <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-4">
+        Mode of Course
+    </label>
+
+    <div class="flex flex-wrap gap-3">
+
+        <!-- ONLINE -->
+        <label class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container-low transition-all">
+            <input 
+                type="radio"
+                name="mode"
+                value="online"
+                class="mode-radio text-secondary focus:ring-secondary"
+                {{ old('mode', $course->mode ?? '') == 'online' ? 'checked' : '' }}
+            >
+            <span class="text-sm font-body text-primary">
+                Online
+            </span>
+        </label>
+
+        <!-- OFFLINE -->
+        <label class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container-low transition-all">
+            <input 
+                type="radio"
+                name="mode"
+                value="offline"
+                class="mode-radio text-secondary focus:ring-secondary"
+                {{ old('mode', $course->mode ?? '') == 'offline' ? 'checked' : '' }}
+            >
+            <span class="text-sm font-body text-primary">
+                Offline
+            </span>
+        </label>
+
+        <!-- HYBRID -->
+        <label class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container-low transition-all">
+            <input 
+                type="radio"
+                name="mode"
+                value="online_offline"
+                class="mode-radio text-secondary focus:ring-secondary"
+                {{ old('mode', $course->mode ?? '') == 'online_offline' ? 'checked' : '' }}
+            >
+            <span class="text-sm font-body text-primary">
+                Online & Offline
+            </span>
+        </label>
+
+    </div>
+
+</div>
+
+
+<!-- ONLINE SECTION -->
+<div id="zoom-section" class="group mt-6 hidden">
+
+    <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3">
+        Zoom Link
+    </label>
+
+    <div class="relative">
+
+        <span class="material-symbols-outlined absolute left-0 top-1/2 -translate-y-1/2 text-outline text-lg">
+            link
+        </span>
+
+        <input 
+            type="url"
+            name="zoom_link"
+            value="{{ old('zoom_link', $course->zoom_link ?? '') }}"
+            placeholder="https://zoom.us/..."
+            class="w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 pl-8 text-sm"
+        />
+
+    </div>
+
+</div>
+
+<!-- OFFLINE SECTION -->
+<div id="venue-section" class="group mt-6 hidden">
+
+    <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3">
+        Venue Link
+    </label>
+
+    <div class="relative">
+
+        <span class="material-symbols-outlined absolute left-0 top-1/2 -translate-y-1/2 text-outline text-lg">
+            location_on
+        </span>
+
+        <input 
+            type="url"
+            name="venue"
+            value="{{ old('venue', $course->venue ?? '') }}"
+            placeholder="https://maps.google.com/..."
+            class="w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 pl-8 text-sm"
+        />
+
+    </div>
+
+</div>
+
+
 <!-- FIRST ROW -->
+ <div class="group mt-6">
 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 
   <!-- Duration -->
@@ -260,21 +741,6 @@ placeholder="Write a short engaging description about the course...">{{ old('des
         value="{{ old('duration', $course->duration ?? '') }}"
         placeholder="4 Intensive Days"
         type="text"/>
-    </div>
-  </div>
-
-  <!-- Fee -->
-  <div class="group">
-    <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 group-focus-within:text-secondary">
-      Tuition Fee (₹)
-    </label>
-    <div class="relative">
-      <span class="absolute left-0 top-1/2 -translate-y-1/2 text-secondary font-bold text-sm">₹</span>
-      <input class="w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 pl-4 text-sm font-bold"
-        name="price"
-        value="{{ old('price', $course->fee ?? '') }}"
-        placeholder="2500"
-        type="number"/>
     </div>
   </div>
 
@@ -295,11 +761,15 @@ placeholder="Write a short engaging description about the course...">{{ old('des
 
 </div>
 
+  
+
+  
+
 <!-- SECOND ROW (SEPARATE GRID) -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
 
   <!-- Course Date -->
-  <div class="group">
+  <!-- <div class="group">
     <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 group-focus-within:text-secondary">
       Course Date
     </label>
@@ -309,7 +779,141 @@ placeholder="Write a short engaging description about the course...">{{ old('des
         name="course_date"
         value="{{ old('course_date', isset($course) && $course->course_date ? \Carbon\Carbon::parse($course->course_date)->format('Y-m-d') : '') }}"        type="date"/>
     </div>
-  </div>
+  </div> -->
+
+  <!-- COURSE SCHEDULE -->
+<div class="col-span-2">
+
+    <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-4">
+        Course Schedule Type
+    </label>
+
+    <!-- TYPE SELECTOR -->
+    <div class="flex flex-wrap gap-3 mb-6">
+
+        <label class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-lg cursor-pointer">
+            <input type="radio" name="schedule_type" value="dates"
+                class="schedule-type"
+                {{ old('schedule_type', $course->schedule_type ?? 'dates') == 'dates' ? 'checked' : '' }}>
+            <span class="text-sm">Specific Dates</span>
+        </label>
+
+        <label class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-lg cursor-pointer">
+            <input type="radio" name="schedule_type" value="month_range"
+                class="schedule-type"
+                {{ old('schedule_type', $course->schedule_type ?? '') == 'month_range' ? 'checked' : '' }}>
+            <span class="text-sm">Month Range</span>
+        </label>
+
+        <label class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-lg cursor-pointer">
+            <input type="radio" name="schedule_type" value="year_range"
+                class="schedule-type"
+                {{ old('schedule_type', $course->schedule_type ?? '') == 'year_range' ? 'checked' : '' }}>
+            <span class="text-sm">Year Range</span>
+        </label>
+
+    </div>
+
+    <!-- SPECIFIC DATES -->
+    <div id="dates-section" class="schedule-section">
+
+        <div id="dates-container" class="space-y-3">
+
+            @php
+                $dates = old('course_dates',
+                    isset($course) && $course->course_dates
+                        ? json_decode($course->course_dates, true)
+                        : ['']
+                );
+            @endphp
+
+            @foreach($dates as $i => $date)
+            <div class="flex gap-3 items-center">
+
+                <input type="date"
+                    name="course_dates[]"
+                    value="{{ $date }}"
+                    class="flex-1 bg-transparent border-b border-outline-variant focus:border-secondary py-3 text-sm">
+
+                <button type="button"
+                    class="remove-date text-error text-xs font-bold">
+                    Remove
+                </button>
+
+            </div>
+            @endforeach
+
+        </div>
+
+        <button type="button"
+            id="add-date-btn"
+            class="mt-4 px-4 py-2 border border-dashed rounded-lg text-secondary text-xs font-bold">
+            + Add Another Date
+        </button>
+
+    </div>
+
+    <!-- MONTH RANGE -->
+    <div id="month-range-section" class="schedule-section hidden">
+
+        <div class="grid grid-cols-2 gap-6">
+
+            <div>
+                <label class="text-xs block mb-2">From</label>
+
+                <input type="month"
+                    name="month_start"
+                    value="{{ old('month_start', $course->month_start ?? '') }}"
+                    class="w-full bg-transparent border-b border-outline-variant py-3 text-sm">
+            </div>
+
+            <div>
+                <label class="text-xs block mb-2">To</label>
+
+                <input type="month"
+                    name="month_end"
+                    value="{{ old('month_end', $course->month_end ?? '') }}"
+                    class="w-full bg-transparent border-b border-outline-variant py-3 text-sm">
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- YEAR RANGE -->
+    <div id="year-range-section" class="schedule-section hidden">
+
+        <div class="grid grid-cols-2 gap-6">
+
+            <div>
+                <label class="text-xs block mb-2">From Year</label>
+
+                <input type="number"
+                    min="2000"
+                    max="2100"
+                    name="year_start"
+                    value="{{ old('year_start', $course->year_start ?? '') }}"
+                    placeholder="2026"
+                    class="w-full bg-transparent border-b border-outline-variant py-3 text-sm">
+            </div>
+
+            <div>
+                <label class="text-xs block mb-2">To Year</label>
+
+                <input type="number"
+                    min="2000"
+                    max="2100"
+                    name="year_end"
+                    value="{{ old('year_end', $course->year_end ?? '') }}"
+                    placeholder="2028"
+                    class="w-full bg-transparent border-b border-outline-variant py-3 text-sm">
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
   <!-- Course Time -->
   <div class="group">
@@ -325,26 +929,9 @@ placeholder="Write a short engaging description about the course...">{{ old('des
     </div>
   </div>
 
-  <!-- Zoom Link -->
-<div class="group">
-  <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 group-focus-within:text-secondary">
-    Zoom Link
-  </label>
+  
 
-  <div class="relative">
-    <span class="material-symbols-outlined absolute left-0 top-1/2 -translate-y-1/2 text-outline text-lg">
-      link
-    </span>
-
-    <input 
-      type="url"
-      name="zoom_link"
-      value="{{ old('zoom_link', $course->zoom_link ?? '') }}"
-      placeholder="https://zoom.us/..."
-      class="w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 pl-8 text-sm"
-    />
-  </div>
-</div>
+  
 
 <!-- QR Enable Toggle -->
 <div class="group mt-6">
@@ -967,6 +1554,166 @@ document.addEventListener('click', function(e) {
     }
 });
 </script> -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
 
+    const radios = document.querySelectorAll('.schedule-type');
+
+    const datesSection = document.getElementById('dates-section');
+    const monthSection = document.getElementById('month-range-section');
+    const yearSection = document.getElementById('year-range-section');
+
+    function toggleScheduleSections() {
+
+        const selected = document.querySelector('.schedule-type:checked')?.value;
+
+        datesSection.classList.add('hidden');
+        monthSection.classList.add('hidden');
+        yearSection.classList.add('hidden');
+
+        if (selected === 'dates') {
+            datesSection.classList.remove('hidden');
+        }
+
+        if (selected === 'month_range') {
+            monthSection.classList.remove('hidden');
+        }
+
+        if (selected === 'year_range') {
+            yearSection.classList.remove('hidden');
+        }
+    }
+
+    radios.forEach(radio => {
+        radio.addEventListener('change', toggleScheduleSections);
+    });
+
+    toggleScheduleSections();
+
+    // ADD DATE
+    const addDateBtn = document.getElementById('add-date-btn');
+    const datesContainer = document.getElementById('dates-container');
+
+    addDateBtn.addEventListener('click', () => {
+
+        const row = document.createElement('div');
+
+        row.className = "flex gap-3 items-center";
+
+        row.innerHTML = `
+            <input type="date"
+                name="course_dates[]"
+                class="flex-1 bg-transparent border-b border-outline-variant focus:border-secondary py-3 text-sm">
+
+            <button type="button"
+                class="remove-date text-error text-xs font-bold">
+                Remove
+            </button>
+        `;
+
+        datesContainer.appendChild(row);
+    });
+
+    // REMOVE DATE
+    document.addEventListener('click', function(e) {
+
+        if (e.target.classList.contains('remove-date')) {
+            e.target.parentElement.remove();
+        }
+
+    });
+
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const modeRadios = document.querySelectorAll('.mode-radio');
+
+    const zoomSection = document.getElementById('zoom-section');
+    const venueSection = document.getElementById('venue-section');
+
+    function toggleModeFields() {
+
+        const selectedMode = document.querySelector('.mode-radio:checked')?.value;
+
+        // Hide all first
+        zoomSection.classList.add('hidden');
+        venueSection.classList.add('hidden');
+
+        // ONLINE
+        if (selectedMode === 'online') {
+            zoomSection.classList.remove('hidden');
+        }
+
+        // OFFLINE
+        if (selectedMode === 'offline') {
+            venueSection.classList.remove('hidden');
+        }
+
+        // HYBRID
+        if (selectedMode === 'online_offline') {
+            zoomSection.classList.remove('hidden');
+            venueSection.classList.remove('hidden');
+        }
+    }
+
+    modeRadios.forEach(radio => {
+        radio.addEventListener('change', toggleModeFields);
+    });
+
+    // Initial load
+    toggleModeFields();
+});
+</script>
+
+<script>
+
+    const addInternationalFeeBtn = document.getElementById('add-international-fee');
+    const internationalFeesWrapper = document.getElementById('international-fees-wrapper');
+    const internationalFeeTemplate = document.getElementById('international-fee-template');
+
+    let internationalFeeIndex = {{ count($internationalFees) }};
+
+    addInternationalFeeBtn.addEventListener('click', () => {
+
+        const clone = internationalFeeTemplate.content.cloneNode(true);
+
+        clone.querySelector('.currency-input')
+            .setAttribute(
+                'name',
+                `international_fees[${internationalFeeIndex}][currency]`
+            );
+
+        clone.querySelector('.fee-input')
+            .setAttribute(
+                'name',
+                `international_fees[${internationalFeeIndex}][fee]`
+            );
+
+        clone.querySelector('.earlybird-input')
+            .setAttribute(
+                'name',
+                `international_fees[${internationalFeeIndex}][early_bird_fee]`
+            );
+
+        internationalFeesWrapper.appendChild(clone);
+
+        internationalFeeIndex++;
+
+    });
+
+    document.addEventListener('click', function(e) {
+
+        if (e.target.classList.contains('remove-international-fee')) {
+
+            e.target.closest('.international-fee-item').remove();
+
+        }
+
+    });
+
+</script>
 </form>
 @endsection

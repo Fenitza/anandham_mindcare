@@ -12,17 +12,63 @@ class Course extends Model
         'specialisation',
         'tags',
         'description',
+        'organised_by',
+        'venue',
+        'mode',
         'course_image',
         'course_time',
         'course_date',
         'duration',
         'fee',
+        'early_bird_fee',
+        'international_pricing',
+        // 'international_currency',
+        // 'international_fee',
+        // 'international_early_bird_fee',
         'capacity',
         'marquee_text',
         'status',
         'zoom_link',
-        'enable_qr'
+        'enable_qr',
+        'schedule_type',
+        'course_dates',
+        'month_start',
+        'month_end',
+        'year_start',
+        'year_end',
     ];
+
+    protected $casts = [
+        'course_dates' => 'array',
+        'enable_qr' => 'boolean',
+        'international_pricing' => 'array',
+    ];
+   
+
+    public function getFormattedScheduleAttribute()
+    {
+        switch ($this->schedule_type) {
+
+            case 'dates':
+
+                return collect($this->course_dates)
+                    ->map(fn($date) => \Carbon\Carbon::parse($date)->format('d M Y'))
+                    ->implode(', ');
+
+            case 'month_range':
+
+                return \Carbon\Carbon::parse($this->month_start)->format('M Y')
+                    .' - '.
+                    \Carbon\Carbon::parse($this->month_end)->format('M Y');
+
+            case 'year_range':
+
+                return $this->year_start.' - '.$this->year_end;
+
+            default:
+                return null;
+        }
+    }
 
     public function mentor()
     {

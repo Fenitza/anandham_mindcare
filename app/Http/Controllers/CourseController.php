@@ -42,14 +42,33 @@ class CourseController extends Controller
                 'course_type' => $request->course_type,
                 'course_image' => $request->hasFile('course_image') ? $request->file('course_image')->store('courses', 'public') : null,
                 'specialisation' => $request->specialisation,
-                
+                'organised_by' => $request->organised_by,
+                'mode' => $request->mode,
+                'venue' => $request->venue,
                 'duration' => $request->duration,
                 'fee' => $request->price,
+                'early_bird_fee' => $request->early_bird_fee,
+                'international_pricing' => $request->international_fees
+                    ? json_encode($request->international_fees)
+                    : null,
+                // 'international_currency' => $request->international_currency,
+                // 'international_fee' => $request->international_fee,
+                // 'international_early_bird_fee' => $request->international_early_bird_fee,
                 'capacity' => $request->capacity, 
                 'marquee_text' => $request->marquee_text,
                 'status' => $request->enrollment_status,
                 'course_time' => $request->course_time,
-                'course_date' => $request->course_date,
+                'schedule_type' => $request->schedule_type,
+                'course_dates' => $request->course_dates
+                    ? json_encode($request->course_dates)
+                    : null,
+
+                'month_start' => $request->month_start,
+                'month_end' => $request->month_end,
+
+                'year_start' => $request->year_start,
+                'year_end' => $request->year_end,
+
                 'description' => $request->description,
                 'zoom_link' => $request->zoom_link,
                 'enable_qr' => $request->enable_qr ? true : false,
@@ -156,6 +175,26 @@ class CourseController extends Controller
 
         /*
         |--------------------------------------------------------------------------
+        | VALIDATION
+        |--------------------------------------------------------------------------
+        */
+        $request->validate([
+
+            'title' => 'required|string|max:255',
+
+            'schedule_type' => 'required|in:dates,month_range,year_range',
+
+            'course_dates.*' => 'nullable|date',
+
+            'month_start' => 'nullable|required_if:schedule_type,month_range',
+            'month_end' => 'nullable|required_if:schedule_type,month_range',
+
+            'year_start' => 'nullable|required_if:schedule_type,year_range|integer',
+            'year_end' => 'nullable|required_if:schedule_type,year_range|integer',
+        ]);
+
+        /*
+        |--------------------------------------------------------------------------
         | 1. COURSE IMAGE UPDATE
         |--------------------------------------------------------------------------
         */
@@ -170,6 +209,38 @@ class CourseController extends Controller
                 ->store('courses', 'public');
         }
 
+         /*
+        |--------------------------------------------------------------------------
+        | SCHEDULE HANDLING
+        |--------------------------------------------------------------------------
+        */
+        $scheduleType = $request->schedule_type;
+
+        $courseDates = null;
+        $monthStart = null;
+        $monthEnd = null;
+        $yearStart = null;
+        $yearEnd = null;
+
+        if ($scheduleType === 'dates') {
+
+            $courseDates = $request->course_dates
+                ? json_encode(array_filter($request->course_dates))
+                : null;
+        }
+
+        if ($scheduleType === 'month_range') {
+
+            $monthStart = $request->month_start;
+            $monthEnd = $request->month_end;
+        }
+
+        if ($scheduleType === 'year_range') {
+
+            $yearStart = $request->year_start;
+            $yearEnd = $request->year_end;
+        }
+
         /*
         |--------------------------------------------------------------------------
         | 2. UPDATE COURSE
@@ -179,16 +250,31 @@ class CourseController extends Controller
             'title' => $request->title,
             'course_type' => $request->course_type,
             'specialisation' => $request->specialisation,
-            
+            'organised_by' => $request->organised_by,
+            'venue' => $request->venue,
+            'mode' => $request->mode,
             'duration' => $request->duration,
             'fee' => $request->price,
+            'early_bird_fee' => $request->early_bird_fee,
+            'international_pricing' => $request->international_fees
+                ? json_encode($request->international_fees)
+                : null,
             'capacity' => $request->capacity,
             'marquee_text' => $request->marquee_text,
             'status' => $request->enrollment_status,
             'description' => $request->description,
             'course_time' => $request->course_time,
-            'course_date' => $request->course_date,
+            'schedule_type' => $scheduleType,
+            'course_dates' => $courseDates,
+
+            'month_start' => $monthStart,
+            'month_end' => $monthEnd,
+
+            'year_start' => $yearStart,
+            'year_end' => $yearEnd,
             'zoom_link' => $request->zoom_link,
+            'venue' => $request->venue,
+            'mode' => $request->mode,
             'enable_qr' => $request->enable_qr ? true : false,
         ]);
 
