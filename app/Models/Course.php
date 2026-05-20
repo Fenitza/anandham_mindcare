@@ -34,45 +34,217 @@ class Course extends Model
         'course_dates',
         'month_start',
         'month_end',
-        'year_start',
-        'year_end',
+        'weekend_start',
+        'weekend_end',
+        'weekend_days',
+        'registration_contact',
     ];
 
     protected $casts = [
         'course_dates' => 'array',
+        'weekend_days' => 'array',
         'enable_qr' => 'boolean',
         'international_pricing' => 'array',
     ];
    
 
-    public function getFormattedScheduleAttribute()
-    {
-        switch ($this->schedule_type) {
+   public function getEffectiveDateAttribute()
+{
+    switch ($this->schedule_type) {
 
-            case 'dates':
+        /*
+        |--------------------------------------------------------------------------
+        | MULTIPLE DATES
+        |--------------------------------------------------------------------------
+        */
+        case 'dates':
 
-                return collect($this->course_dates)
-                    ->map(fn($date) => \Carbon\Carbon::parse($date)->format('d M Y'))
-                    ->implode(', ');
+            $dates = is_array($this->course_dates)
+                ? $this->course_dates
+                : json_decode($this->course_dates, true);
 
-            case 'month_range':
+            $first = collect($dates)
+                ->filter()
+                ->sort()
+                ->first();
 
-                return \Carbon\Carbon::parse($this->month_start)->format('M Y')
-                    .' - '.
-                    \Carbon\Carbon::parse($this->month_end)->format('M Y');
+            return $first
+                ? \Carbon\Carbon::parse($first, 'Asia/Kolkata')->startOfDay()
+                : null;
 
-            case 'year_range':
+        /*
+        |--------------------------------------------------------------------------
+        | MONTH RANGE
+        |--------------------------------------------------------------------------
+        */
+        case 'month_range':
 
-                return $this->year_start.' - '.$this->year_end;
+            return $this->month_start
+                ? \Carbon\Carbon::createFromFormat(
+                    'Y-m',
+                    $this->month_start,
+                    'Asia/Kolkata'
+                )->startOfMonth()
+                : null;
 
-            default:
-                return null;
-        }
+        /*
+        |--------------------------------------------------------------------------
+        | WEEKEND RANGE
+        |--------------------------------------------------------------------------
+        */
+        case 'weekend_range':
+
+            return $this->weekend_start
+                ? \Carbon\Carbon::createFromFormat(
+                    'Y-m',
+                    $this->weekend_start,
+                    'Asia/Kolkata'
+                )->startOfMonth()
+                : null;
+
+        /*
+        |--------------------------------------------------------------------------
+        | DEFAULT SINGLE DATE
+        |--------------------------------------------------------------------------
+        */
+        default:
+
+            return $this->course_date
+                ? \Carbon\Carbon::parse(
+                    $this->course_date,
+                    'Asia/Kolkata'
+                )->startOfDay()
+                : null;
     }
+}
 
-    public function mentor()
+public function getEffectiveEndDateAttribute()
+{
+    switch ($this->schedule_type) {
+
+        /*
+        |--------------------------------------------------------------------------
+        | MULTIPLE DATES
+        |--------------------------------------------------------------------------
+        */
+        case 'dates':
+
+            $dates = is_array($this->course_dates)
+                ? $this->course_dates
+                : json_decode($this->course_dates, true);
+
+            $last = collect($dates)
+                ->filter()
+                ->sort()
+                ->last();
+
+            return $last
+                ? \Carbon\Carbon::parse($last, 'Asia/Kolkata')->endOfDay()
+                : null;
+
+        /*
+        |--------------------------------------------------------------------------
+        | MONTH RANGE
+        |--------------------------------------------------------------------------
+        */
+        case 'month_range':
+
+            return $this->month_end
+                ? \Carbon\Carbon::createFromFormat(
+                    'Y-m',
+                    $this->month_end,
+                    'Asia/Kolkata'
+                )->endOfMonth()
+                : null;
+
+        /*
+        |--------------------------------------------------------------------------
+        | WEEKEND RANGE
+        |--------------------------------------------------------------------------
+        */
+        case 'weekend_range':
+
+            return $this->weekend_end
+                ? \Carbon\Carbon::createFromFormat(
+                    'Y-m',
+                    $this->weekend_end,
+                    'Asia/Kolkata'
+                )->endOfMonth()
+                : null;
+
+        /*
+        |--------------------------------------------------------------------------
+        | DEFAULT SINGLE DATE
+        |--------------------------------------------------------------------------
+        */
+        default:
+
+            return $this->course_date
+                ? \Carbon\Carbon::parse(
+                    $this->course_date,
+                    'Asia/Kolkata'
+                )->endOfDay()
+                : null;
+    }
+}
+    public function getFormattedScheduleAttribute()
+{
+    switch ($this->schedule_type) {
+
+        case 'dates':
+
+            $dates = is_array($this->course_dates)
+                ? $this->course_dates
+                : json_decode($this->course_dates, true);
+
+            return collect($dates)
+                ->filter()
+                ->map(fn($date) =>
+                    \Carbon\Carbon::parse($date)->format('d M Y')
+                )
+                ->implode(', ');
+
+        case 'month_range':
+
+            return \Carbon\Carbon::parse($this->month_start)->format('M Y')
+                .' - '.
+                \Carbon\Carbon::parse($this->month_end)->format('M Y');
+
+        case 'weekend_range':
+
+            $start = \Carbon\Carbon::parse($this->weekend_start);
+            $end   = \Carbon\Carbon::parse($this->weekend_end);
+
+            // Format selected weekend days
+            $days = [];
+
+            if (is_array($this->weekend_days)) {
+                $days = $this->weekend_days;
+            } elseif (!empty($this->weekend_days)) {
+                $days = json_decode($this->weekend_days, true) ?? [];
+            }
+
+            $daysText = '';
+
+            if (count($days) === 2) {
+                $daysText = 'Sat, Sun';
+            } elseif (count($days) === 1) {
+                $daysText = $days[0] === 'Saturday' ? 'Sat' : 'Sun';
+            }
+
+            return 'All ' . $daysText . ' of '
+                . $start->format('M, Y')
+                . ' - '
+                . $end->format('M, Y');
+
+        default:
+            return null;
+    }
+}
+
+    public function mentors()
     {
-        return $this->hasOne(Mentor::class);
+        return $this->hasMany(Mentor::class);
     }
 
     public function modules()

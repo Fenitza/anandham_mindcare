@@ -115,24 +115,36 @@
     <main class="flex-1 p-4 sm:p-6 lg:p-8">
 
         <!-- HEADER -->
-        <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-6">
-            Upcoming Courses
-        </h1>
+<h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-6">
+    Courses List
+</h1>
 
-        <!-- TABS -->
-        <div class="flex gap-4 sm:gap-6 border-b mb-8 overflow-x-auto">
+<!-- ENROLLMENT STATUS TABS -->
+<div class="flex gap-4 sm:gap-6 border-b mb-8 overflow-x-auto">
 
-            @php $types = ['All Courses', 'Free', 'Premium', 'Specialised']; @endphp
+    @php
+        $statuses = [
+            'ongoing' => 'Ongoing',
+            'upcoming' => 'Upcoming',
+            'completed' => 'Completed'
+        ];
+    @endphp
 
-            @foreach($types as $type)
-                <a href="{{ request()->fullUrlWithQuery(['type' => $type]) }}"
-                   class="pb-3 border-b-2 whitespace-nowrap text-sm sm:text-base
-                   {{ $selectedType == $type ? 'border-yellow-600 text-primary font-bold' : 'border-transparent text-gray-500' }}">
-                    {{ $type }}
-                </a>
-            @endforeach
+    @foreach($statuses as $key => $label)
 
-        </div>
+        <a href="{{ request()->fullUrlWithQuery(['status' => $key]) }}"
+           class="pb-3 border-b-2 whitespace-nowrap text-sm sm:text-base transition-all
+           {{ $selectedStatus == $key
+                ? 'border-yellow-600 text-primary font-bold'
+                : 'border-transparent text-gray-500 hover:text-primary' }}">
+
+            {{ $label }}
+
+        </a>
+
+    @endforeach
+
+</div>
 
         @php
             $hasCourses = collect($timelineGroups)->flatMap(fn($g) => $g['courses'])->isNotEmpty();
@@ -201,15 +213,87 @@
                                     {{ Str::limit($course->description, 120) }}
                                 </p>
 
-                                <!-- Footer -->
-                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                <!-- FOOTER -->
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mt-4">
 
-                                    <span class="text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded">
-                                        {{ $course->price }}
-                                    </span>
+    <!-- PRICE SECTION -->
+    <div class="flex flex-wrap items-center gap-3">
 
+        {{-- FREE --}}
+        @if($course->price == 'Free')
+
+            <div class="px-4 py-2 rounded-xl bg-green-50 border border-green-100">
+                <p class="text-[10px] uppercase tracking-wider text-green-600 font-bold">
+                    Registration
+                </p>
+
+                <p class="text-sm font-bold text-green-700">
+                    Free
+                </p>
+            </div>
+
+        @else
+
+            {{-- INDIAN PRICE --}}
+            <div class="px-4 py-2 rounded-xl bg-primary/5 border border-primary/10">
+
+                <p class="text-[10px] uppercase tracking-wider text-primary/60 font-bold">
+                    India
+                </p>
+
+                <p class="text-sm font-bold text-primary">
+                    {{ $course->price }}
+                </p>
+
+            </div>
+
+        @endif
+
+        {{-- INTERNATIONAL --}}
+        @php
+            $internationalFees = is_array($course->international_fees)
+                ? $course->international_fees
+                : json_decode($course->international_fees, true);
+
+            $symbols = [
+                'USD' => '$',
+                'EUR' => '€',
+                'GBP' => '£',
+                'AUD' => 'A$',
+                'CAD' => 'C$',
+                'SGD' => 'S$',
+                'AED' => 'د.إ',
+            ];
+        @endphp
+
+        @if(!empty($internationalFees))
+
+    @foreach($internationalFees as $fee)
+
+        @if(!empty($fee['fee']) && $fee['fee'] > 0)
+
+            <div class="px-4 py-2 rounded-xl bg-yellow-50 border border-yellow-100">
+
+                <p class="text-[10px] uppercase tracking-wider text-yellow-700 font-bold">
+                    {{ $fee['currency'] }}
+                </p>
+
+                <p class="text-sm font-bold text-yellow-800">
+                    {{ $symbols[$fee['currency']] ?? '' }}
+                    {{ number_format($fee['fee']) }}
+                </p>
+
+            </div>
+
+        @endif
+
+    @endforeach
+
+@endif
+
+                                    {{-- BUTTON --}}
                                     <a href="{{ route('courses.detail', $course->id) }}"
-                                       class="bg-primary text-white px-4 py-2 text-xs rounded text-center">
+                                    class="bg-primary text-white px-4 py-2 text-xs rounded text-center hover:opacity-90 transition">
                                         Details
                                     </a>
 

@@ -806,10 +806,10 @@ Organised By
         </label>
 
         <label class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-lg cursor-pointer">
-            <input type="radio" name="schedule_type" value="year_range"
+            <input type="radio" name="schedule_type" value="weekend_range"
                 class="schedule-type"
-                {{ old('schedule_type', $course->schedule_type ?? '') == 'year_range' ? 'checked' : '' }}>
-            <span class="text-sm">Year Range</span>
+                {{ old('schedule_type', $course->schedule_type ?? '') == 'weekend_range' ? 'checked' : '' }}>
+            <span class="text-sm">Weekend Range</span>
         </label>
 
     </div>
@@ -880,38 +880,125 @@ Organised By
 
     </div>
 
-    <!-- YEAR RANGE -->
-    <div id="year-range-section" class="schedule-section hidden">
+    <!-- WEEKEND RANGE -->
+<div id="weekend-range-section" class="schedule-section hidden">
 
-        <div class="grid grid-cols-2 gap-6">
+    <div class="grid grid-cols-2 gap-6">
 
-            <div>
-                <label class="text-xs block mb-2">From Year</label>
+        <!-- FROM -->
+        <div>
 
-                <input type="number"
-                    min="2000"
-                    max="2100"
-                    name="year_start"
-                    value="{{ old('year_start', $course->year_start ?? '') }}"
-                    placeholder="2026"
-                    class="w-full bg-transparent border-b border-outline-variant py-3 text-sm">
-            </div>
+            <label class="text-xs block mb-2">
+                From Month
+            </label>
 
-            <div>
-                <label class="text-xs block mb-2">To Year</label>
+            <input type="month"
+                name="weekend_start"
+                value="{{ old('weekend_start', $course->weekend_start ?? '') }}"
+                class="w-full bg-transparent border-b border-outline-variant py-3 text-sm">
 
-                <input type="number"
-                    min="2000"
-                    max="2100"
-                    name="year_end"
-                    value="{{ old('year_end', $course->year_end ?? '') }}"
-                    placeholder="2028"
-                    class="w-full bg-transparent border-b border-outline-variant py-3 text-sm">
-            </div>
+        </div>
+
+        <!-- TO -->
+        <div>
+
+            <label class="text-xs block mb-2">
+                To Month
+            </label>
+
+            <input type="month"
+                name="weekend_end"
+                value="{{ old('weekend_end', $course->weekend_end ?? '') }}"
+                class="w-full bg-transparent border-b border-outline-variant py-3 text-sm">
 
         </div>
 
     </div>
+
+    <!-- INFO -->
+    <p class="text-xs text-outline mt-4">
+        Weekend classes conducted between selected months
+    </p>
+    <!-- WEEKEND DAYS -->
+<div class="mt-6">
+
+    <label class="text-xs block mb-3 font-semibold">
+        Weekend Days
+    </label>
+
+    <div class="flex flex-wrap gap-4">
+
+        <!-- SATURDAY -->
+        <label class="flex items-center gap-2 px-4 py-3 border border-outline-variant rounded-lg cursor-pointer">
+
+            <input
+                type="checkbox"
+                name="weekend_days[]"
+                value="Saturday"
+
+                @checked(
+                    in_array(
+                        'Saturday',
+                        old(
+                            'weekend_days',
+                            isset($course) && $course->weekend_days
+                                ? (
+                                    is_array($course->weekend_days)
+                                        ? $course->weekend_days
+                                        : json_decode($course->weekend_days, true)
+                                )
+                                : []
+                        )
+                    )
+                )
+            >
+
+            <span class="text-sm">
+                Saturday
+            </span>
+
+        </label>
+
+        <!-- SUNDAY -->
+        <label class="flex items-center gap-2 px-4 py-3 border border-outline-variant rounded-lg cursor-pointer">
+
+            <input
+                type="checkbox"
+                name="weekend_days[]"
+                value="Sunday"
+
+                @checked(
+                    in_array(
+                        'Sunday',
+                        old(
+                            'weekend_days',
+                            isset($course) && $course->weekend_days
+                                ? (
+                                    is_array($course->weekend_days)
+                                        ? $course->weekend_days
+                                        : json_decode($course->weekend_days, true)
+                                )
+                                : []
+                        )
+                    )
+                )
+            >
+
+            <span class="text-sm">
+                Sunday
+            </span>
+
+        </label>
+
+    </div>
+
+    <p class="text-xs text-outline mt-3">
+        Select Saturday, Sunday or both
+    </p>
+
+</div>
+
+</div>
 
 </div>
 
@@ -955,6 +1042,32 @@ Organised By
 
   </div>
 </div>
+
+<!-- Registration Contact & Details -->
+<div class="group mt-6 w-full">
+
+    <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3">
+        Registration Contact & Details
+    </label>
+
+    <div class="relative w-full">
+
+        <span class="material-symbols-outlined absolute left-4 top-4 text-outline text-lg">
+            contact_phone
+        </span>
+
+        <textarea
+            name="registration_contact"
+            rows="5"
+            placeholder="Enter registration contact details, phone numbers, coordinator info, WhatsApp details, timings, etc..."
+            class="w-full min-w-full bg-transparent border border-outline-variant focus:border-secondary rounded-2xl py-4 pl-12 pr-4 text-sm resize-none focus:ring-0"
+        >{{ old('registration_contact', $course->registration_contact ?? '') }}</textarea>
+
+    </div>
+
+    <p class="text-[11px] text-outline mt-2">
+        Example: Call/WhatsApp +91 98765 43210 between 9 AM – 6 PM
+    </p>
 
 </div>
 </section>
@@ -1131,7 +1244,7 @@ $modules = old('modules', isset($course) ? $course->modules : []);
         <div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center">
             <span class="material-symbols-outlined text-secondary">redeem</span>
         </div>
-        <h4 class="text-2xl font-headline font-bold text-primary">Strategic Bonuses</h4>
+        <h4 class="text-2xl font-headline font-bold text-primary">Certifications</h4>
     </div>
 
     <div class="grid grid-cols-1 gap-6 mb-8" id="bonus-container">
@@ -1153,19 +1266,19 @@ $modules = old('modules', isset($course) ? $course->modules : []);
                 <!-- TITLE -->
                 <div class="flex-1">
                     <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-1">
-                        Bonus Title
+                        Certification Title
                     </label>
                     <input 
                         name="bonuses[{{ $index }}][title]"
                         value="{{ is_array($bonus) ? $bonus['title'] : $bonus->title }}"
                         class="w-full bg-transparent border-none focus:ring-0 font-headline text-xl font-bold text-primary p-0"
                         type="text"
-                        placeholder="Bonus Title"
+                        placeholder="Certification Title"
                     />
                 </div>
 
                 <!-- VALUE -->
-                <div class="w-40 border-l border-outline-variant border-opacity-20 pl-6">
+                <!-- <div class="w-40 border-l border-outline-variant border-opacity-20 pl-6">
                     <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-1">
                         Value (₹)
                     </label>
@@ -1179,7 +1292,7 @@ $modules = old('modules', isset($course) ? $course->modules : []);
                             placeholder="0"
                         />
                     </div>
-                </div>
+                </div> -->
 
                 <!-- DELETE -->
                 <button type="button" class="remove-bonus material-symbols-outlined text-outline-variant hover:text-error transition-colors p-2 hover:bg-error/5 rounded-full">
@@ -1190,13 +1303,13 @@ $modules = old('modules', isset($course) ? $course->modules : []);
             <!-- DESCRIPTION -->
             <div class="pl-[72px]">
                 <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-2">
-                    Bonus Description
+                    Certification Description
                 </label>
                 <textarea 
                     name="bonuses[{{ $index }}][description]"
                     class="w-full bg-surface-container-low border border-outline-variant border-opacity-20 rounded-lg p-3 font-body text-sm text-on-surface-variant focus:border-secondary focus:ring-0"
                     rows="2"
-                    placeholder="Bonus Description"
+                    placeholder="Certification Description"
                 >{{ is_array($bonus) ? $bonus['description'] : $bonus->description }}</textarea>
             </div>
 
@@ -1216,18 +1329,18 @@ $modules = old('modules', isset($course) ? $course->modules : []);
                 <!-- TITLE -->
                 <div class="flex-1">
                     <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-1">
-                        Bonus Title
+                        Certification Title
                     </label>
                     <input 
                         name="bonuses[0][title]"
                         class="w-full bg-transparent border-none focus:ring-0 font-headline text-xl font-bold text-primary p-0"
                         type="text"
-                        placeholder="Bonus Title"
+                        placeholder="Certification Title"
                     />
                 </div>
 
                 <!-- VALUE -->
-                <div class="w-40 border-l border-outline-variant border-opacity-20 pl-6">
+                <!-- <div class="w-40 border-l border-outline-variant border-opacity-20 pl-6">
                     <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-1">
                         Value (₹)
                     </label>
@@ -1240,7 +1353,7 @@ $modules = old('modules', isset($course) ? $course->modules : []);
                             placeholder="0"
                         />
                     </div>
-                </div>
+                </div> -->
 
                 <!-- DELETE -->
                 <button type="button" class="remove-bonus material-symbols-outlined text-outline-variant hover:text-error p-2 rounded-full">
@@ -1251,13 +1364,13 @@ $modules = old('modules', isset($course) ? $course->modules : []);
             <!-- DESCRIPTION -->
             <div class="pl-[72px]">
                 <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-2">
-                    Bonus Description
+                    Certification Description
                 </label>
                 <textarea 
                     name="bonuses[0][description]"
                     class="w-full bg-surface-container-low border border-outline-variant border-opacity-20 rounded-lg p-3 font-body text-sm text-on-surface-variant"
                     rows="2"
-                    placeholder="Bonus Description"
+                    placeholder="Certification Description"
                 ></textarea>
             </div>
 
@@ -1271,7 +1384,7 @@ $modules = old('modules', isset($course) ? $course->modules : []);
     <button type="button" id="add-bonus-btn"
         class="w-full py-5 border-2 border-dashed border-outline-variant rounded-xl text-on-surface-variant font-bold text-sm flex items-center justify-center gap-3 hover:bg-surface-container-low hover:border-secondary transition-all">
         <span class="material-symbols-outlined">add_circle</span>
-        Enroll Additional High-Value Bonus
+        Enroll Additional High-Value Certification
     </button>
 
 </section>
@@ -1312,21 +1425,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 </div>
 
                 <div class="flex-1">
-                    <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-1">Bonus Title</label>
+                    <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-1">Certification Title</label>
                     <input name="bonuses[${index}][title]" 
                         class="w-full bg-transparent border-none focus:ring-0 font-headline text-xl font-bold text-primary p-0"
-                        type="text" placeholder="New Strategic Bonus">
+                        type="text" placeholder="New Certification">
                 </div>
 
-                <div class="w-40 border-l border-outline-variant border-opacity-20 pl-6">
-                    <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-1">Value (₹)</label>
-                    <div class="flex items-center gap-1">
-                        <span class="text-secondary font-bold">₹</span>
-                        <input name="bonuses[${index}][value]" 
-                            class="w-full bg-transparent border-none focus:ring-0 font-body font-bold text-secondary text-lg p-0"
-                            type="number" value="0">
-                    </div>
-                </div>
+                // <div class="w-40 border-l border-outline-variant border-opacity-20 pl-6">
+                //     <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-1">Value (₹)</label>
+                //     <div class="flex items-center gap-1">
+                //         <span class="text-secondary font-bold">₹</span>
+                //         <input name="bonuses[${index}][value]" 
+                //             class="w-full bg-transparent border-none focus:ring-0 font-body font-bold text-secondary text-lg p-0"
+                //             type="number" value="0">
+                //     </div>
+                // </div>
 
                 <button type="button" class="remove-bonus material-symbols-outlined text-outline-variant hover:text-error transition-colors p-2 hover:bg-error/5 rounded-full">
                     delete_outline
@@ -1334,7 +1447,7 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
 
             <div class="pl-[72px]">
-                <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-2">Bonus Description</label>
+                <label class="block text-[10px] font-label uppercase tracking-widest text-outline font-bold mb-2">Certification Description</label>
                 <textarea name="bonuses[${index}][description]"
                     class="w-full bg-surface-container-low border border-outline-variant border-opacity-20 rounded-lg p-3 font-body text-sm text-on-surface-variant"
                     rows="2" placeholder="Describe the strategic advantage..."></textarea>
@@ -1367,83 +1480,308 @@ document.addEventListener("DOMContentLoaded", function () {
         Publish Content
     </button>
 </div>
-<!-- Lead Mentor Profile -->
- @php 
-$mentor = $course->mentor ?? null; 
-@endphp
-<section class="bg-primary text-white rounded-2xl p-10 editorial-shadow overflow-hidden relative group">
-<!-- Background Pattern -->
-<div class="absolute -right-20 -top-20 w-64 h-64 bg-primary-container rounded-full opacity-20 transition-transform duration-700 group-hover:scale-110"></div>
-<div class="absolute -left-10 -bottom-10 w-40 h-40 bg-secondary rounded-full opacity-5 transition-transform duration-700 group-hover:scale-125"></div>
-<div class="relative z-10">
-<div class="flex items-center gap-3 mb-8">
-<span class="material-symbols-outlined text-secondary-fixed text-3xl" data-icon="school">school</span>
-<h4 class="text-xl font-headline font-bold tracking-wide">Lead Faculty</h4>
-</div>
-<div class="flex flex-col items-center mb-8">
 
-    <!-- IMAGE SECTION -->
-    <div class="relative mb-6">
-        <div class="w-40 h-40 rounded-full border-4 border-secondary/30 p-1 group-hover:border-secondary transition-all duration-500">
-            
-            <!-- Preview Image -->
-            <img 
-                id="mentorPreview"
-                alt="Mentor Image"
-                class="w-full h-full rounded-full object-cover grayscale-[0.3] group-hover:grayscale-0 transition-all duration-500"
-                src="{{ $mentor && $mentor->image ? asset('storage/'.$mentor->image) : asset('images/default-avatar.png') }}"/>
+<!-- LEAD FACULTY -->
+<section class="bg-primary text-white rounded-3xl p-5 shadow-xl">
+
+    <!-- HEADER -->
+    <div class="flex items-center justify-between mb-5">
+
+        <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-secondary-fixed text-xl">
+                school
+            </span>
+
+            <h4 class="text-lg font-headline font-bold">
+                Lead Faculty
+            </h4>
+        </div>
+
+        <button
+            type="button"
+            id="add-mentor-btn"
+            class="px-3 py-2 rounded-xl border border-white/20 text-xs hover:bg-white/10 transition-all"
+        >
+            + Add
+        </button>
+
+    </div>
+
+    @php
+        $mentors = old(
+            'mentors',
+            isset($course) && $course->mentors && $course->mentors->count()
+                ? $course->mentors->map(function($mentor){
+                    return [
+                        'name' => $mentor->name,
+                        'qualification' => $mentor->qualification,
+                        'bio' => $mentor->bio,
+                        'image' => $mentor->image,
+                    ];
+                })->toArray()
+                : [
+                    [
+                        'name' => '',
+                        'qualification' => '',
+                        'bio' => '',
+                        'image' => '',
+                    ]
+                ]
+        );
+    @endphp
+
+    <!-- LIST -->
+    <div id="mentors-wrapper" class="space-y-4">
+
+        @foreach($mentors as $index => $mentor)
+
+        <div class="mentor-item bg-white/5 border border-white/10 rounded-2xl p-4">
+
+            <div class="flex gap-4">
+
+                <!-- IMAGE -->
+                
+                <div class="shrink-0">
+
+                    <div class="relative">
+
+                        <img
+                            src="{{ !empty($mentor['image']) ? asset('storage/'.$mentor['image']) : asset('images/default-avatar.png') }}"
+                            class="mentor-preview w-20 h-20 rounded-xl object-cover border border-white/20"
+                        >
+
+                        <button
+                            type="button"
+                            class="upload-mentor-btn absolute -bottom-2 -right-2 bg-secondary text-white w-7 h-7 rounded-full flex items-center justify-center"
+                        >
+                            <span class="material-symbols-outlined text-xs">
+                                photo_camera
+                            </span>
+                        </button>
+
+                    </div>
+
+                    <!-- OLD IMAGE -->
+                    <input
+                        type="hidden"
+                        name="mentors[{{ $index }}][existing_image]"
+                        value="{{ $mentor['image'] ?? '' }}"
+                    >
+
+                    <!-- NEW IMAGE -->
+                    <input
+                        type="file"
+                        name="mentors[{{ $index }}][image]"
+                        accept="image/*"
+                        class="mentor-image-input hidden"
+                    >
+
+                </div>
+
+                <!-- DETAILS -->
+                <div class="flex-1 space-y-3">
+
+                    <input
+                        type="text"
+                        name="mentors[{{ $index }}][name]"
+                        value="{{ $mentor['name'] ?? '' }}"
+                        placeholder="Faculty Name"
+                        class="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-secondary"
+                    >
+
+                    <input
+                        type="text"
+                        name="mentors[{{ $index }}][qualification]"
+                        value="{{ $mentor['qualification'] ?? '' }}"
+                        placeholder="Qualification"
+                        class="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:border-secondary"
+                    >
+
+                    <textarea
+                        name="mentors[{{ $index }}][bio]"
+                        rows="2"
+                        placeholder="Short bio..."
+                        class="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white/90 resize-none focus:border-secondary"
+                    >{{ $mentor['bio'] ?? '' }}</textarea>
+
+                    <button
+                        type="button"
+                        class="remove-mentor-btn text-red-300 text-xs hover:text-red-200"
+                    >
+                        Remove
+                    </button>
+
+                </div>
+
+            </div>
 
         </div>
 
-        <!-- Upload Button -->
-        <button type="button"
-            id="uploadBtn"
-            class="absolute bottom-2 right-2 bg-secondary text-white w-10 h-10 rounded-full flex items-center justify-center hover:scale-110 hover:bg-secondary-container transition-all shadow-xl active:scale-90">
-            <span class="material-symbols-outlined text-lg">camera</span>
-        </button>
+        @endforeach
 
-        <!-- Hidden File Input -->
-        <input 
-            type="file" 
-            name="mentor_image"
-            id="mentorImageInput" 
-            accept="image/*" 
-            class="hidden"
-        >
     </div>
 
-    <!-- NAME -->
-    <input 
-        name="mentor_name"
-        class="w-full bg-transparent border-none text-center font-headline text-3xl font-bold text-white focus:ring-0 p-0 mb-2"
-        type="text" 
-        placeholder="Enter Mentor Name"
-        value="{{ old('mentor_name', $mentor->name ?? '') }}"
-    />
+</section>
 
-    <!-- QUALIFICATION -->
-    <input 
-        name="mentor_qualification"
-        class="w-full bg-transparent border-none text-center font-label text-[10px] uppercase tracking-[0.2em] text-secondary-fixed font-bold focus:ring-0 p-0"
-        type="text" 
-        placeholder="Qualification"
-        value="{{ old('mentor_qualification', $mentor->qualification ?? '') }}"
-    />
-</div>
+<!-- TEMPLATE -->
+<template id="mentor-template">
 
-<!-- BIO -->
-<div class="space-y-4 pt-6 border-t border-white border-opacity-10">
-    <label class="block text-[10px] font-label uppercase tracking-widest text-primary-fixed font-bold opacity-80">
-        Biography & Institutional Standing
-    </label>
+    <div class="mentor-item bg-white/5 border border-white/10 rounded-2xl p-4">
 
-    <textarea 
-        name="mentor_bio"
-        class="w-full bg-primary-container/20 border border-white/5 rounded-xl font-body text-sm text-white/90 focus:border-secondary-fixed focus:ring-0 p-5 leading-relaxed"
-        rows="4"
-        placeholder="Enter mentor biography..."
-    >{{ old('mentor_bio', $mentor->bio ?? '') }}</textarea>
-</div>
+        <div class="flex gap-4">
+
+            <!-- IMAGE -->
+            <div class="shrink-0">
+
+                <div class="relative">
+
+                    <img
+                        src="{{ asset('images/default-avatar.png') }}"
+                        class="mentor-preview w-20 h-20 rounded-xl object-cover border border-white/20"
+                    >
+
+                    <button
+                        type="button"
+                        class="upload-mentor-btn absolute -bottom-2 -right-2 bg-secondary text-white w-7 h-7 rounded-full flex items-center justify-center"
+                    >
+                        <span class="material-symbols-outlined text-xs">
+                            photo_camera
+                        </span>
+                    </button>
+
+                </div>
+
+                <input
+                    type="file"
+                    accept="image/*"
+                    class="mentor-image-input hidden"
+                >
+
+            </div>
+
+            <!-- DETAILS -->
+            <div class="flex-1 space-y-3">
+
+                <input
+                    type="text"
+                    placeholder="Faculty Name"
+                    class="mentor-name w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-secondary"
+                >
+
+                <input
+                    type="text"
+                    placeholder="Qualification"
+                    class="mentor-qualification w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:border-secondary"
+                >
+
+                <textarea
+                    rows="2"
+                    placeholder="Short bio..."
+                    class="mentor-bio w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-xs text-white/90 resize-none focus:border-secondary"
+                ></textarea>
+
+                <button
+                    type="button"
+                    class="remove-mentor-btn text-red-300 text-xs hover:text-red-200"
+                >
+                    Remove
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</template>
+
+<script>
+
+    const mentorWrapper = document.getElementById('mentors-wrapper');
+    const mentorTemplate = document.getElementById('mentor-template');
+    const addMentorBtn = document.getElementById('add-mentor-btn');
+
+    let mentorIndex = {{ count($mentors) }};
+
+    // ADD FACULTY
+    addMentorBtn.addEventListener('click', () => {
+
+        const clone = mentorTemplate.content.cloneNode(true);
+
+        clone.querySelector('.mentor-name')
+            .setAttribute('name', `mentors[${mentorIndex}][name]`);
+
+        clone.querySelector('.mentor-qualification')
+            .setAttribute('name', `mentors[${mentorIndex}][qualification]`);
+
+        clone.querySelector('.mentor-bio')
+            .setAttribute('name', `mentors[${mentorIndex}][bio]`);
+
+        clone.querySelector('.mentor-image-input')
+            .setAttribute('name', `mentors[${mentorIndex}][image]`);
+
+        mentorWrapper.appendChild(clone);
+
+        mentorIndex++;
+
+    });
+
+    // REMOVE
+    document.addEventListener('click', function(e){
+
+        if(e.target.closest('.remove-mentor-btn')) {
+
+            const mentorItems = document.querySelectorAll('.mentor-item');
+
+            if(mentorItems.length > 1){
+                e.target.closest('.mentor-item').remove();
+            }
+
+        }
+
+    });
+
+    // OPEN FILE
+    document.addEventListener('click', function(e){
+
+        if(e.target.closest('.upload-mentor-btn')) {
+
+            const parent = e.target.closest('.mentor-item');
+
+            parent.querySelector('.mentor-image-input').click();
+
+        }
+
+    });
+
+    // PREVIEW IMAGE
+    document.addEventListener('change', function(e){
+
+        if(e.target.classList.contains('mentor-image-input')) {
+
+            const file = e.target.files[0];
+
+            if(file) {
+
+                const reader = new FileReader();
+
+                reader.onload = function(event) {
+
+                    e.target.closest('.mentor-item')
+                        .querySelector('.mentor-preview')
+                        .src = event.target.result;
+
+                }
+
+                reader.readAsDataURL(file);
+
+            }
+
+        }
+
+    });
+
+</script>
 </section>
 <!-- Marketing Urgency Controls -->
 <section class="bg-surface-container-lowest rounded-2xl p-10 editorial-shadow border border-outline-variant border-opacity-10">
@@ -1462,14 +1800,14 @@ $mentor = $course->mentor ?? null;
 </div>
 </div>
 <div>
-<input type="hidden" name="enrollment_status" id="enrollment_status" value="{{ old('enrollment_status', $course->status ?? 'active') }}">
+<input type="hidden" name="enrollment_status" id="enrollment_status" value="{{ old('enrollment_status', $course->status ?? 'ongoing') }}">
 <label class="block text-xs font-label uppercase tracking-widest text-on-surface-variant font-bold mb-4">Enrollment Status</label>
 <div class="flex p-1 bg-surface-container-low rounded-xl gap-1" id="enrollment-status-toggles">
-<button type="button" class="status-btn flex-1 py-3 text-on-surface-variant hover:text-primary rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all active:scale-95" data-status="active">Active</button>
+<button type="button" class="status-btn flex-1 py-3 text-on-surface-variant hover:text-primary rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all active:scale-95" data-status="ongoing">Ongoing</button>
 
-<button type="button" class="status-btn flex-1 py-3 text-on-surface-variant hover:text-primary rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all active:scale-95" data-status="waitlist">Waitlist</button>
+<button type="button" class="status-btn flex-1 py-3 text-on-surface-variant hover:text-primary rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all active:scale-95" data-status="upcoming">Upcoming</button>
 
-<button type="button" class="status-btn flex-1 py-3 text-on-surface-variant hover:text-primary rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all active:scale-95" data-status="closed">Closed</button></div>
+<button type="button" class="status-btn flex-1 py-3 text-on-surface-variant hover:text-primary rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all active:scale-95" data-status="completed">Completed</button></div>
 </div>
 <div class="p-5 bg-tertiary/5 border border-tertiary/10 rounded-xl flex gap-4">
 <span class="material-symbols-outlined text-tertiary mt-0.5" data-icon="tips_and_updates" style="font-variation-settings: 'FILL' 1;">tips_and_updates</span>
@@ -1561,16 +1899,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const datesSection = document.getElementById('dates-section');
     const monthSection = document.getElementById('month-range-section');
-    const yearSection = document.getElementById('year-range-section');
+    const weekendSection = document.getElementById('weekend-range-section');
+
+    /*
+    |--------------------------------------------------------------------------
+    | TOGGLE SECTIONS
+    |--------------------------------------------------------------------------
+    */
 
     function toggleScheduleSections() {
 
         const selected = document.querySelector('.schedule-type:checked')?.value;
 
+        // hide all
         datesSection.classList.add('hidden');
         monthSection.classList.add('hidden');
-        yearSection.classList.add('hidden');
+        weekendSection.classList.add('hidden');
 
+        // show selected
         if (selected === 'dates') {
             datesSection.classList.remove('hidden');
         }
@@ -1579,8 +1925,8 @@ document.addEventListener('DOMContentLoaded', function () {
             monthSection.classList.remove('hidden');
         }
 
-        if (selected === 'year_range') {
-            yearSection.classList.remove('hidden');
+        if (selected === 'weekend_range') {
+            weekendSection.classList.remove('hidden');
         }
     }
 
@@ -1590,11 +1936,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     toggleScheduleSections();
 
-    // ADD DATE
+    /*
+    |--------------------------------------------------------------------------
+    | ADD DATE
+    |--------------------------------------------------------------------------
+    */
+
     const addDateBtn = document.getElementById('add-date-btn');
     const datesContainer = document.getElementById('dates-container');
 
-    addDateBtn.addEventListener('click', () => {
+    addDateBtn?.addEventListener('click', () => {
 
         const row = document.createElement('div');
 
@@ -1614,13 +1965,23 @@ document.addEventListener('DOMContentLoaded', function () {
         datesContainer.appendChild(row);
     });
 
-    // REMOVE DATE
+    /*
+    |--------------------------------------------------------------------------
+    | REMOVE DATE
+    |--------------------------------------------------------------------------
+    */
+
     document.addEventListener('click', function(e) {
 
         if (e.target.classList.contains('remove-date')) {
-            e.target.parentElement.remove();
-        }
 
+            // prevent removing last date row
+            const rows = document.querySelectorAll('#dates-container .flex');
+
+            if (rows.length > 1) {
+                e.target.parentElement.remove();
+            }
+        }
     });
 
 });

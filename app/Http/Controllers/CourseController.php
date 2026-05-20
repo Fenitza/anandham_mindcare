@@ -23,7 +23,7 @@ class CourseController extends Controller
 
     public function edit($id)
     {
-        $course = Course::with(['modules.topics', 'bonuses', 'mentor'])
+        $course = Course::with(['modules.topics', 'bonuses', 'mentors'])
                         ->findOrFail($id);
 
         return view('pages.dasboard.admin.add_course', compact('course'));
@@ -44,6 +44,7 @@ class CourseController extends Controller
                 'specialisation' => $request->specialisation,
                 'organised_by' => $request->organised_by,
                 'mode' => $request->mode,
+                'registration_contact' => $request->registration_contact,
                 'venue' => $request->venue,
                 'duration' => $request->duration,
                 'fee' => $request->price,
@@ -66,8 +67,12 @@ class CourseController extends Controller
                 'month_start' => $request->month_start,
                 'month_end' => $request->month_end,
 
-                'year_start' => $request->year_start,
-                'year_end' => $request->year_end,
+                'weekend_start' => $request->weekend_start,
+                'weekend_end' => $request->weekend_end,
+
+                'weekend_days' => $request->weekend_days
+                    ? json_encode($request->weekend_days)
+                    : null,
 
                 'description' => $request->description,
                 'zoom_link' => $request->zoom_link,
@@ -140,20 +145,51 @@ class CourseController extends Controller
                 }
             }
 
-            // ✅ 4. Save Mentor
-            $mentorImagePath = null;
+           /*
+|--------------------------------------------------------------------------
+| SAVE MULTIPLE MENTORS
+|--------------------------------------------------------------------------
+*/
 
-            if ($request->hasFile('mentor_image')) {
-                $mentorImagePath = $request->file('mentor_image')->store('mentors', 'public');
-            }
+if ($request->has('mentors')) {
 
-            Mentor::create([
-                'course_id' => $course->id,
-                'name' => $request->mentor_name,
-                'qualification' => $request->mentor_qualification,
-                'bio' => $request->mentor_bio,
-                'image' => $mentorImagePath,
-            ]);
+    foreach ($request->mentors as $index => $mentorData) {
+
+        // skip completely empty mentor blocks
+        if (
+            empty($mentorData['name']) &&
+            empty($mentorData['qualification']) &&
+            empty($mentorData['bio']) &&
+            !$request->hasFile("mentors.$index.image")
+        ) {
+            continue;
+        }
+
+        $mentorImagePath = null;
+
+        // image upload
+        if ($request->hasFile("mentors.$index.image")) {
+
+            $mentorImagePath = $request
+                ->file("mentors.$index.image")
+                ->store('mentors', 'public');
+        }
+
+        Mentor::create([
+
+            'course_id' => $course->id,
+
+            'name' => $mentorData['name'] ?? null,
+
+            'qualification' => $mentorData['qualification'] ?? null,
+
+            'bio' => $mentorData['bio'] ?? null,
+
+            'image' => $mentorImagePath,
+
+        ]);
+    }
+}
 
             DB::commit();
 
@@ -182,15 +218,16 @@ class CourseController extends Controller
 
             'title' => 'required|string|max:255',
 
-            'schedule_type' => 'required|in:dates,month_range,year_range',
+            'schedule_type' => 'required|in:dates,month_range,weekend_range',
 
             'course_dates.*' => 'nullable|date',
 
             'month_start' => 'nullable|required_if:schedule_type,month_range',
             'month_end' => 'nullable|required_if:schedule_type,month_range',
 
-            'year_start' => 'nullable|required_if:schedule_type,year_range|integer',
-            'year_end' => 'nullable|required_if:schedule_type,year_range|integer',
+            'weekend_start' => 'nullable|required_if:schedule_type,weekend_range',
+            'weekend_end' => 'nullable|required_if:schedule_type,weekend_range',
+            'weekend_days' => 'nullable|array',
         ]);
 
         /*
@@ -219,8 +256,9 @@ class CourseController extends Controller
         $courseDates = null;
         $monthStart = null;
         $monthEnd = null;
-        $yearStart = null;
-        $yearEnd = null;
+        $weekendStart = null;
+        $weekendEnd = null;
+        $weekendDays = null;
 
         if ($scheduleType === 'dates') {
 
@@ -235,10 +273,11 @@ class CourseController extends Controller
             $monthEnd = $request->month_end;
         }
 
-        if ($scheduleType === 'year_range') {
+        if ($scheduleType === 'weekend_range') {
 
-            $yearStart = $request->year_start;
-            $yearEnd = $request->year_end;
+            $weekendStart = $request->weekend_start;
+            $weekendEnd = $request->weekend_end;
+            $weekendDays = $request->weekend_days ? json_encode($request->weekend_days) : null;
         }
 
         /*
@@ -253,6 +292,7 @@ class CourseController extends Controller
             'organised_by' => $request->organised_by,
             'venue' => $request->venue,
             'mode' => $request->mode,
+            'registration_contact' => $request->registration_contact,
             'duration' => $request->duration,
             'fee' => $request->price,
             'early_bird_fee' => $request->early_bird_fee,
@@ -270,12 +310,14 @@ class CourseController extends Controller
             'month_start' => $monthStart,
             'month_end' => $monthEnd,
 
-            'year_start' => $yearStart,
-            'year_end' => $yearEnd,
+            'weekend_start' => $weekendStart,
+            'weekend_end' => $weekendEnd,
+            'weekend_days' => $weekendDays,
             'zoom_link' => $request->zoom_link,
             'venue' => $request->venue,
             'mode' => $request->mode,
             'enable_qr' => $request->enable_qr ? true : false,
+            'registration_contact' => $request->registration_contact,
         ]);
 
         /*
@@ -377,50 +419,65 @@ class CourseController extends Controller
         }
 
         /*
-        |--------------------------------------------------------------------------
-        | 7. UPDATE MENTOR
-        |--------------------------------------------------------------------------
-        */
-        $mentor = $course->mentor;
+|--------------------------------------------------------------------------
+| 7. UPDATE MULTIPLE MENTORS
+|--------------------------------------------------------------------------
+*/
 
-        if ($mentor) {
+// delete old mentor images
+// foreach ($course->mentors as $oldMentor) {
 
-            // image update
-            if ($request->hasFile('mentor_image')) {
+//     if ($oldMentor->image) {
+//         \Storage::disk('public')->delete($oldMentor->image);
+//     }
+// }
 
-                if ($mentor->image) {
-                    \Storage::disk('public')->delete($mentor->image);
-                }
+// delete old mentors
+$course->mentors()->delete();
 
-                $mentor->image = $request->file('mentor_image')
-                    ->store('mentors', 'public');
+/*
+|--------------------------------------------------------------------------
+| SAVE NEW MENTORS
+|--------------------------------------------------------------------------
+*/
+
+if ($request->mentors) {
+
+    foreach ($request->mentors as $index => $mentorData) {
+
+        // preserve old image
+        $mentorImagePath = $mentorData['existing_image'] ?? null;
+
+        // upload new image if selected
+        if ($request->hasFile("mentors.$index.image")) {
+
+            // delete old image
+            if (!empty($mentorData['existing_image'])) {
+
+                \Storage::disk('public')
+                    ->delete($mentorData['existing_image']);
             }
 
-            $mentor->update([
-                'name' => $request->mentor_name,
-                'qualification' => $request->mentor_qualification,
-                'bio' => $request->mentor_bio,
-                'image' => $mentor->image,
-            ]);
-
-        } else {
-
-            // create if not exists
-            $mentorImage = null;
-
-            if ($request->hasFile('mentor_image')) {
-                $mentorImage = $request->file('mentor_image')
-                    ->store('mentors', 'public');
-            }
-
-            Mentor::create([
-                'course_id' => $course->id,
-                'name' => $request->mentor_name,
-                'qualification' => $request->mentor_qualification,
-                'bio' => $request->mentor_bio,
-                'image' => $mentorImage,
-            ]);
+            $mentorImagePath = $request
+                ->file("mentors.$index.image")
+                ->store('mentors', 'public');
         }
+
+        Mentor::create([
+
+            'course_id' => $course->id,
+
+            'name' => $mentorData['name'] ?? null,
+
+            'qualification' => $mentorData['qualification'] ?? null,
+
+            'bio' => $mentorData['bio'] ?? null,
+
+            'image' => $mentorImagePath,
+
+        ]);
+    }
+}
 
         DB::commit();
 
@@ -468,91 +525,223 @@ class CourseController extends Controller
         public function list(Request $request)
 {
     $selectedType = $request->type ?? 'All Courses';
+
     $selectedSpecialization = $request->specialization;
-    $selectedTags = $request->tags ?? []; // ✅ MULTIPLE
 
-    $query = Course::with('tags')
-        ->where('status', 'active');
+    $selectedTags = $request->tags ?? [];
 
-    // 🔹 Type filter
+    $selectedStatus = $request->status ?? 'upcoming';
+
+    $today = now()->startOfDay();
+
+    $query = Course::with('tags');
+
+    /*
+|--------------------------------------------------------------------------
+| STATUS FILTER
+|--------------------------------------------------------------------------
+*/
+
+if (!empty($selectedStatus)) {
+
+    $query->where('status', $selectedStatus);
+}
+
+    /*
+    |--------------------------------------------------------------------------
+    | TYPE FILTER
+    |--------------------------------------------------------------------------
+    */
+
     if ($selectedType !== 'All Courses') {
+
         match ($selectedType) {
+
             'Free' => $query->where('course_type', 'free'),
+
             'Premium' => $query->where('course_type', 'premium'),
+
             'Specialised' => $query->where('course_type', 'specialised'),
+
             default => null
         };
     }
 
-    // 🔹 Specialization filter
+    /*
+    |--------------------------------------------------------------------------
+    | SPECIALIZATION FILTER
+    |--------------------------------------------------------------------------
+    */
+
     if (!empty($selectedSpecialization)) {
+
         $query->where('specialisation', $selectedSpecialization);
     }
 
-    // 🔹 MULTI TAG FILTER ✅
+    /*
+    |--------------------------------------------------------------------------
+    | TAG FILTER
+    |--------------------------------------------------------------------------
+    */
+
     if (!empty($selectedTags)) {
+
         $query->whereHas('tags', function ($q) use ($selectedTags) {
+
             $q->whereIn('tags.id', $selectedTags);
+
         });
     }
 
-    $courses = $query->orderBy('course_date', 'desc')->get();
+    $courses = $query
+        ->orderBy('course_date', 'asc')
+        ->get();
 
-    // 🔹 Specializations
+    /*
+    |--------------------------------------------------------------------------
+    | SPECIALIZATIONS
+    |--------------------------------------------------------------------------
+    */
+
     $specializations = Course::select('specialisation')
         ->whereNotNull('specialisation')
         ->distinct()
         ->get();
 
-    // 🔥 Tags grouped by specialization
-    $tagsBySpecialization = Tag::with(['courses' => function ($q) {
-        $q->select('courses.id', 'specialisation');
-    }])->get()->groupBy(function ($tag) {
+    /*
+    |--------------------------------------------------------------------------
+    | TAGS
+    |--------------------------------------------------------------------------
+    */
+
+    $tagsBySpecialization = Tag::with([
+        'courses' => function ($q) {
+            $q->select('courses.id', 'specialisation');
+        }
+    ])->get()->groupBy(function ($tag) {
+
         return optional($tag->courses->first())->specialisation;
+
     });
 
-    // 🔹 Timeline
+    /*
+    |--------------------------------------------------------------------------
+    | TIMELINE GROUPS
+    |--------------------------------------------------------------------------
+    */
+
     $timelineGroups = $courses
-        ->groupBy(fn ($course) => Carbon::parse($course->course_date)->format('M Y'))
+    ->groupBy(function ($course) {
+
+        switch ($course->schedule_type) {
+
+            case 'dates':
+
+            $dates = $course->course_dates;
+
+            // decode if json string
+            if (is_string($dates)) {
+                $dates = json_decode($dates, true);
+            }
+
+            // ensure array
+            if (!is_array($dates) || empty($dates)) {
+                return 'Schedule';
+            }
+
+            $firstDate = collect($dates)
+                ->filter(fn($date) => !empty($date))
+                ->first();
+
+            return $firstDate
+                ? Carbon::parse($firstDate)->format('M Y')
+                : 'Schedule';
+
+            case 'month_range':
+
+                return Carbon::parse($course->month_start)
+                    ->format('M Y');
+
+            case 'weekend_range':
+
+            $start = Carbon::parse($course->weekend_start ?? null);
+            $end   = Carbon::parse($course->weekend_end ?? null);
+
+            $startMonth = $start->format('M, Y');
+            $endMonth   = $end->format('M, Y');
+
+            return $startMonth . ' - ' . $endMonth;
+
+            default:
+
+                return 'Other';
+        }
+    })
         ->map(function ($group, $key) {
 
             return [
-                'label' => Carbon::parse($key)->format('M y'),
-                'title' => $this->getPhaseTitle($key),
+
+                'label' => $key,
+
+                'title' => $key,
 
                 'courses' => $group->map(fn ($course) => (object)[
+
                     'id' => $course->id,
+
                     'title' => $course->title,
-                    'price' => $course->fee > 0 ? '₹' . number_format($course->fee) : 'Free',
+
+                    'price' => $course->fee > 0
+                        ? '₹' . number_format($course->fee)
+                        : 'Free',
+
+                    'international_fees' => $course->international_pricing ?? [],
+
                     'description' => $course->description,
+
                     'image' => $course->course_image,
+
                     'duration' => $course->duration ?? $course->course_time,
+
                     'category' => ucfirst($course->specialisation),
 
                     'type' => match ($course->course_type) {
+
                         'free' => 'Free',
+
                         'premium' => 'Premium',
+
                         'specialised' => 'Specialised',
+
                         default => 'Unknown'
                     },
 
-                    // ✅ FIXED TAGS
                     'tags' => $course->tags->pluck('name')->toArray()
 
                 ])->values()
+
             ];
         })
         ->values();
 
     return view('pages.courses.course_list', compact(
+
         'specializations',
+
         'tagsBySpecialization',
+
         'selectedType',
+
         'selectedSpecialization',
+
         'selectedTags',
+
+        'selectedStatus',
+
         'timelineGroups'
     ));
 }
+
     private function getIcon($specialisation)
 {
     return match (strtolower($specialisation)) {
@@ -591,7 +780,7 @@ private function getTagIcon($tagName)
 }
 public function detail($id)
 {
-    $course = Course::with(['modules.topics', 'bonuses', 'mentor'])
+    $course = Course::with(['modules.topics', 'bonuses', 'mentors'])
                     ->findOrFail($id);
 
     return view('pages.courses.course_detail', compact('course'));

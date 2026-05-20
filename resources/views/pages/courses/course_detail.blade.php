@@ -179,7 +179,7 @@ function toggleModule(index) {
         </div>
 
         <!-- Title -->
-        <h1 class="opacity-0 animate-fade-in-up delay-100 text-4xl md:text-7xl font-bold text-white mb-6 leading-[1.15] max-w-4xl mx-auto">
+        <h1 class="opacity-0 animate-fade-in-up delay-100 text-4xl md:text-5xl font-bold text-white mb-6 leading-[1.15] max-w-4xl mx-auto">
             {{ $course->title }}
         </h1>
 
@@ -188,37 +188,220 @@ function toggleModule(index) {
             {{ $course->description }}
         </p>
 
-        <!-- Summary Cards -->
-        <div class="opacity-0 animate-fade-in-up delay-300 grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto mb-10">
+        <!-- SUMMARY CARDS -->
+<div class="opacity-0 animate-fade-in-up delay-300 grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl mx-auto mb-10">
 
-            <!-- Fee -->
-            <div class="hero-glass p-4 rounded-xl flex flex-col items-center text-white">
-                <span class="text-secondary-container mb-1.5 material-symbols-outlined text-3xl">payments</span>
-                <p class="text-[10px] uppercase tracking-widest opacity-60 mb-0.5">Tuition Fee</p>
-                <p class="text-2xl font-bold font-headline">
-                    {{ $course->fee > 0 ? '₹'.number_format($course->fee) : 'Free' }}
-                </p>
+    {{-- =========================
+        FEES
+    ========================== --}}
+    <div class="hero-glass p-5 rounded-2xl text-white">
+
+        <div class="flex items-center gap-3 mb-4">
+
+            <div class="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center">
+                <span class="material-symbols-outlined text-secondary-container text-2xl">
+                    payments
+                </span>
             </div>
 
-            <!-- Duration -->
-            <div class="hero-glass p-4 rounded-xl flex flex-col items-center text-white">
-                <span class="text-secondary-container mb-1.5 material-symbols-outlined text-3xl">schedule</span>
-                <p class="text-[10px] uppercase tracking-widest opacity-60 mb-0.5">Duration</p>
-                <p class="text-2xl font-bold font-headline">
-                    {{ $course->duration ?? $course->course_time }}
+            <div>
+                <p class="text-[10px] uppercase tracking-widest opacity-60">
+                    Course Fees
                 </p>
-            </div>
 
-            <!-- Seats -->
-            <div class="hero-glass p-4 rounded-xl flex flex-col items-center text-white">
-                <span class="text-secondary-container mb-1.5 material-symbols-outlined text-3xl">groups</span>
-                <p class="text-[10px] uppercase tracking-widest opacity-60 mb-0.5">Capacity</p>
-                <p class="text-2xl font-bold font-headline">
-                    {{ $course->capacity ?? 'Limited' }}
-                </p>
+                <h3 class="text-lg font-bold font-headline">
+                    Pricing
+                </h3>
             </div>
 
         </div>
+
+        {{-- Indian Fee --}}
+        <div class="flex items-center justify-between py-2 border-b border-white/10">
+
+            <span class="text-sm opacity-80">
+                India
+            </span>
+
+            <span class="text-lg font-bold">
+                {{ $course->fee > 0 ? '₹'.number_format($course->fee) : 'Free' }}
+            </span>
+
+        </div>
+
+        {{-- International --}}
+        @php
+            $internationalFees = is_array($course->international_pricing)
+                ? $course->international_pricing
+                : json_decode($course->international_pricing, true);
+
+            $symbols = [
+                'USD' => '$',
+                'EUR' => '€',
+                'GBP' => '£',
+                'AUD' => 'A$',
+                'CAD' => 'C$',
+                'SGD' => 'S$',
+                'AED' => 'د.إ',
+            ];
+        @endphp
+
+        @if(!empty($internationalFees))
+
+            @foreach($internationalFees as $fee)
+
+                @if(!empty($fee['fee']) && $fee['fee'] > 0)
+
+                    <div class="flex items-center justify-between py-2 border-b border-white/10">
+
+                        <span class="text-sm opacity-80">
+                            {{ $fee['currency'] }}
+                        </span>
+
+                        <span class="font-semibold">
+                            {{ $symbols[$fee['currency']] ?? '' }}
+                            {{ number_format($fee['fee']) }}
+                        </span>
+
+                    </div>
+
+                @endif
+
+            @endforeach
+
+        @endif
+
+    </div>
+
+
+    {{-- =========================
+        DURATION / SCHEDULE
+    ========================== --}}
+    <div class="hero-glass p-5 rounded-2xl text-white">
+
+        <div class="flex items-center gap-3 mb-4">
+
+            <div class="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center">
+                <span class="material-symbols-outlined text-secondary-container text-2xl">
+                    calendar_month
+                </span>
+            </div>
+
+            <div>
+                <p class="text-[10px] uppercase tracking-widest opacity-60">
+                    Schedule
+                </p>
+
+                <h3 class="text-lg font-bold font-headline">
+                    Duration
+                </h3>
+            </div>
+
+        </div>
+
+        <div class="space-y-2">
+
+            <div class="flex items-start justify-between gap-3">
+
+                <span class="text-sm opacity-80">
+                    Timeline
+                </span>
+
+                <span class="text-right text-sm font-semibold">
+                    {{ $course->formatted_schedule }}
+                </span>
+
+            </div>
+
+            @if($course->course_time)
+
+                <div class="flex items-start justify-between gap-3">
+
+                    <span class="text-sm opacity-80">
+                        Timing
+                    </span>
+
+                    <span class="text-right text-sm font-semibold">
+                        {{ $course->course_time }}
+                    </span>
+
+                </div>
+
+            @endif
+
+            @if($course->venue)
+
+                <div class="flex items-start justify-between gap-3">
+
+                    <span class="text-sm opacity-80">
+                        Venue
+                    </span>
+
+                    <span class="text-right text-sm font-semibold">
+                        {{ $course->venue }}
+                    </span>
+
+                </div>
+
+            @endif
+
+        </div>
+
+    </div>
+
+
+    {{-- =========================
+        CAPACITY
+    ========================== --}}
+    <div class="hero-glass p-5 rounded-2xl text-white">
+
+        <div class="flex items-center gap-3 mb-4">
+
+            <div class="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center">
+                <span class="material-symbols-outlined text-secondary-container text-2xl">
+                    groups
+                </span>
+            </div>
+
+            <div>
+                <p class="text-[10px] uppercase tracking-widest opacity-60">
+                    Enrollment
+                </p>
+
+                <h3 class="text-lg font-bold font-headline">
+                    Capacity
+                </h3>
+            </div>
+
+        </div>
+
+        <div class="flex items-center justify-between py-2 border-b border-white/10">
+
+            <span class="text-sm opacity-80">
+                Seats Available
+            </span>
+
+            <span class="text-lg font-bold">
+                {{ $course->capacity ?? 'Limited' }}
+            </span>
+
+        </div>
+
+        <div class="flex items-center justify-between py-2">
+
+            <span class="text-sm opacity-80">
+                Status
+            </span>
+
+            <span class="px-3 py-1 rounded-full text-xs bg-white/10 font-semibold capitalize">
+                {{ $course->status }}
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
 
         <!-- CTA -->
         <a href="{{ route('course.enroll.handle', $course->id) }}"
@@ -327,21 +510,27 @@ function toggleModule(index) {
         </div>
     </div>
 </section>
-<!-- High-Value Bonuses -->
+<!-- Certifications -->
 <section class="py-24 bg-primary text-white">
     <div class="max-w-7xl mx-auto px-8">
 
         <h2 class="text-4xl md:text-5xl font-bold mb-16 text-center text-white">
-            Enrollment High-Value Bonuses
+            Certifications
         </h2>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div class="
+            grid gap-10
+            {{ $course->bonuses->count() == 1
+                ? 'grid-cols-1 max-w-2xl mx-auto'
+                : 'grid-cols-1 md:grid-cols-2'
+            }}
+        ">
 
             @foreach($course->bonuses as $bonus)
 
                 <div class="bg-white/5 border border-white/10 p-10 rounded-2xl flex gap-8 hover:bg-white/10 transition-all group">
 
-                    <!-- Icon (dynamic optional later) -->
+                    <!-- Icon -->
                     <div class="w-16 h-16 rounded-full bg-secondary flex items-center justify-center shrink-0 shadow-lg shadow-secondary/10">
                         <span class="material-symbols-outlined text-3xl text-primary">
                             redeem
@@ -350,11 +539,11 @@ function toggleModule(index) {
 
                     <!-- Content -->
                     <div>
+
                         <h3 class="text-2xl font-bold mb-2 text-secondary">
                             {{ $bonus->title }}
                         </h3>
 
-                        {{-- Optional value --}}
                         @if($bonus->value > 0)
                             <p class="text-sm text-white/50 mb-2">
                                 Worth ₹{{ number_format($bonus->value) }}
@@ -364,6 +553,7 @@ function toggleModule(index) {
                         <p class="text-white/70 leading-relaxed text-lg">
                             {{ $bonus->description }}
                         </p>
+
                     </div>
 
                 </div>
@@ -371,80 +561,86 @@ function toggleModule(index) {
             @endforeach
 
         </div>
+
     </div>
 </section>
 <!-- Meet Your Mentor -->
+@if($course->mentors && $course->mentors->count())
+
 <section class="py-24 bg-surface">
     <div class="max-w-7xl mx-auto px-8">
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+        <h2 class="text-4xl md:text-5xl font-bold text-primary mb-16 text-center">
+            Meet Your Faculty
+        </h2>
 
-            <!-- Image -->
-            <div>
-                <h2 class="text-4xl md:text-5xl font-bold text-primary mb-12">
-                    Meet Your Mentor
-                </h2>
+        @php
+            $mentors = $course->mentors ?? collect();
+        @endphp
 
-                <div class="relative">
+        <div class="
+            grid gap-14
+            {{ $mentors->count() == 1
+                ? 'grid-cols-1 max-w-3xl mx-auto'
+                : 'grid-cols-1 lg:grid-cols-2' }}
+        ">
+
+            @foreach($mentors as $mentor)
+
+            <div class="flex flex-col items-center text-center">
+
+                <!-- IMAGE -->
+                <div class="relative mb-8">
+
                     <div class="absolute -inset-4 bg-secondary/10 rounded-3xl blur-xl"></div>
 
-                    <img 
-                        class="rounded-2xl ghost-border mb-10 relative z-10 w-full"
-                        src="{{ $course->mentor && $course->mentor->image 
-                                ? asset('storage/'.$course->mentor->image) 
-                                : 'https://via.placeholder.com/600x400' }}"
+                    <img
+                        class="relative z-10 w-72 h-72 object-cover rounded-3xl border border-secondary/10 shadow-2xl"
+                        src="{{ $mentor->image
+                                ? asset('storage/'.$mentor->image)
+                                : 'https://via.placeholder.com/600x600' }}"
+                        alt="{{ $mentor->name }}"
                     />
-                </div>
-
-                <!-- Qualification Pills -->
-                <div class="flex flex-wrap gap-4">
-
-                    @if($course->mentor && $course->mentor->qualification)
-                        @foreach(explode(',', $course->mentor->qualification) as $qual)
-                            <div class="bg-secondary/20 px-6 py-2.5 rounded-lg text-primary font-bold text-sm tracking-wide">
-                                {{ trim($qual) }}
-                            </div>
-                        @endforeach
-                    @endif
 
                 </div>
-            </div>
 
-            <!-- Content -->
-            <div class="space-y-8">
-
-                <h3 class="text-4xl font-bold text-primary font-headline">
-                    {{ $course->mentor->name ?? 'Expert Mentor' }}
+                <!-- NAME -->
+                <h3 class="text-3xl md:text-4xl font-bold text-primary font-headline mb-4">
+                    {{ $mentor->name }}
                 </h3>
 
-                <p class="text-xl text-on-surface-variant leading-relaxed">
-                    {{ $course->mentor->bio ?? 'Mentor details will be updated soon.' }}
+                <!-- QUALIFICATIONS -->
+                @if($mentor->qualification)
+
+                    <div class="flex flex-wrap justify-center gap-3 mb-6">
+
+                        @foreach(explode(',', $mentor->qualification) as $qual)
+
+                            <div class="bg-secondary/15 px-5 py-2 rounded-full text-primary font-semibold text-sm">
+                                {{ trim($qual) }}
+                            </div>
+
+                        @endforeach
+
+                    </div>
+
+                @endif
+
+                <!-- BIO -->
+                <p class="text-lg text-on-surface-variant leading-relaxed max-w-2xl">
+                    {{ $mentor->bio ?? 'Faculty details will be updated soon.' }}
                 </p>
-
-                <!-- Static achievements (optional dynamic later) -->
-                <ul class="space-y-5">
-
-                    <li class="flex items-start gap-4">
-                        <span class="material-symbols-outlined text-secondary text-2xl">verified</span>
-                        <span class="text-on-surface-variant text-lg">
-                            Industry Expert & Certified Practitioner
-                        </span>
-                    </li>
-
-                    <li class="flex items-start gap-4">
-                        <span class="material-symbols-outlined text-secondary text-2xl">verified</span>
-                        <span class="text-on-surface-variant text-lg">
-                            Extensive Clinical & Academic Experience
-                        </span>
-                    </li>
-
-                </ul>
 
             </div>
 
+            @endforeach
+
         </div>
+
     </div>
 </section>
+
+@endif
 <!-- Why This Course (Grid) -->
 <section class="py-20 bg-surface relative">
 <div class="max-w-7xl mx-auto px-8">

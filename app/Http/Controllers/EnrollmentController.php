@@ -106,7 +106,7 @@ class EnrollmentController extends Controller
         
 
         // ✅ Fetch enrollments correctly
-        $enrollments = Enrollment::with(['course.mentor'])
+        $enrollments = Enrollment::with(['course.mentors'])
             ->where('user_id', auth()->id()) // 🔥 FIXED FILTER
             ->latest()
             ->get();
@@ -249,89 +249,327 @@ public function reject($id)
 
 
 public function attendanceInsights()
-    {
-        $date = request('date')
-            ? Carbon::parse(request('date'), 'Asia/Kolkata')->startOfMonth()
-            : now('Asia/Kolkata')->startOfMonth();
+{
+    $date = request('date')
+        ? Carbon::parse(request('date'), 'Asia/Kolkata')->startOfMonth()
+        : now('Asia/Kolkata')->startOfMonth();
 
-        $month = $date->month;
-        $year  = $date->year;
+    $month = $date->month;
+    $year  = $date->year;
 
-        // Calendar range
-        $startOfCalendar = $date->copy()->startOfMonth()->startOfWeek(Carbon::SUNDAY);
-        $endOfCalendar   = $date->copy()->endOfMonth()->endOfWeek(Carbon::SATURDAY);
+    /*
+    |--------------------------------------------------------------------------
+    | CALENDAR RANGE
+    |--------------------------------------------------------------------------
+    */
+    $startOfCalendar = $date->copy()
+        ->startOfMonth()
+        ->startOfWeek(Carbon::SUNDAY);
 
-        $days = [];
-        $current = $startOfCalendar->copy();
+    $endOfCalendar = $date->copy()
+        ->endOfMonth()
+        ->endOfWeek(Carbon::SATURDAY);
 
-        while ($current <= $endOfCalendar) {
-            $days[] = $current->copy();
-            $current->addDay();
+    $days = [];
+
+    $current = $startOfCalendar->copy();
+
+    while ($current <= $endOfCalendar) {
+        $days[] = $current->copy();
+        $current->addDay();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | TODAY
+    |--------------------------------------------------------------------------
+    */
+    $today = now('Asia/Kolkata')->startOfDay();
+
+    /*
+    |--------------------------------------------------------------------------
+    | STATS
+    |--------------------------------------------------------------------------
+    */
+    $totalUsers = User::count();
+
+    $totalEnrollments = Enrollment::count();
+
+    $enrollmentRate = $totalUsers > 0
+        ? round(($totalEnrollments / $totalUsers) * 100)
+        : 0;
+
+    $totalCapacity = Course::sum('capacity');
+
+    $capacityUtil = $totalCapacity > 0
+        ? round(($totalEnrollments / $totalCapacity) * 100)
+        : 0;
+
+    /*
+    |--------------------------------------------------------------------------
+    | MONTH FILTER RANGE
+    |--------------------------------------------------------------------------
+    */
+    $monthStart = $date->copy()->startOfMonth();
+
+    $monthEnd = $date->copy()->endOfMonth();
+
+    /*
+    |--------------------------------------------------------------------------
+    | COURSES FOR SELECTED MONTH
+    |--------------------------------------------------------------------------
+    */
+    $monthlyCourses = Course::withCount('enrollments')
+        ->get()
+        ->filter(function ($course) use ($monthStart, $monthEnd) {
+
+            $start = $course->effective_date;
+
+            $end = $course->effective_end_date ?? $start;
+
+            if (!$start) {
+                return false;
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | RANGE OVERLAP CHECK
+            |--------------------------------------------------------------------------
+            */
+            return $start->lte($monthEnd)
+                && $end->gte($monthStart);
+        })
+        ->values();
+
+    /*
+    |--------------------------------------------------------------------------
+    | ACTIVE COURSES
+    |--------------------------------------------------------------------------
+    */
+    $activeCourses = Course::get()
+        ->filter(function ($course) use ($today) {
+
+            $start = $course->effective_date;
+
+            $end = $course->effective_end_date ?? $start;
+
+            if (!$start) {
+                return false;
+            }
+
+            return $start->lte($today)
+                && $end->gte($today);
+        })
+        ->count();
+
+    /*
+    |--------------------------------------------------------------------------
+    | COMPLETED COURSES
+    |--------------------------------------------------------------------------
+    */
+    $completedCourses = $monthlyCourses
+        ->filter(function ($course) use ($today) {
+
+            $end = $course->effective_end_date
+                ?? $course->effective_date;
+
+            return $end && $end->lt($today);
+        })
+        ->values();
+
+    /*
+    |--------------------------------------------------------------------------
+    | UPCOMING / ONGOING COURSES
+    |--------------------------------------------------------------------------
+    */
+    $upcomingCourses = $monthlyCourses
+    ->filter(function ($course) use ($today) {
+
+        $start = $course->effective_date;
+
+        $end = $course->effective_end_date ?? $start;
+
+        if (!$start || !$end) {
+            return false;
         }
 
         /*
         |--------------------------------------------------------------------------
-        | STATS
+        | WEEKEND RANGE COURSES
         |--------------------------------------------------------------------------
         */
-        $today = now('Asia/Kolkata')->startOfDay();
+        if ($course->schedule_type === 'weekend_range') {
 
-        $activeCourses = Course::whereDate('course_date', '>=', $today)->count();
+            $weekendDays = is_array($course->weekend_days)
+                ? $course->weekend_days
+                : json_decode($course->weekend_days, true);
 
-        $totalUsers = User::count();
-        $totalEnrollments = Enrollment::count();
+            $current = $today->copy();
 
-        $enrollmentRate = $totalUsers > 0
-            ? round(($totalEnrollments / $totalUsers) * 100)
-            : 0;
+            while ($current->lte($end)) {
 
-        $totalCapacity = Course::sum('capacity');
+                // skip before actual course start
+                if ($current->lt($start)) {
+                    $current->addDay();
+                    continue;
+                }
 
-        $capacityUtil = $totalCapacity > 0
-            ? round(($totalEnrollments / $totalCapacity) * 100)
-            : 0;
+                if (
+                    in_array(
+                        $current->format('l'),
+                        $weekendDays ?? []
+                    )
+                ) {
+                    return true;
+                }
+
+                $current->addDay();
+            }
+
+            return false;
+        }
 
         /*
         |--------------------------------------------------------------------------
-        | MONTH COURSES
+        | NORMAL COURSES
         |--------------------------------------------------------------------------
         */
-        $currentMonthStart = now('Asia/Kolkata')->startOfMonth();
+        return $end->gte($today);
+    })
+    ->values();
+    /*
+    |--------------------------------------------------------------------------
+    | CALENDAR COURSES
+    |--------------------------------------------------------------------------
+    */
+   $calendarCourses = collect();
 
-        $monthlyCourses = Course::withCount('enrollments')
-            ->whereYear('course_date', $year)
-            ->whereMonth('course_date', $month)
-            ->get();
+foreach ($monthlyCourses as $course) {
 
-        /*
-        |--------------------------------------------------------------------------
-        | COMPLETED + UPCOMING (FIXED LOGIC)
-        |--------------------------------------------------------------------------
-        */
+    /*
+    |--------------------------------------------------------------------------
+    | IRREGULAR MULTIPLE DATES
+    |--------------------------------------------------------------------------
+    */
+    if ($course->schedule_type === 'dates') {
 
-        $completedCourses = $monthlyCourses->filter(function ($course) use ($today) {
-            return Carbon::parse($course->course_date, 'Asia/Kolkata')
-                ->startOfDay()
-                ->lt($today);
-        })->values();
+        $dates = is_array($course->course_dates)
+            ? $course->course_dates
+            : json_decode($course->course_dates, true);
 
-        $upcomingCourses = $monthlyCourses->filter(function ($course) use ($today) {
-            return Carbon::parse($course->course_date, 'Asia/Kolkata')
-                ->startOfDay()
-                ->gte($today);
-        })->values();
-        /*
-        |--------------------------------------------------------------------------
-        | CALENDAR GROUPING
-        |--------------------------------------------------------------------------
-        */
-        $calendarCourses = $monthlyCourses->groupBy(function ($course) {
-            return Carbon::parse($course->course_date)
-                ->timezone('Asia/Kolkata')
-                ->toDateString();
-        });
+        foreach ($dates ?? [] as $dateValue) {
 
-        return view('pages.dasboard.admin.attendance', compact(
+            if (!$dateValue) {
+                continue;
+            }
+
+            $current = Carbon::parse($dateValue, 'Asia/Kolkata');
+
+            if (
+                $current->month !== $month ||
+                $current->year !== $year
+            ) {
+                continue;
+            }
+
+            $dateKey = $current->toDateString();
+
+            if (!$calendarCourses->has($dateKey)) {
+                $calendarCourses[$dateKey] = collect();
+            }
+
+            $calendarCourses[$dateKey]->push($course);
+        }
+
+        continue;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | NORMAL / RANGE COURSES
+    |--------------------------------------------------------------------------
+    */
+    $start = $course->effective_date;
+
+    $end = $course->effective_end_date ?? $start;
+
+    if (!$start || !$end) {
+        continue;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | WEEKEND RANGE
+    |--------------------------------------------------------------------------
+    */
+    if ($course->schedule_type === 'weekend_range') {
+
+        $weekendDays = is_array($course->weekend_days)
+            ? $course->weekend_days
+            : json_decode($course->weekend_days, true);
+
+        $current = $start->copy();
+
+        while ($current->lte($end)) {
+
+            if (
+                in_array(
+                    $current->format('l'),
+                    $weekendDays ?? []
+                )
+            ) {
+
+                if (
+                    $current->month === $month &&
+                    $current->year === $year
+                ) {
+
+                    $dateKey = $current->toDateString();
+
+                    if (!$calendarCourses->has($dateKey)) {
+                        $calendarCourses[$dateKey] = collect();
+                    }
+
+                    $calendarCourses[$dateKey]->push($course);
+                }
+            }
+
+            $current->addDay();
+        }
+
+        continue;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | MONTH / YEAR / SINGLE DATE
+    |--------------------------------------------------------------------------
+    */
+    $current = $start->copy();
+
+    while ($current->lte($end)) {
+
+        if (
+            $current->month === $month &&
+            $current->year === $year
+        ) {
+
+            $dateKey = $current->toDateString();
+
+            if (!$calendarCourses->has($dateKey)) {
+                $calendarCourses[$dateKey] = collect();
+            }
+
+            $calendarCourses[$dateKey]->push($course);
+        }
+
+        $current->addDay();
+    }
+}
+
+    return view(
+        'pages.dasboard.admin.attendance',
+        compact(
             'days',
             'date',
             'month',
@@ -344,6 +582,7 @@ public function attendanceInsights()
             'totalEnrollments',
             'enrollmentRate',
             'capacityUtil'
-        ));
-    }
+        )
+    );
+}
 }

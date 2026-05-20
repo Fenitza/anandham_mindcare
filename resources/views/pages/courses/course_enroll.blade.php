@@ -11,7 +11,7 @@ h1, h2, h3 { font-family: 'Newsreader', serif; }
 </style>
 
 <section class="py-16 px-6">
-<div class="max-w-5xl mx-auto">
+<div class="max-w-7xl mx-auto">
 
     <!-- HEADER -->
     <div class="mb-10 text-center">
@@ -63,7 +63,7 @@ h1, h2, h3 { font-family: 'Newsreader', serif; }
     <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
 
         <!-- LEFT -->
-        <div class="space-y-8">
+        <div class="space-y-7">
 
             <div>
                 <h2 class="text-2xl md:text-3xl text-primary font-bold italic mb-3">
@@ -122,51 +122,247 @@ h1, h2, h3 { font-family: 'Newsreader', serif; }
                 $tagNames = $course->tags->pluck('name')->toArray();
             @endphp
 
-            <div class="mb-4">
-                <label class="flex items-center gap-2 text-sm text-gray-700">
-                    <input type="checkbox" id="tagConfirm" class="w-4 h-4">
+            <div class="mb-6">
 
-                    @if(count($tagNames))
-                        I confirm I belong to 
-                        <span class="font-semibold text-primary">
-                            {{ implode(' / ', array_map('ucfirst', $tagNames)) }}
-                        </span>
-                        category
-                    @else
-                        I confirm I meet the course eligibility
-                    @endif
+                <label
+                    for="tagConfirm"
+                    class="flex items-start gap-4 p-5 rounded-2xl border border-primary/10 bg-primary/[0.03] hover:bg-primary/[0.05] transition-all cursor-pointer"
+                >
+
+                    <!-- CHECKBOX -->
+                    <div class="pt-1">
+
+                        <input
+                            type="checkbox"
+                            id="tagConfirm"
+                            class="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary"
+                        >
+
+                    </div>
+
+                    <!-- CONTENT -->
+                    <div class="flex-1">
+
+                        <!-- TITLE -->
+                        <div class="flex items-center gap-2 mb-2">
+
+                            <span class="material-symbols-outlined text-secondary text-lg">
+                                verified
+                            </span>
+
+                            <h4 class="text-sm font-bold text-primary tracking-wide">
+                                Eligibility Confirmation
+                            </h4>
+
+                        </div>
+
+                        <!-- DESCRIPTION -->
+                        @if(count($tagNames))
+
+                            <p class="text-sm leading-7 text-gray-700">
+
+                                I confirm that I belong to the following professional category:
+
+                                <span class="block mt-3 font-semibold text-primary leading-7">
+                                    {{ implode(' • ', array_map('ucfirst', $tagNames)) }}
+                                </span>
+
+                            </p>
+
+                        @else
+
+                            <p class="text-sm leading-7 text-gray-700">
+                                I confirm that I meet the eligibility criteria for this course.
+                            </p>
+
+                        @endif
+
+                    </div>
+
                 </label>
+
             </div>
 
-            <!-- QR + PRICE -->
-            <div id="qrSection" class="flex gap-6 items-center mb-8 hidden">
+            <!-- QR + PAYMENT CARD -->
+<div id="qrSection" class="hidden mb-8">
 
-                <!-- QR -->
-                <div class="p-3 border rounded-xl">
-                    <img 
+    @php
+
+        $internationalFees = is_array($course->international_pricing)
+            ? $course->international_pricing
+            : json_decode($course->international_pricing, true);
+
+        $symbols = [
+            'USD' => '$',
+            'EUR' => '€',
+            'GBP' => '£',
+            'AUD' => 'A$',
+            'CAD' => 'C$',
+            'SGD' => 'S$',
+            'AED' => 'د.إ',
+        ];
+
+    @endphp
+
+    <div class="bg-gradient-to-br from-primary to-[#003b82] text-white rounded-3xl overflow-hidden shadow-2xl">
+
+        <div class="grid lg:grid-cols-[260px_1fr]">
+
+            <!-- LEFT -->
+            <div class="bg-white/5 backdrop-blur-sm p-6 flex flex-col items-center justify-center border-b lg:border-b-0 lg:border-r border-white/10">
+
+                <div class="bg-white p-4 rounded-2xl shadow-lg mb-4">
+
+                    <img
                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-0ufG4JFtGRisSfArbMQAayKgKhFuaAV0saktWrptPqQ85Zz4EX_IfQ861qLmgsuAdt9Ng9sUEtBpVpjsLqN9-IZ8TdvVmYWqH15uMF7K7GG3ItGZ9lmeBj4JnNnKsXPwjaJVM1yIo1pgUxm3TnYPebWhvJkMmgFdmyCujHQUa9RM2jV0cTO0PFzQVA1bayXMGeAlQ2QvRHsCUWNmW2V8zFqiGmpzaRH5UYtfiecgGC0WUVKzpBP23_y8ftvd6cJRYSE1DVxC5k"
-                        class="w-36 h-36 object-contain"
+                        class="w-40 h-40 object-contain"
                     >
+
                 </div>
 
-                <!-- PRICE -->
-                <div class="flex-1 text-base space-y-3">
-                    <div class="flex justify-between">
-                        <span>Fee</span>
-                        <span class="font-semibold">₹ {{ number_format($course->fee ?? 0) }}</span>
-                    </div>
+                <div class="text-center">
 
-                    <div class="flex justify-between text-xl font-bold border-t pt-3">
-                        <span>Total</span>
-                        <span class="text-secondary">₹ {{ number_format($course->fee ?? 0) }}</span>
-                    </div>
-
-                    <p class="text-xs text-green-600 flex items-center gap-1">
-                        ● Waiting for payment
+                    <p class="text-xs uppercase tracking-[0.25em] text-white/50 mb-2">
+                        Scan & Pay
                     </p>
+
+                    <p class="text-sm text-white/80 leading-relaxed">
+                        Complete your payment using any UPI app and upload the screenshot below.
+                    </p>
+
                 </div>
 
             </div>
+
+            <!-- RIGHT -->
+            <div class="p-6 lg:p-8">
+
+                <!-- TOP -->
+                <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-8">
+
+                    <div>
+
+                        <p class="text-xs uppercase tracking-[0.25em] text-white/50 mb-2">
+                            Course Enrollment
+                        </p>
+
+                        <h3 class="text-3xl font-bold font-headline">
+                            Payment Summary
+                        </h3>
+
+                    </div>
+
+                    <div class="bg-green-500/15 border border-green-400/20 text-green-200 px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 h-fit">
+
+                        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+
+                        Awaiting Payment
+
+                    </div>
+
+                </div>
+
+                <!-- PRICING -->
+                <div class="space-y-4">
+
+                    {{-- Indian Pricing --}}
+                    @if(($course->fee ?? 0) > 0)
+
+                    <div class="bg-white/5 border border-white/10 rounded-2xl px-5 py-4 flex items-center justify-between">
+
+                        <div>
+
+                            <p class="text-sm text-white/60 mb-1">
+                                Indian Registration
+                            </p>
+
+                            <h4 class="font-semibold text-lg">
+                                INR Pricing
+                            </h4>
+
+                        </div>
+
+                        <div class="text-right">
+
+                            <p class="text-2xl font-bold">
+                                ₹{{ number_format($course->fee) }}
+                            </p>
+
+                            @if(($course->early_bird_fee ?? 0) > 0)
+
+                                <p class="text-xs text-secondary-container mt-1">
+                                    Early Bird ₹{{ number_format($course->early_bird_fee) }}
+                                </p>
+
+                            @endif
+
+                        </div>
+
+                    </div>
+
+                    @endif
+
+                    {{-- International Pricing --}}
+                    @if(!empty($internationalFees))
+
+                        @foreach($internationalFees as $fee)
+
+                            @if(!empty($fee['fee']) && $fee['fee'] > 0)
+
+                            <div class="bg-white/5 border border-white/10 rounded-2xl px-5 py-4 flex items-center justify-between">
+
+                                <div>
+
+                                    <p class="text-sm text-white/60 mb-1">
+                                        Abroad Registration
+                                    </p>
+
+                                    <h4 class="font-semibold text-lg">
+                                        {{ $fee['currency'] }} Pricing
+                                    </h4>
+
+                                </div>
+
+                                <div class="text-right">
+
+                                    <p class="text-2xl font-bold">
+
+                                        {{ $symbols[$fee['currency']] ?? $fee['currency'] }}
+                                        {{ number_format($fee['fee']) }}
+
+                                    </p>
+
+                                    @if(!empty($fee['early_bird_fee']) && $fee['early_bird_fee'] > 0)
+
+                                        <p class="text-xs text-secondary-container mt-1">
+
+                                            Early Bird
+                                            {{ $symbols[$fee['currency']] ?? $fee['currency'] }}
+                                            {{ number_format($fee['early_bird_fee']) }}
+
+                                        </p>
+
+                                    @endif
+
+                                </div>
+
+                            </div>
+
+                            @endif
+
+                        @endforeach
+
+                    @endif
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
             <!-- ERROR -->
             @error('payment_screenshot')

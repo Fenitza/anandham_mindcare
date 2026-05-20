@@ -106,7 +106,7 @@
 
         <div>
             <h4 class="font-semibold text-on-surface">
-                {{ $course->title }}
+                {{ $course->title  ?? '' }}
             </h4>
 
             <p class="text-xs text-on-surface-variant">
@@ -122,7 +122,7 @@
             <p class="text-xs text-on-surface-variant uppercase font-semibold">Enrolled</p>
 
             <p class="text-lg font-headline text-primary">
-                {{ $course->enrollments_count }}
+                {{ $course->enrollments_count  ?? ''}}
                 <span class="text-xs text-outline">
                     / {{ $course->capacity ?? '—' }}
                 </span>
@@ -216,7 +216,7 @@
 
                 <div class="min-w-0">
                     <h4 class="font-semibold text-on-surface truncate">
-                        {{ $course->title }}
+                        {{ $course->title  ?? ''}}
                     </h4>
 
                     <p class="text-xs text-on-surface-variant truncate">
@@ -232,7 +232,7 @@
                     <p class="text-xs text-on-surface-variant uppercase font-semibold">Enrolled</p>
 
                     <p class="text-lg font-headline text-primary">
-                        {{ $course->enrollments_count }}
+                        {{ $course->enrollments_count  ?? '' }}
                         <span class="text-xs text-outline">
                             / {{ $course->capacity ?? '—' }}
                         </span>
@@ -301,11 +301,33 @@
 <div class="relative group">
 
     <!-- Day Cell -->
+     @php
+    $courseColors = [
+        'bg-rose-200 text-rose-900',
+        'bg-blue-200 text-blue-900',
+        'bg-emerald-200 text-emerald-900',
+        'bg-amber-200 text-amber-900',
+        'bg-violet-200 text-violet-900',
+        'bg-cyan-200 text-cyan-900',
+        'bg-pink-200 text-pink-900',
+    ];
+
+    $colorClass = '';
+
+    if ($coursesForDay->count()) {
+
+        $firstCourse = $coursesForDay->first();
+
+        $index = abs(crc32($firstCourse->id)) % count($courseColors);
+
+        $colorClass = $courseColors[$index];
+    }
+@endphp
     <div class="h-10 flex items-center justify-center rounded-md transition-all
-        {{ !$isCurrentMonth ? 'text-outline-variant' : '' }}
-        {{ $isToday ? 'bg-white ring-1 ring-primary text-primary' : '' }}
-        {{ $coursesForDay->count() ? 'bg-secondary/30' : '' }}
-    ">
+    {{ !$isCurrentMonth ? 'text-outline-variant' : '' }}
+    {{ $isToday ? 'ring-2 ring-primary font-bold' : '' }}
+    {{ $colorClass }}
+">
         {{ $day->day }}
     </div>
 
@@ -323,9 +345,9 @@
         <div class="space-y-1 max-h-32 overflow-y-auto">
             @foreach($coursesForDay as $course)
                 <div class="flex justify-between gap-2">
-                    <span class="truncate">{{ $course->title }}</span>
+                    <span class="truncate">{{ $course->title  ?? '' }}</span>
                     <span class="text-secondary text-[10px]">
-                        {{ $course->enrollments_count }}
+                        {{ $course->enrollments_count  ?? '' }}
                     </span>
                 </div>
             @endforeach
@@ -356,7 +378,7 @@
 
 <div class="flex items-center gap-4">
     <span class="text-xs font-medium w-32 truncate">
-        {{ $course->title }}
+        {{ $course->title  ?? '' }}
     </span>
 
     <div class="flex-1 h-1.5 bg-surface-container rounded-full overflow-hidden">
