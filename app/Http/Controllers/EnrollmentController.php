@@ -250,9 +250,29 @@ public function reject($id)
 
 public function attendanceInsights()
 {
-    $date = request('date')
-        ? Carbon::parse(request('date'), 'Asia/Kolkata')->startOfMonth()
-        : now('Asia/Kolkata')->startOfMonth();
+    if (request()->has('month') && request()->has('year')) {
+
+    $date = Carbon::create(
+        request('year'),
+        request('month'),
+        1,
+        0,
+        0,
+        0,
+        'Asia/Kolkata'
+    )->startOfMonth();
+
+} elseif (request('date')) {
+
+    $date = Carbon::parse(
+        request('date'),
+        'Asia/Kolkata'
+    )->startOfMonth();
+
+} else {
+
+    $date = now('Asia/Kolkata')->startOfMonth();
+}
 
     $month = $date->month;
     $year  = $date->year;

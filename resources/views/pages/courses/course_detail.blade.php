@@ -413,6 +413,7 @@ function toggleModule(index) {
 
     </div>
 </header>
+
 <!-- Trust Bar -->
 <section class="bg-white py-10 border-b border-outline-variant/20 relative z-30">
 <div class="max-w-7xl mx-auto px-8">
@@ -436,7 +437,233 @@ function toggleModule(index) {
 </div>
 </div>
 </section>
+<!-- Registration & Contact -->
+<section class="py-24 bg-gradient-to-br from-primary to-primary-container text-white relative overflow-hidden">
 
+    <!-- Decorative Blur -->
+    <div class="absolute -top-20 -right-20 w-72 h-72 bg-secondary/20 rounded-full blur-3xl"></div>
+    <div class="absolute -bottom-20 -left-20 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
+
+    <div class="max-w-7xl mx-auto px-8 relative z-10">
+
+        <!-- Heading -->
+        <div class="text-center mb-16">
+
+            <span class="inline-block px-4 py-1 rounded-full bg-white/10 text-xs tracking-[0.3em] uppercase font-bold mb-5">
+                Registration Support
+            </span>
+
+            <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                Need Help With Enrollment?
+            </h2>
+
+            <p class="max-w-3xl mx-auto text-white/75 text-lg leading-relaxed">
+                Our admissions and academic coordination team is available to guide you
+                through course registration, international pricing, payment assistance,
+                accommodation support, and schedule clarification.
+            </p>
+
+        </div>
+
+        <!-- Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+            <!-- Left Card -->
+            <div class="bg-white/10 backdrop-blur-xl border border-white/10 rounded-3xl p-10">
+
+                <h3 class="text-2xl font-bold mb-8">
+                    Registration Details
+                </h3>
+
+                <div class="space-y-6">
+
+                    <!-- Registration -->
+                    <div class="flex items-start gap-4">
+
+                        <div class="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center shrink-0">
+                            <span class="material-symbols-outlined text-primary">
+                                how_to_reg
+                            </span>
+                        </div>
+
+                        <div>
+                            <p class="text-sm uppercase tracking-widest opacity-60 mb-1">
+                                Enrollment Process
+                            </p>
+
+                            <p class="text-lg font-semibold">
+                                Online Registration Available
+                            </p>
+
+                            <p class="text-white/70 text-sm mt-1 leading-relaxed">
+                                Complete your enrollment online securely using UPI,
+                                bank transfer, or international payment methods.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <!-- Documents -->
+                    <div class="flex items-start gap-4">
+
+                        <div class="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center shrink-0">
+                            <span class="material-symbols-outlined text-primary">
+                                description
+                            </span>
+                        </div>
+
+                        <div>
+                            <p class="text-sm uppercase tracking-widest opacity-60 mb-1">
+                                Required Documents
+                            </p>
+
+                            <p class="text-lg font-semibold">
+                                ID / Qualification Proof
+                            </p>
+
+                            <p class="text-white/70 text-sm mt-1 leading-relaxed">
+                                Participants may be requested to submit educational
+                                or professional credentials during verification.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <!-- International -->
+                    <div class="flex items-start gap-4">
+
+                        <div class="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center shrink-0">
+                            <span class="material-symbols-outlined text-primary">
+                                public
+                            </span>
+                        </div>
+
+                        <div>
+                            <p class="text-sm uppercase tracking-widest opacity-60 mb-1">
+                                International Participants
+                            </p>
+
+                            <p class="text-lg font-semibold">
+                                Global Enrollment Supported
+                            </p>
+
+                            <p class="text-white/70 text-sm mt-1 leading-relaxed">
+                                Dedicated assistance available for overseas students
+                                regarding currency payments and scheduling.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Right Card -->
+            <div class="bg-white text-primary rounded-3xl p-10 shadow-2xl">
+
+                <h3 class="text-2xl font-bold mb-8">
+                    Contact Admissions
+                </h3>
+
+                <div class="space-y-6">
+
+                    <!-- Phone -->
+                    <div class="flex items-center gap-4">
+
+                        <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-primary">
+                                call
+                            </span>
+                        </div>
+
+                        <div>
+                            <p class="text-xs uppercase tracking-widest text-on-surface-variant mb-1">
+                                Phone Support
+                            </p>
+
+                            <p class="font-bold text-lg">
+                                {{ $course->registration_contact ?? '+91 98765 43210' }}
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <!-- Email -->
+                    <div class="flex items-center gap-4">
+
+                        <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-primary">
+                                mail
+                            </span>
+                        </div>
+
+                        <div>
+                            <p class="text-xs uppercase tracking-widest text-on-surface-variant mb-1">
+                                Email
+                            </p>
+
+                            <p class="font-bold text-lg break-all">
+                                admissions@anandhammindcare.org
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <!-- Location -->
+                    <div class="flex items-center gap-4">
+
+                        <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-primary">
+                                location_on
+                            </span>
+                        </div>
+
+                        <div>
+                            <p class="text-xs uppercase tracking-widest text-on-surface-variant mb-1">
+                                Campus
+                            </p>
+
+                            <p class="font-bold text-lg">
+                                Anandham Mindcare Foundation
+                            </p>
+
+                            <p class="text-sm text-on-surface-variant">
+                                Tamil Nadu, India
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- CTA -->
+                <div class="mt-10 flex flex-col sm:flex-row gap-4">
+
+                    <a href="{{ route('course.enroll.handle', $course->id) }}"
+                       class="flex-1 text-center bg-primary text-white px-6 py-4 rounded-xl font-bold hover:scale-105 transition-all">
+
+                        Register Now
+
+                    </a>
+
+                    <a href="https://wa.me/919876543210"
+                       target="_blank"
+                       class="flex-1 text-center bg-secondary text-primary px-6 py-4 rounded-xl font-bold hover:scale-105 transition-all">
+
+                        WhatsApp Support
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
 <!-- Curriculum -->
 <section class="py-20 bg-surface">
     <div class="max-w-4xl mx-auto px-8">

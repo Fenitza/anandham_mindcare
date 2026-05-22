@@ -75,8 +75,8 @@
         </p>
 
         <div class="btn-group">
-            <a href="{{ route('courses') }}" class="btn-secondary magnetic">Explore Courses</a>
-            <a href="{{ route('courses') }}" class="btn-primary magnetic">Admissions</a>
+            <a href="{{ route('courses.list') }}" class="btn-secondary magnetic">Explore Courses</a>
+            <a href="{{ route('courses.list') }}" class="btn-primary magnetic">Admissions</a>
         </div>
 
     </div>

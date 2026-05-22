@@ -221,7 +221,7 @@
     </a>
 
     <!-- Enroll Courses -->
-    <a href="{{ route('courses') }}"
+    <a href="{{ route('courses.list') }}"
        class="group flex items-center justify-end">
 
         <!-- Label -->
