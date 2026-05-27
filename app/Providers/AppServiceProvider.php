@@ -29,10 +29,21 @@ class AppServiceProvider extends ServiceProvider
 
         $upcomingCourses = Course::where('status', 'upcoming')
             ->get()
+
+            /*
+            |--------------------------------------------------------------------------
+            | FILTER ONLY FUTURE / ACTIVE COURSES
+            |--------------------------------------------------------------------------
+            */
             ->filter(function ($course) {
 
                 switch ($course->schedule_type) {
 
+                    /*
+                    |--------------------------------------------------------------------------
+                    | MULTIPLE DATES
+                    |--------------------------------------------------------------------------
+                    */
                     case 'dates':
 
                         $dates = is_array($course->course_dates)
@@ -42,26 +53,69 @@ class AppServiceProvider extends ServiceProvider
                         return collect($dates)
                             ->filter()
                             ->contains(fn ($date) =>
-                                \Carbon\Carbon::parse($date)->isFuture()
+                                \Carbon\Carbon::parse($date)
+                                    ->endOfDay()
+                                    ->isFuture()
                             );
 
+                    /*
+                    |--------------------------------------------------------------------------
+                    | MONTH RANGE
+                    |--------------------------------------------------------------------------
+                    */
                     case 'month_range':
 
                         return $course->month_end &&
-                            \Carbon\Carbon::parse($course->month_end)->endOfMonth()->isFuture();
+                            \Carbon\Carbon::createFromFormat(
+                                'Y-m',
+                                $course->month_end
+                            )
+                            ->endOfMonth()
+                            ->isFuture();
 
-                    case 'year_range':
+                    /*
+                    |--------------------------------------------------------------------------
+                    | WEEKEND RANGE
+                    |--------------------------------------------------------------------------
+                    */
+                    case 'weekend_range':
 
-                        return $course->year_end >= now()->year;
+                        return $course->weekend_end &&
+                            \Carbon\Carbon::createFromFormat(
+                                'Y-m',
+                                $course->weekend_end
+                            )
+                            ->endOfMonth()
+                            ->isFuture();
 
+                    /*
+                    |--------------------------------------------------------------------------
+                    | DEFAULT SINGLE DATE
+                    |--------------------------------------------------------------------------
+                    */
                     default:
-                        return false;
+
+                        return $course->course_date &&
+                            \Carbon\Carbon::parse($course->course_date)
+                                ->endOfDay()
+                                ->isFuture();
                 }
             })
+
+            /*
+            |--------------------------------------------------------------------------
+            | SORT BY NEAREST UPCOMING DATE
+            |--------------------------------------------------------------------------
+            */
             ->sortBy(function ($course) {
 
                 switch ($course->schedule_type) {
 
+                    /*
+                    |--------------------------------------------------------------------------
+                    | MULTIPLE DATES
+                    |--------------------------------------------------------------------------
+                    */
                     case 'dates':
 
                         $dates = is_array($course->course_dates)
@@ -73,18 +127,47 @@ class AppServiceProvider extends ServiceProvider
                             ->sort()
                             ->first();
 
+                    /*
+                    |--------------------------------------------------------------------------
+                    | MONTH RANGE
+                    |--------------------------------------------------------------------------
+                    */
                     case 'month_range':
 
-                        return $course->month_start;
+                        return $course->month_start
+                            ? \Carbon\Carbon::createFromFormat(
+                                'Y-m',
+                                $course->month_start
+                            )->startOfMonth()
+                            : now();
 
-                    case 'year_range':
+                    /*
+                    |--------------------------------------------------------------------------
+                    | WEEKEND RANGE
+                    |--------------------------------------------------------------------------
+                    */
+                    case 'weekend_range':
 
-                        return $course->year_start;
+                        return $course->weekend_start
+                            ? \Carbon\Carbon::createFromFormat(
+                                'Y-m',
+                                $course->weekend_start
+                            )->startOfMonth()
+                            : now();
 
+                    /*
+                    |--------------------------------------------------------------------------
+                    | DEFAULT SINGLE DATE
+                    |--------------------------------------------------------------------------
+                    */
                     default:
-                        return now();
+
+                        return $course->course_date
+                            ? \Carbon\Carbon::parse($course->course_date)
+                            : now();
                 }
             })
+
             ->take(10);
 
         $view->with('upcomingCourses', $upcomingCourses);
