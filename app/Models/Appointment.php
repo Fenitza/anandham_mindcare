@@ -20,9 +20,21 @@ class Appointment extends Model
         'user_id', 
         'status',
         'doctor_name', 
+        'review_of',
     ];
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
+public function parentAppointment()
+{
+    return $this->belongsTo(Appointment::class, 'review_of');
+}
+
+public function reviewAppointments()
+{
+    return $this->hasMany(Appointment::class, 'review_of');
+}
+
 }

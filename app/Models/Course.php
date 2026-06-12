@@ -20,8 +20,10 @@ class Course extends Model
         'course_date',
         'duration',
         'fee',
+        'offer_id',
         'early_bird_fee',
         'international_pricing',
+        'indian_pricing',
         // 'international_currency',
         // 'international_fee',
         // 'international_early_bird_fee',
@@ -265,5 +267,26 @@ public function getEffectiveEndDateAttribute()
     public function tags()
 {
     return $this->belongsToMany(Tag::class);
+}
+public function offer()
+{
+    return $this->belongsTo(Offer::class, 'offer_id');
+}
+
+public function offers()
+{
+    return $this->belongsToMany(
+        Offer::class,
+        'course_offer'
+    );
+}
+
+public function getDiscountedFeeAttribute()
+{
+    if (!$this->offer || !$this->offer->is_active) {
+        return $this->fee;
+    }
+
+    return $this->offer->calculateDiscount($this->fee);
 }
 }

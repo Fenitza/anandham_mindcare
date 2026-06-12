@@ -159,6 +159,28 @@
 </div>
 </div>
 
+<!-- Role -->
+ <div class="space-y-1">
+    <label class="block font-label text-[10px] font-bold text-primary uppercase tracking-widest ml-1">
+        Role
+    </label>
+
+    <select
+        name="role"
+        class="w-full px-0 py-2.5 bg-transparent border-0 border-b-2 border-outline-variant focus:border-secondary focus:ring-0"
+        required
+    >
+        <option value="">Select Role</option>
+
+        @foreach($tags as $tag)
+            <option value="{{ $tag->name }}"
+                {{ old('role') == $tag->name ? 'selected' : '' }}>
+                {{ ucfirst($tag->name) }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
 <!-- Password -->
 <div class="space-y-1">
 <label class="block font-label text-[10px] font-bold text-primary uppercase tracking-widest ml-1" for="password">Password</label>

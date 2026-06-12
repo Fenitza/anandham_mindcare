@@ -19,13 +19,26 @@
 <!-- <h2 class="font-headline text-5xl text-primary font-bold mb-4">Schedule New Clinical Session</h2> -->
 
 </header>
-<form 
-    action="{{ isset($appointment) ? route('appointment.update',$appointment->id) : route('appointment.admin.store') }}"
+<form
+    action="{{ isset($review_of)
+        ? route('appointment.admin.store')
+        : (isset($appointment)
+            ? route('appointment.update', $appointment->id)
+            : route('appointment.admin.store')) }}"
     method="POST"
-    class="space-y-12"
->
-@csrf
-@if(isset($appointment)) @method('PUT') @endif
+    class="space-y-12">
+
+    @csrf
+
+    @if(isset($appointment) && !isset($review_of))
+        @method('PUT')
+    @endif
+
+    @if(isset($review_of))
+        <input type="hidden" name="review_of" value="{{ $review_of }}">
+    @endif
+
+
 <!-- Section 1: Patient Details (Bento-style Grid) -->
 <section class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
     
@@ -64,7 +77,12 @@
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 <div class="relative">
 <label class="block text-xs font-semibold text-secondary uppercase tracking-widest mb-1">Date</label>
-<input class="w-full bg-surface-container-lowest border-none border-b-2 border-transparent focus:border-secondary focus:ring-0 transition-all px-4 py-3 font-body" name="date"     value="{{ old('date', $appointment->date ?? request('date')) }}" type="date"/>
+<input
+    id="date"
+    class="w-full bg-surface-container-lowest border-none border-b-2 border-transparent focus:border-secondary focus:ring-0 transition-all px-4 py-3 font-body"
+    name="date"
+    value="{{ old('date', $appointment->date ?? '') }}"
+    type="date"/>
 </div>
 <div class="relative">
     <label class="block text-xs font-semibold text-secondary uppercase tracking-widest mb-1">
@@ -76,8 +94,8 @@
     <option value="">Select Time Slot</option>
 
     @php
-        $start = \Carbon\Carbon::parse('16:00', 'Asia/Kolkata');
-        $end = \Carbon\Carbon::parse('21:00', 'Asia/Kolkata');
+        $start = \Carbon\Carbon::parse('17:00', 'Asia/Kolkata');
+        $end = \Carbon\Carbon::parse('20:30', 'Asia/Kolkata');
 
         $selectedTime = old(
             'start_time',
@@ -215,5 +233,18 @@ function setUrgency(value) {
 document.addEventListener("DOMContentLoaded", function () {
     setUrgency(document.getElementById('urgencyInput').value);
 });
-</script><
+</script>
+<script>
+document.getElementById('date').addEventListener('change', function () {
+
+    const selectedDate = new Date(this.value);
+
+    if (selectedDate.getDay() === 0) {
+
+        alert('Appointments are not available on Sundays');
+
+        this.value = '';
+    }
+});
+</script>
 @endsection

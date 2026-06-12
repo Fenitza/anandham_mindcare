@@ -178,9 +178,11 @@
                         <div class="bg-white border rounded-lg overflow-hidden shadow-sm mb-6 flex flex-col md:flex-row">
 
                             <!-- Image -->
-                            <img src="{{ asset('storage/' . $course->image) }}"
-                                 class="w-full md:w-64 h-48 md:h-auto object-cover">
-
+                            <img
+                                src="{{ asset('storage/' . $course->image) }}"
+                                alt="{{ $course->title }}"
+                                onclick="openImage(this.src)"
+                                class="w-full md:w-64 h-48 md:h-auto object-cover cursor-pointer hover:opacity-90 transition">
                             <!-- Content -->
                             <div class="p-4 sm:p-6 flex-1">
 
@@ -216,72 +218,181 @@
                                 <!-- FOOTER -->
 <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mt-4">
 
+    
     <!-- PRICE SECTION -->
-    <div class="flex flex-wrap items-center gap-3">
+<div class="flex flex-wrap items-center gap-2">
 
-        {{-- FREE --}}
-        @if($course->price == 'Free')
+    @php
 
-            <div class="px-4 py-2 rounded-xl bg-green-50 border border-green-100">
-                <p class="text-[10px] uppercase tracking-wider text-green-600 font-bold">
-                    Registration
-                </p>
+        $indianPricing = [];
 
-                <p class="text-sm font-bold text-green-700">
-                    Free
-                </p>
-            </div>
+if (!empty($course->indian_pricing)) {
 
-        @else
+    $indianPricing = is_array($course->indian_pricing)
+        ? $course->indian_pricing
+        : json_decode($course->indian_pricing, true);
+}
 
-            {{-- INDIAN PRICE --}}
-            <div class="px-4 py-2 rounded-xl bg-primary/5 border border-primary/10">
+$baseFee = (float) (
+    $indianPricing['fee']
+    ?? 0
+);
 
-                <p class="text-[10px] uppercase tracking-wider text-primary/60 font-bold">
-                    India
-                </p>
+$internationalFees = [];
 
-                <p class="text-sm font-bold text-primary">
-                    {{ $course->price }}
-                </p>
+if (!empty($course->international_pricing)) {
+
+    $internationalFees = is_array($course->international_pricing)
+        ? $course->international_pricing
+        : json_decode($course->international_pricing, true);
+}
+
+        $symbols = [
+            'USD' => '$',
+            'EUR' => '€',
+            'GBP' => '£',
+            'AUD' => 'A$',
+            'CAD' => 'C$',
+            'SGD' => 'S$',
+            'AED' => 'د.إ',
+        ];
+
+    @endphp
+ 
+
+    {{-- INDIA BASE --}}
+    <div class="flex flex-wrap gap-3">
+
+    {{-- INDIA --}}
+    <div class="min-w-[180px] rounded-xl border border-primary/10 bg-primary/5 p-3">
+
+        <div class="flex justify-between items-center mb-2">
+            <span class="text-xs font-bold uppercase text-primary/60">
+                🇮🇳 India
+            </span>
+
+            <span class="font-bold text-primary">
+                ₹{{ number_format($baseFee) }}
+            </span>
+        </div>
+
+        @if(!empty($indianPricing['offers']))
+
+            <div class="space-y-1 border-t border-primary/10 pt-2">
+
+                @foreach($indianPricing['offers'] as $savedOffer)
+
+                    @php
+                        $offer = \App\Models\Offer::find(
+                            $savedOffer['offer_id'] ?? null
+                        );
+                    @endphp
+
+                    @if($offer)
+
+                        @php
+                            $discount =
+                                $offer->discount_type === 'percentage'
+                                ? ($baseFee * $offer->discount_value) / 100
+                                : $offer->discount_value;
+
+                            $finalPrice =
+                                max($baseFee - $discount, 0);
+                        @endphp
+
+                        <div class="flex justify-between text-xs">
+
+                            <span class="text-gray-600">
+                                {{ $offer->name }}
+                            </span>
+
+                            <span class="font-semibold text-green-700">
+                                ₹{{ number_format($finalPrice) }}
+                            </span>
+
+                        </div>
+
+                    @endif
+
+                @endforeach
 
             </div>
 
         @endif
 
-        {{-- INTERNATIONAL --}}
-        @php
-            $internationalFees = is_array($course->international_fees)
-                ? $course->international_fees
-                : json_decode($course->international_fees, true);
+    </div>
 
-            $symbols = [
-                'USD' => '$',
-                'EUR' => '€',
-                'GBP' => '£',
-                'AUD' => 'A$',
-                'CAD' => 'C$',
-                'SGD' => 'S$',
-                'AED' => 'د.إ',
-            ];
-        @endphp
-
-        @if(!empty($internationalFees))
-
+    {{-- INTERNATIONAL --}}
     @foreach($internationalFees as $fee)
 
-        @if(!empty($fee['fee']) && $fee['fee'] > 0)
+        @php
+            $symbol =
+                $symbols[$fee['currency']]
+                ?? $fee['currency'];
 
-            <div class="px-4 py-2 rounded-xl bg-yellow-50 border border-yellow-100">
+            $basePrice =
+                (float) ($fee['fee'] ?? 0);
+        @endphp
 
-                <p class="text-[10px] uppercase tracking-wider text-yellow-700 font-bold">
-                    {{ $fee['currency'] }}
-                </p>
+        @if($basePrice > 0)
 
-                <p class="text-sm font-bold text-yellow-800">
-                    {{ $symbols[$fee['currency']] ?? '' }}
-                    {{ number_format($fee['fee']) }}
-                </p>
+            <div class="min-w-[180px] rounded-xl border border-yellow-200 bg-yellow-50 p-3">
+
+                <div class="flex justify-between items-center mb-2">
+
+                    <span class="text-xs font-bold uppercase text-yellow-700">
+                        {{ $fee['currency'] }}
+                    </span>
+
+                    <span class="font-bold text-yellow-800">
+                        {{ $symbol }}{{ number_format($basePrice) }}
+                    </span>
+
+                </div>
+
+                @if(!empty($fee['offers']))
+
+                    <div class="space-y-1 border-t border-yellow-200 pt-2">
+
+                        @foreach($fee['offers'] as $savedOffer)
+
+                            @php
+                                $offer = \App\Models\Offer::find(
+                                    $savedOffer['offer_id'] ?? null
+                                );
+                            @endphp
+
+                            @if($offer)
+
+                                @php
+                                    $discount =
+                                        $offer->discount_type === 'percentage'
+                                        ? ($basePrice * $offer->discount_value) / 100
+                                        : $offer->discount_value;
+
+                                    $finalPrice =
+                                        max($basePrice - $discount, 0);
+                                @endphp
+
+                                <div class="flex justify-between text-xs">
+
+                                    <span class="text-gray-600">
+                                        {{ $offer->name }}
+                                    </span>
+
+                                    <span class="font-semibold text-green-700">
+                                        {{ $symbol }}{{ number_format($finalPrice) }}
+                                    </span>
+
+                                </div>
+
+                            @endif
+
+                        @endforeach
+
+                    </div>
+
+                @endif
 
             </div>
 
@@ -289,7 +400,9 @@
 
     @endforeach
 
-@endif
+</div>
+
+</div>
 
                                     {{-- BUTTON --}}
                                     <a href="{{ route('courses.detail', $course->id) }}"
@@ -332,6 +445,36 @@
 
 </div>
 
+<!-- Image Preview Modal -->
+<div
+    id="imageModal"
+    class="fixed inset-0 bg-black/95 hidden z-[9999] overflow-auto">
+
+    <!-- Close Button -->
+    <button
+        onclick="closeImage()"
+        class="fixed top-4 right-5 text-white text-5xl z-[10000]">
+        &times;
+    </button>
+
+    <!-- Image Container -->
+    <div
+        class="min-h-screen flex items-center justify-center p-4">
+
+        <img
+            id="modalImage"
+            src=""
+            alt=""
+            class="max-w-none cursor-zoom-in select-none"
+            style="
+                transform: scale(1);
+                transform-origin: center center;
+                transition: transform .2s ease;
+            ">
+    </div>
+
+</div>
+
 <!-- 🔥 SCRIPT -->
 <script>
 function toggleFilter() {
@@ -341,6 +484,87 @@ function toggleFilter() {
     sidebar.classList.toggle('-translate-x-full');
     overlay.classList.toggle('hidden');
 }
+</script>
+
+<script>
+
+let currentZoom = 1;
+
+function toggleFilter() {
+    const sidebar = document.getElementById('filterSidebar');
+    const overlay = document.getElementById('overlay');
+
+    sidebar.classList.toggle('-translate-x-full');
+    overlay.classList.toggle('hidden');
+}
+
+function openImage(src) {
+
+    currentZoom = 1;
+
+    const modal = document.getElementById('imageModal');
+    const image = document.getElementById('modalImage');
+
+    image.src = src;
+    image.style.transform = 'scale(1)';
+
+    modal.classList.remove('hidden');
+
+    document.body.style.overflow = 'hidden';
+}
+
+function closeImage() {
+
+    document.getElementById('imageModal')
+        .classList.add('hidden');
+
+    document.body.style.overflow = 'auto';
+}
+
+/*
+|--------------------------------------------------------------------------
+| Mouse Wheel Zoom
+|--------------------------------------------------------------------------
+*/
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    const image = document.getElementById('modalImage');
+
+    image.addEventListener('wheel', function(e) {
+
+        e.preventDefault();
+
+        if (e.deltaY < 0) {
+            currentZoom += 0.2;
+        } else {
+            currentZoom -= 0.2;
+        }
+
+        currentZoom = Math.max(1, Math.min(currentZoom, 5));
+
+        image.style.transform = `scale(${currentZoom})`;
+
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Double Click Zoom
+    |--------------------------------------------------------------------------
+    */
+
+    image.addEventListener('dblclick', () => {
+
+        if (currentZoom === 1) {
+            currentZoom = 2;
+        } else {
+            currentZoom = 1;
+        }
+
+        image.style.transform = `scale(${currentZoom})`;
+    });
+
+});
 </script>
 
 </body>

@@ -144,16 +144,34 @@
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
 <div class="space-y-1">
-<label class="block font-label text-xs font-bold text-primary tracking-wide" for="role">USER ROLE</label>
+<label class="block font-label text-xs font-bold text-primary tracking-wide" for="role">
+    USER ROLE
+</label>
+
 <div class="relative">
-<select class="w-full bg-surface-container-low border-0 border-b border-surface-container-highest focus:border-primary focus:ring-0 appearance-none transition-all font-body text-lg py-3 px-4 pr-10 cursor-pointer rounded-t-lg" id="role" name="role">
-    <option value="doctor" {{ (old('role', $user->role ?? '') == 'doctor') ? 'selected' : '' }}>Doctor</option>
-    <option value="student" {{ (old('role', $user->role ?? '') == 'student') ? 'selected' : '' }}>Student</option>
-    <option value="professional" {{ (old('role', $user->role ?? '') == 'professional') ? 'selected' : '' }}>Professional</option>
-</select>
-<span class="material-symbols-outlined absolute right-0 top-4 pointer-events-none text-slate-400">expand_more</span>
+    <select
+        class="w-full bg-surface-container-low border-0 border-b border-surface-container-highest focus:border-primary focus:ring-0 appearance-none transition-all font-body text-lg py-3 px-4 pr-10 cursor-pointer rounded-t-lg"
+        id="role"
+        name="role">
+
+        <option value="">Select Role</option>
+
+        @foreach($tags as $tag)
+            <option
+                value="{{ $tag->name }}"
+                {{ old('role', $user->role ?? '') == $tag->name ? 'selected' : '' }}>
+                {{ ucfirst($tag->name) }}
+            </option>
+        @endforeach
+
+    </select>
+
+    <span class="material-symbols-outlined absolute right-0 top-4 pointer-events-none text-slate-400">
+        expand_more
+    </span>
 </div>
 </div>
+
 <div class="space-y-1">
 <label class="block font-label text-xs font-bold text-primary tracking-wide" for="specialization">CLINICAL SPECIALIZATION</label>
 <input class="w-full bg-surface-container-low border-0 border-b-2 border-surface-container-high focus:border-secondary focus:ring-0 transition-all font-body text-lg py-3 px-0" id="specialization" name="specialization" value="{{ old('specialization', isset($user) ? $user->specialization : '') }}" placeholder="e.g. Cognitive Behavioral Therapy" type="text"/>

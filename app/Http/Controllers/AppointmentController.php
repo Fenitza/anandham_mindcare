@@ -11,7 +11,7 @@ class AppointmentController extends Controller
 {  
     public function adminIndex(Request $request)
 {
-    $query = Appointment::query();
+$query = Appointment::with('reviewAppointments');
 
     // 🔍 Search (name, ID, phone)
     if ($request->search) {
@@ -63,8 +63,8 @@ public function adminSlots(Request $request)
     ?? Carbon::now('Asia/Kolkata')->toDateString();
 
     // ✅ Generate slots (4PM → 9PM, 30 mins)
-    $start = Carbon::parse($selectedDate . ' 16:00');
-    $end = Carbon::parse($selectedDate . ' 21:00');
+    $start = Carbon::parse($selectedDate . ' 17:00');
+    $end = Carbon::parse($selectedDate . ' 20:30');
 
     $slots = [];
 
@@ -82,10 +82,11 @@ public function adminSlots(Request $request)
     }
 
     // ✅ Fetch appointments for that day
-    $appointments = Appointment::whereDate('date', $selectedDate)
+    $appointments = Appointment::with('reviewAppointments')
+    ->whereDate('date', $selectedDate)
     ->get()
     ->groupBy(function ($item) {
-        return \Carbon\Carbon::parse($item->start_time, 'Asia/Kolkata')->format('H:i');
+        return \Carbon\Carbon::parse($item->start_time)->format('H:i');
     });
 
     return view('pages.dasboard.admin.appointments_slots', compact('slots', 'appointments', 'selectedDate'));
@@ -150,12 +151,15 @@ if ($request->date_range) {
             'phone' => 'required',
             'date' => 'required|date',
             'start_time' => 'required',
+           
             // 'end_time' => 'required',
         ]);
 
         Appointment::create([
         ...$request->all(),
-        'user_id' => auth()->id(), // ✅ attach user
+        'user_id' => auth()->id(), 
+        // ✅ attach user
+        'review_of' => $request->review_of,
     ]);
 
         return redirect()->route('user.appointments.list')->with('success', 'Appointment created');
@@ -174,7 +178,8 @@ if ($request->date_range) {
 
         Appointment::create([
         ...$request->all(),
-        'user_id' => auth()->id(), // ✅ attach user
+        'review_of' => $request->review_of,
+        // 'user_id' => auth()->id(), // ✅ attach user
     ]);
 
         return redirect()->route('admin.appointments.slots')->with('success', 'Appointment created');
@@ -221,11 +226,24 @@ if ($request->date_range) {
 
 public function create(Request $request)
 {
-    return view('pages.dasboard.admin.appointments_edit', [
-        'appointment' => null,
-        'date' => $request->date,
-        'time' => $request->time,
-    ]);
+    $appointment = null;
+
+    if ($request->review_of) {
+
+        $appointment = Appointment::findOrFail(
+            $request->review_of
+        );
+    }
+
+    return view(
+        'pages.dasboard.admin.appointments_edit',
+        [
+            'appointment' => $appointment,
+            'date' => $request->date,
+            'time' => $request->time,
+            'review_of' => $request->review_of,
+        ]
+    );
 }
 public function storeGuest(Request $request)
 {

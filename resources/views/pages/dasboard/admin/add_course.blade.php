@@ -230,8 +230,46 @@ Organised By
 </div>
 
 <div class="group">
-<label class=" text-xs font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 transition-colors group-focus-within:text-secondary">Tags</label>
-<input class="w-full bg-surface-container-low border-b-2 border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 text-2xl font-headline text-primary py-4 px-0 transition-all placeholder:text-outline-variant" name="tags" value="{{ old('tags', isset($course) ? $course->tags->pluck('name')->implode(', ') : '') }}" placeholder="e.g., Students" type="text"/>
+
+    <label class="text-xs font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 block">
+        Eligibility Tags
+    </label>
+
+    <select
+        name="tags[]"
+        multiple
+        class="w-full bg-surface-container-low border-b-2 border-outline-variant border-x-0 border-t-0 focus:border-secondary focus:ring-0 text-primary py-4 px-0 min-h-[180px]"
+    >
+
+        @foreach($tags as $tag)
+
+            <option
+                value="{{ $tag->id }}"
+                {{
+                    in_array(
+                        $tag->id,
+                        old(
+                            'tags',
+                            isset($course)
+                                ? $course->tags->pluck('id')->toArray()
+                                : []
+                        )
+                    )
+                    ? 'selected'
+                    : ''
+                }}
+            >
+                {{ $tag->name }}
+            </option>
+
+        @endforeach
+
+    </select>
+
+    <p class="text-xs text-gray-500 mt-2">
+        Hold Ctrl (Windows) or Cmd (Mac) to select multiple tags.
+    </p>
+
 </div>
 
 <!-- COURSE TYPE -->
@@ -280,343 +318,437 @@ Organised By
 
 </div>
 
-<!-- ========================= -->
-<!-- PRICING WRAPPER -->
-<!-- ========================= -->
-<div id="pricing-wrapper">
+<!-- ================================= -->
+<!-- INDIAN PRICING -->
+<!-- ================================= -->
+@php
 
-    <!-- PRICING SECTION -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+$indianPricing = old(
+    'indian_pricing',
+    isset($course) && $course->indian_pricing
+        ? (
+            is_array($course->indian_pricing)
+                ? $course->indian_pricing
+                : json_decode($course->indian_pricing, true)
+        )
+        : [
+            'base_fee' => '',
+            'offers' => [
+                [
+                    'offer_id' => '',
+                    'fee' => ''
+                ]
+            ]
+        ]
+);
 
-        <!-- INDIAN FEE -->
-        <div class="group">
+@endphp
+<div class="bg-surface-container-low rounded-3xl border border-outline-variant p-6">
 
-            <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 group-focus-within:text-secondary">
-                Indian Registration Fee (₹)
-            </label>
-
-            <div class="relative">
-
-                <span class="absolute left-0 top-1/2 -translate-y-1/2 text-secondary font-bold text-sm">
-                    ₹
-                </span>
-
-                <input
-                    class="w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 pl-4 text-sm font-bold"
-                    name="price"
-                    value="{{ old('price', $course->fee ?? '') }}"
-                    placeholder="2500"
-                    type="number"
-                />
-
-            </div>
-
-        </div>
-
-        <!-- EARLY BIRD -->
-        <div class="group">
-
-            <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3 group-focus-within:text-secondary">
-                Early Bird Offer Fee (₹)
-            </label>
-
-            <div class="relative">
-
-                <span class="absolute left-0 top-1/2 -translate-y-1/2 text-secondary font-bold text-sm">
-                    ₹
-                </span>
-
-                <input
-                    class="w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 pl-4 text-sm font-bold"
-                    name="early_bird_fee"
-                    value="{{ old('early_bird_fee', $course->early_bird_fee ?? '') }}"
-                    placeholder="1999"
-                    type="number"
-                />
-
-            </div>
-
-            <p class="text-[11px] text-outline mt-2">
-                Optional discounted fee for early registrations
-            </p>
-
-        </div>
-
-    </div>
-
-    <!-- INTERNATIONAL FEE -->
-    <!-- INTERNATIONAL PRICING -->
-<div class="group mt-8">
-
-    <div class="flex items-center justify-between mb-4">
-
+    <div class="mb-6">
         <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold">
-            International Registration Fees
+            Indian Pricing
         </label>
 
-        <button
-            type="button"
-            id="add-international-fee"
-            class="text-xs px-3 py-2 border border-dashed border-secondary rounded-lg text-secondary hover:bg-secondary/5 transition-all"
-        >
-            + Add Currency
-        </button>
+        <p class="text-xs text-outline mt-1">
+            Configure pricing and promotional offers for Indian registrations
+        </p>
+    </div>
+
+    <!-- Base Fee -->
+    <div class="mb-6">
+
+        <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3">
+            Registration Fee
+        </label>
+
+        <div class="relative">
+
+            <span class="absolute left-0 top-1/2 -translate-y-1/2 text-secondary font-bold text-sm">
+                ₹
+            </span>
+
+            <input
+                id="price"
+                type="number"
+                name="price"
+                value="{{ old('fee', $course->fee ?? '') }}"
+                placeholder="2500"
+                class="w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 pl-4 text-sm font-bold"
+            >
+
+        </div>
 
     </div>
 
-    <div id="international-fees-wrapper" class="space-y-6">
+    <!-- OFFERS -->
+    <div class="border-t border-outline-variant pt-6">
 
-        
-            @php
+        <div class="flex items-center justify-between mb-4">
 
-            $internationalFees = old(
-                'international_fees',
-                isset($course) && $course->international_pricing
-                    ? (
-                        is_array($course->international_pricing)
-                            ? $course->international_pricing
-                            : json_decode($course->international_pricing, true)
-                    )
-                    : [
-                        [
-                            'currency' => '',
-                            'fee' => '',
-                            'early_bird_fee' => ''
-                        ]
-                    ]
+            <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold">
+                Available Offers
+            </label>
+
+            <button
+                type="button"
+                id="add-indian-offer"
+                class="px-3 py-1 text-xs rounded-lg border border-dashed border-secondary text-secondary"
+            >
+                + Add Offer
+            </button>
+
+        </div>
+
+        @php
+
+            $savedOffers = old(
+                'indian_offers',
+                isset($course) && $course->offers
+                    ? $course->offers->map(fn($offer) => [
+                        'offer_id' => $offer->id
+                    ])->toArray()
+                    : [['offer_id' => '']]
             );
 
         @endphp
 
-        @foreach($internationalFees as $index => $fee)
+        <div id="indian-offers-wrapper">
 
-        <div class="international-fee-item border border-outline-variant rounded-xl p-4">
+@foreach(($indianPricing['offers'] ?? []) as $offerIndex => $savedOffer)
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
+<div class="offer-row grid grid-cols-1 md:grid-cols-5 gap-4 items-center mb-4">
 
-                <!-- CURRENCY -->
-                <div>
+    <select
+        name="indian_offers[{{ $offerIndex }}][offer_id]"
+        class="offer-select w-full bg-transparent border-b border-outline-variant py-3 text-sm"
+    >
 
-                    <label class="block text-xs text-outline mb-2">
-                        Currency
-                    </label>
+        <option value="">
+            Select Offer
+        </option>
 
-                    <select
-                        name="international_fees[{{ $index }}][currency]"
-                        class="w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 text-sm"
-                    >
+        @foreach($offers as $offer)
 
-                        <option value="">Select Currency</option>
-
-                        <option value="USD" {{ ($fee['currency'] ?? '') == 'USD' ? 'selected' : '' }}>
-                            USD ($)
-                        </option>
-
-                        <option value="EUR" {{ ($fee['currency'] ?? '') == 'EUR' ? 'selected' : '' }}>
-                            EUR (€)
-                        </option>
-
-                        <option value="GBP" {{ ($fee['currency'] ?? '') == 'GBP' ? 'selected' : '' }}>
-                            GBP (£)
-                        </option>
-
-                        <option value="AUD" {{ ($fee['currency'] ?? '') == 'AUD' ? 'selected' : '' }}>
-                            AUD (A$)
-                        </option>
-
-                        <option value="CAD" {{ ($fee['currency'] ?? '') == 'CAD' ? 'selected' : '' }}>
-                            CAD (C$)
-                        </option>
-
-                        <option value="SGD" {{ ($fee['currency'] ?? '') == 'SGD' ? 'selected' : '' }}>
-                            SGD (S$)
-                        </option>
-
-                        <option value="AED" {{ ($fee['currency'] ?? '') == 'AED' ? 'selected' : '' }}>
-                            AED (د.إ)
-                        </option>
-
-                    </select>
-
-                </div>
-
-                <!-- FEE -->
-                <div>
-
-                    <label class="block text-xs text-outline mb-2">
-                        Registration Fee
-                    </label>
-
-                    <input
-                        type="number"
-                        name="international_fees[{{ $index }}][fee]"
-                        value="{{ $fee['fee'] ?? '' }}"
-                        placeholder="99"
-                        class="w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 text-sm font-bold"
-                    />
-
-                </div>
-
-                <!-- EARLY BIRD -->
-                <div>
-
-                    <label class="block text-xs text-outline mb-2">
-                        Early Bird Fee
-                    </label>
-
-                    <input
-                        type="number"
-                        name="international_fees[{{ $index }}][early_bird_fee]"
-                        value="{{ $fee['early_bird_fee'] ?? '' }}"
-                        placeholder="89"
-                        class="w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 text-sm font-bold"
-                    />
-
-                </div>
-
-                <!-- REMOVE -->
-                <div>
-
-                    <button
-                        type="button"
-                        class="remove-international-fee w-full px-4 py-3 border border-error text-error rounded-lg hover:bg-error/5 transition-all text-sm"
-                    >
-                        Remove
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
+        <option
+            value="{{ $offer->id }}"
+            data-type="{{ $offer->discount_type }}"
+            data-value="{{ $offer->discount_value }}"
+            {{ ($savedOffer['offer_id'] ?? '') == $offer->id ? 'selected' : '' }}
+        >
+            {{ $offer->name }}
+        </option>
 
         @endforeach
+
+    </select>
+
+    <!-- <input
+        type="number"
+        name="indian_offers[{{ $offerIndex }}][fee]"
+        value="{{ $savedOffer['fee'] ?? '' }}"
+        placeholder="Offer Fee"
+        class="offer-fee w-full bg-transparent border-b border-outline-variant py-3 text-sm"
+    > -->
+
+    <div
+        class="discount-display bg-red-50 border border-red-200 rounded-xl p-3 text-center font-bold text-red-700"
+    >
+        -
+    </div>
+
+    <div
+        class="final-display bg-green-50 border border-green-200 rounded-xl p-3 text-center font-bold text-green-700"
+    >
+        ₹{{ $savedOffer['fee'] ?? 0 }}
+    </div>
+
+    <button
+        type="button"
+        class="remove-offer-row text-red-600"
+    >
+        Remove
+    </button>
+
+</div>
+
+@endforeach
+
+</div>
 
     </div>
 
 </div>
 
-<!-- TEMPLATE -->
-<template id="international-fee-template">
+<template id="indian-offer-template">
 
-    <div class="international-fee-item border border-outline-variant rounded-xl p-4">
+<div class="offer-row grid grid-cols-1 md:grid-cols-4 gap-4 items-center mb-4">
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
+    <select
+        class="offer-select w-full bg-transparent border-b border-outline-variant py-3 text-sm"
+    >
 
-            <!-- CURRENCY -->
-            <div>
+        <option value="">
+            Select Offer
+        </option>
 
-                <label class="block text-xs text-outline mb-2">
-                    Currency
-                </label>
+        @foreach($offers as $offer)
 
-                <select
-                    name=""
-                    class="currency-input w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 text-sm"
+        <option
+            value="{{ $offer->id }}"
+            data-type="{{ $offer->discount_type }}"
+            data-value="{{ $offer->discount_value }}"
+        >
+            {{ $offer->name }}
+        </option>
+
+        @endforeach
+
+    </select>
+
+    <div
+        class="discount-display bg-red-50 border border-red-200 rounded-xl p-3 text-center font-bold text-red-700"
+    >
+        -
+    </div>
+
+    <div
+        class="final-display bg-green-50 border border-green-200 rounded-xl p-3 text-center font-bold text-green-700"
+    >
+        -
+    </div>
+
+    <button
+        type="button"
+        class="remove-offer-row text-red-600 hover:text-red-700"
+    >
+        Remove
+    </button>
+
+</div>
+
+</template>
+
+<!-- ================================= -->
+<!-- INTERNATIONAL PRICING -->
+<!-- ================================= -->
+@php
+$internationalFees = old(
+    'international_fees',
+    isset($course) && $course->international_pricing
+        ? (
+            is_array($course->international_pricing)
+                ? $course->international_pricing
+                : json_decode($course->international_pricing, true)
+        )
+        : [
+            [
+                'currency' => 'USD',
+                'fee' => '',
+                'offers' => [
+                    [
+                        'offer_id' => ''
+                    ]
+                ]
+            ]
+        ]
+);
+@endphp
+
+
+<div id="international-fees-wrapper">
+    <div class="mb-6">
+
+        <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold">
+            International Pricing
+        </label>
+
+        <p class="text-xs text-outline mt-1">
+            Configure pricing and promotional offers for international registrations
+        </p>
+        <div class="flex justify-end mb-5">
+
+    <button
+        type="button"
+        id="add-international-fee"
+        class="px-4 py-2 rounded-xl border border-dashed border-secondary text-secondary hover:bg-secondary/10"
+    >
+        + Add Currency
+    </button>
+
+</div>
+
+    </div>
+
+    @foreach($internationalFees as $index => $fee)
+
+<div class="international-fee-item bg-surface-container-low rounded-3xl border border-outline-variant p-6">
+
+
+
+    <!-- Currency + Fee -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+
+        <!-- Currency -->
+        <div>
+
+            <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3">
+                Currency
+            </label>
+
+            <select
+                name="international_fees[{{ $index }}][currency]"
+                class="w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 text-sm"
+            >
+                <option value="USD" {{ ($fee['currency'] ?? '') == 'USD' ? 'selected' : '' }}>🇺🇸 USD ($)</option>
+                <option value="EUR" {{ ($fee['currency'] ?? '') == 'EUR' ? 'selected' : '' }}>🇪🇺 EUR (€)</option>
+                <option value="GBP" {{ ($fee['currency'] ?? '') == 'GBP' ? 'selected' : '' }}>🇬🇧 GBP (£)</option>
+                <option value="AUD" {{ ($fee['currency'] ?? '') == 'AUD' ? 'selected' : '' }}>🇦🇺 AUD (A$)</option>
+                <option value="CAD" {{ ($fee['currency'] ?? '') == 'CAD' ? 'selected' : '' }}>🇨🇦 CAD (C$)</option>
+                <option value="SGD" {{ ($fee['currency'] ?? '') == 'SGD' ? 'selected' : '' }}>🇸🇬 SGD (S$)</option>
+                <option value="AED" {{ ($fee['currency'] ?? '') == 'AED' ? 'selected' : '' }}>🇦🇪 AED (د.إ)</option>
+            </select>
+
+        </div>
+
+        <!-- Registration Fee -->
+        <div>
+
+            <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold mb-3">
+                Registration Fee
+            </label>
+
+            <input
+                type="number"
+                name="international_fees[{{ $index }}][fee]"
+                value="{{ $fee['fee'] ?? '' }}"
+                placeholder="100"
+                class="international-price w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 text-sm font-bold"
+            >
+
+        </div>
+
+    </div>
+
+    <!-- Offers Section -->
+    <div class="border-t border-outline-variant pt-6">
+
+        <div class="flex items-center justify-between mb-4">
+
+            <label class="block text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold">
+                Available Offers
+            </label>
+
+            <button
+                type="button"
+                class="add-offer-row px-3 py-1 text-xs rounded-lg border border-dashed border-secondary text-secondary"
+            >
+                + Add Offer
+            </button>
+
+        </div>
+
+        <div class="offers-wrapper space-y-4">
+
+            @php
+                $savedOffers = $fee['offers'] ?? [
+                    ['offer_id' => '']
+                ];
+            @endphp
+
+            @foreach($savedOffers as $offerIndex => $savedOffer)
+
+            <div class="offer-row grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+
+                <!-- Offer -->
+                <div>
+
+                    <select
+                        name="international_fees[{{ $index }}][offers][{{ $offerIndex }}][offer_id]"
+                        class="offer-select w-full bg-transparent border-b border-outline-variant py-3 text-sm"
+                    >
+                        <option value="">
+                            Select Offer
+                        </option>
+
+                        @foreach($offers as $offer)
+
+                            <option
+                                value="{{ $offer->id }}"
+                                data-type="{{ $offer->discount_type }}"
+                                data-value="{{ $offer->discount_value }}"
+                                {{ ($savedOffer['offer_id'] ?? '') == $offer->id ? 'selected' : '' }}
+                            >
+                                {{ $offer->name }}
+                            </option>
+
+                        @endforeach
+
+                    </select>
+
+                </div>
+
+                <!-- Discount -->
+
+                <div
+                    class="discount-display bg-red-50 border border-red-200 rounded-xl p-3 text-center font-bold text-red-700"
                 >
+                    -
+                </div>
 
-                    <option value="">Select Currency</option>
+                <!-- Final Price -->
 
-                    <option value="USD">USD ($)</option>
-                    <option value="EUR">EUR (€)</option>
-                    <option value="GBP">GBP (£)</option>
-                    <option value="AUD">AUD (A$)</option>
-                    <option value="CAD">CAD (C$)</option>
-                    <option value="SGD">SGD (S$)</option>
-                    <option value="AED">AED (د.إ)</option>
+                <div
+                    class="final-display bg-green-50 border border-green-200 rounded-xl p-3 text-center font-bold text-green-700"
+                >
+                    -
+                </div>
 
-                </select>
-
-            </div>
-
-            <!-- FEE -->
-            <div>
-
-                <label class="block text-xs text-outline mb-2">
-                    Registration Fee
-                </label>
-
-                <input
-                    type="number"
-                    name=""
-                    placeholder="99"
-                    class="fee-input w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 text-sm font-bold"
-                />
-
-            </div>
-
-            <!-- EARLY BIRD -->
-            <div>
-
-                <label class="block text-xs text-outline mb-2">
-                    Early Bird Fee
-                </label>
-
-                <input
-                    type="number"
-                    name=""
-                    placeholder="89"
-                    class="earlybird-input w-full bg-transparent border-b border-outline-variant focus:border-secondary py-3 text-sm font-bold"
-                />
-
-            </div>
-
-            <!-- REMOVE -->
-            <div>
+                <!-- Remove -->
 
                 <button
                     type="button"
-                    class="remove-international-fee w-full px-4 py-3 border border-error text-error rounded-lg hover:bg-error/5 transition-all text-sm"
+                    class="remove-offer-row text-red-600 hover:text-red-700"
                 >
                     Remove
                 </button>
 
             </div>
 
+            @endforeach
+
         </div>
 
     </div>
 
-</template>
+    <!-- Footer -->
 
+    <div class="flex justify-between items-center mt-6 pt-4 border-t border-outline-variant">
 
+        <span class="text-xs text-outline">
+            Offer will automatically calculate the payable amount.
+        </span>
+
+        <button
+            type="button"
+            class="remove-international-fee flex items-center gap-2 text-red-600 hover:text-red-700"
+        >
+            <span class="material-symbols-outlined text-sm">
+                delete
+            </span>
+
+            Remove Currency
+        </button>
 
     </div>
 
 </div>
+   @endforeach
 
-<!-- ========================= -->
-<!-- SCRIPT -->
-<!-- ========================= -->
-<script>
+</div>
 
-    const pricingWrapper = document.getElementById('pricing-wrapper');
-    const courseTypeRadios = document.querySelectorAll('.course-type-radio');
 
-    function togglePricingSection() {
 
-        const selectedType = document.querySelector('input[name="course_type"]:checked')?.value;
-
-        if (selectedType === 'free') {
-
-            pricingWrapper.classList.add('hidden');
-
-        } else {
-
-            pricingWrapper.classList.remove('hidden');
-
-        }
-    }
-
-    // Initial Load
-    togglePricingSection();
-
-    // Change Event
-    courseTypeRadios.forEach(radio => {
-        radio.addEventListener('change', togglePricingSection);
-    });
-
-</script>
 
 <!-- MODE OF COURSE -->
 <div class="group mt-6">
@@ -1140,13 +1272,17 @@ $modules = old('modules', isset($course) ? $course->modules : []);
             <div class="topic-list flex flex-wrap gap-2">
 
                 @foreach($topics as $topic)
-                <input 
-                    type="text" 
-                    name="modules[{{ $index }}][topics][]" 
-                    value="{{ is_array($topic) ? $topic['name'] : $topic->name }}"
-                    class="bg-surface-container-high px-4 py-2 rounded-full text-xs"
-                />
-                @endforeach
+
+    <input
+        type="text"
+        name="modules[{{ $index }}][topics][]"
+        value="{{ is_array($topic)
+                    ? ($topic['name'] ?? '')
+                    : ($topic->name ?? '') }}"
+        class="bg-surface-container-high px-4 py-2 rounded-full text-xs"
+    />
+
+@endforeach
 
                 <!-- ADD TOPIC -->
                 <button type="button" class="add-topic-btn inline-flex items-center gap-1 border border-dashed px-4 py-2 rounded-full text-xs text-secondary">
@@ -1284,13 +1420,15 @@ $modules = old('modules', isset($course) ? $course->modules : []);
                     </label>
                     <div class="flex items-center gap-1">
                         <span class="text-secondary font-bold">₹</span>
-                        <input 
-                            name="bonuses[{{ $index }}][value]"
-                            value="{{ is_array($bonus) ? $bonus['value'] : $bonus->value }}"
-                            class="w-full bg-transparent border-none focus:ring-0 font-body font-bold text-secondary text-lg p-0"
-                            type="number"
-                            placeholder="0"
-                        />
+                        <input
+    name="bonuses[{{ $index }}][value]"
+    value="{{ is_array($bonus)
+        ? ($bonus['value'] ?? '')
+        : ($bonus->value ?? '') }}"
+    class="w-full bg-transparent border-none focus:ring-0 font-body font-bold text-secondary text-lg p-0"
+    type="number"
+    placeholder="0"
+/>
                     </div>
                 </div> -->
 
@@ -2031,49 +2169,475 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <script>
 
-    const addInternationalFeeBtn = document.getElementById('add-international-fee');
-    const internationalFeesWrapper = document.getElementById('international-fees-wrapper');
-    const internationalFeeTemplate = document.getElementById('international-fee-template');
+document.addEventListener('DOMContentLoaded', function () {
 
-    let internationalFeeIndex = {{ count($internationalFees) }};
+    // =====================================
+    // CALCULATE SINGLE OFFER ROW
+    // =====================================
 
-    addInternationalFeeBtn.addEventListener('click', () => {
+    function calculateOfferRow(row)
+    {
+        const feeItem = row.closest('.international-fee-item');
 
-        const clone = internationalFeeTemplate.content.cloneNode(true);
-
-        clone.querySelector('.currency-input')
-            .setAttribute(
-                'name',
-                `international_fees[${internationalFeeIndex}][currency]`
+        const fee =
+            parseFloat(
+                feeItem.querySelector('.international-price')?.value || 0
             );
 
-        clone.querySelector('.fee-input')
-            .setAttribute(
-                'name',
-                `international_fees[${internationalFeeIndex}][fee]`
-            );
+        const offerSelect =
+            row.querySelector('.offer-select');
 
-        clone.querySelector('.earlybird-input')
-            .setAttribute(
-                'name',
-                `international_fees[${internationalFeeIndex}][early_bird_fee]`
-            );
+        const selected =
+            offerSelect.options[offerSelect.selectedIndex];
 
-        internationalFeesWrapper.appendChild(clone);
+        let discount = 0;
 
-        internationalFeeIndex++;
+        if (selected && selected.value !== '')
+        {
+            const type =
+                selected.dataset.type;
 
-    });
+            const value =
+                parseFloat(selected.dataset.value || 0);
 
-    document.addEventListener('click', function(e) {
-
-        if (e.target.classList.contains('remove-international-fee')) {
-
-            e.target.closest('.international-fee-item').remove();
-
+            if (type === 'percentage')
+            {
+                discount = (fee * value) / 100;
+            }
+            else
+            {
+                discount = value;
+            }
         }
 
+        const finalPrice =
+            Math.max(fee - discount, 0);
+
+        row.querySelector('.discount-display').innerHTML =
+            discount > 0
+                ? discount.toFixed(2)
+                : '-';
+
+        row.querySelector('.final-display').innerHTML =
+            finalPrice.toFixed(2);
+    }
+
+    // =====================================
+    // CALCULATE ALL OFFERS IN CURRENCY CARD
+    // =====================================
+
+    function calculateAllOffers(card)
+    {
+        card.querySelectorAll('.offer-row')
+            .forEach(row => calculateOfferRow(row));
+    }
+
+    // =====================================
+    // INITIAL CALCULATION
+    // =====================================
+
+    document.querySelectorAll('.international-fee-item')
+        .forEach(card => calculateAllOffers(card));
+
+    // =====================================
+    // OFFER CHANGE
+    // =====================================
+
+    document.addEventListener('change', function (e)
+    {
+        if (e.target.classList.contains('offer-select'))
+        {
+            calculateOfferRow(
+                e.target.closest('.offer-row')
+            );
+        }
     });
+
+    // =====================================
+    // PRICE CHANGE
+    // =====================================
+
+    document.addEventListener('input', function (e)
+    {
+        if (e.target.classList.contains('international-price'))
+        {
+            calculateAllOffers(
+                e.target.closest('.international-fee-item')
+            );
+        }
+    });
+
+    // =====================================
+    // ADD OFFER ROW
+    // =====================================
+
+    document.addEventListener('click', function (e)
+    {
+        const btn = e.target.closest('.add-offer-row');
+
+        if (!btn) return;
+
+        const card =
+            btn.closest('.international-fee-item');
+
+        const wrapper =
+            card.querySelector('.offers-wrapper');
+
+        const currencyIndex =
+            [...document.querySelectorAll('.international-fee-item')]
+            .indexOf(card);
+
+        const offerIndex =
+            wrapper.querySelectorAll('.offer-row').length;
+
+        const row = document.createElement('div');
+
+        row.className =
+            'offer-row grid grid-cols-1 md:grid-cols-4 gap-4 items-center';
+
+        row.innerHTML = `
+            <div>
+
+                <select
+                    name="international_fees[${currencyIndex}][offers][${offerIndex}][offer_id]"
+                    class="offer-select w-full bg-transparent border-b border-outline-variant py-3 text-sm"
+                >
+
+                    <option value="">
+                        Select Offer
+                    </option>
+
+                    @foreach($offers as $offer)
+                        <option
+                            value="{{ $offer->id }}"
+                            data-type="{{ $offer->discount_type }}"
+                            data-value="{{ $offer->discount_value }}"
+                        >
+                            {{ $offer->name }}
+                        </option>
+                    @endforeach
+
+                </select>
+
+            </div>
+
+            <div class="discount-display bg-red-50 border border-red-200 rounded-xl p-3 text-center font-bold text-red-700">
+                -
+            </div>
+
+            <div class="final-display bg-green-50 border border-green-200 rounded-xl p-3 text-center font-bold text-green-700">
+                -
+            </div>
+
+            <button
+                type="button"
+                class="remove-offer-row text-red-600 hover:text-red-700"
+            >
+                Remove
+            </button>
+        `;
+
+        wrapper.appendChild(row);
+    });
+
+    // =====================================
+    // REMOVE OFFER ROW
+    // =====================================
+
+    document.addEventListener('click', function (e)
+    {
+        const btn = e.target.closest('.remove-offer-row');
+
+        if (!btn) return;
+
+        const wrapper =
+            btn.closest('.offers-wrapper');
+
+        if (
+            wrapper.querySelectorAll('.offer-row').length <= 1
+        )
+        {
+            alert('At least one offer row must remain');
+            return;
+        }
+
+        btn.closest('.offer-row').remove();
+    });
+
+    // =====================================
+    // ADD CURRENCY CARD
+    // =====================================
+
+    document.getElementById('add-international-fee')
+    ?.addEventListener('click', function ()
+    {
+        const wrapper =
+            document.getElementById('international-fees-wrapper');
+
+        const index =
+            wrapper.querySelectorAll('.international-fee-item').length;
+
+        const html = `
+        <div class="international-fee-item bg-surface-container-low rounded-3xl border border-outline-variant p-6 mt-5">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+
+                <div>
+
+                    <label class="block text-[10px] uppercase tracking-widest font-bold mb-3">
+                        Currency
+                    </label>
+
+                    <select
+                        name="international_fees[${index}][currency]"
+                        class="w-full bg-transparent border-b border-outline-variant py-3 text-sm"
+                    >
+                        <option value="USD">🇺🇸 USD ($)</option>
+                        <option value="EUR">🇪🇺 EUR (€)</option>
+                        <option value="GBP">🇬🇧 GBP (£)</option>
+                        <option value="AUD">🇦🇺 AUD (A$)</option>
+                        <option value="CAD">🇨🇦 CAD (C$)</option>
+                        <option value="SGD">🇸🇬 SGD (S$)</option>
+                        <option value="AED">🇦🇪 AED (د.إ)</option>
+                    </select>
+
+                </div>
+
+                <div>
+
+                    <label class="block text-[10px] uppercase tracking-widest font-bold mb-3">
+                        Registration Fee
+                    </label>
+
+                    <input
+                        type="number"
+                        name="international_fees[${index}][fee]"
+                        class="international-price w-full bg-transparent border-b border-outline-variant py-3 text-sm font-bold"
+                    >
+
+                </div>
+
+            </div>
+
+            <div class="border-t border-outline-variant pt-6">
+
+                <div class="flex items-center justify-between mb-4">
+
+                    <label class="block text-[10px] uppercase tracking-widest font-bold">
+                        Available Offers
+                    </label>
+
+                    <button
+                        type="button"
+                        class="add-offer-row px-3 py-1 text-xs rounded-lg border border-dashed border-secondary text-secondary"
+                    >
+                        + Add Offer
+                    </button>
+
+                </div>
+
+                <div class="offers-wrapper">
+
+                    <div class="offer-row grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+
+                        <select
+                            name="international_fees[${index}][offers][0][offer_id]"
+                            class="offer-select w-full bg-transparent border-b border-outline-variant py-3 text-sm"
+                        >
+
+                            <option value="">
+                                Select Offer
+                            </option>
+
+                            @foreach($offers as $offer)
+                                <option
+                                    value="{{ $offer->id }}"
+                                    data-type="{{ $offer->discount_type }}"
+                                    data-value="{{ $offer->discount_value }}"
+                                >
+                                    {{ $offer->name }}
+                                </option>
+                            @endforeach
+
+                        </select>
+
+                        <div class="discount-display bg-red-50 border border-red-200 rounded-xl p-3 text-center font-bold text-red-700">
+                            -
+                        </div>
+
+                        <div class="final-display bg-green-50 border border-green-200 rounded-xl p-3 text-center font-bold text-green-700">
+                            -
+                        </div>
+
+                        <button
+                            type="button"
+                            class="remove-offer-row text-red-600"
+                        >
+                            Remove
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="flex justify-between items-center mt-6 pt-4 border-t border-outline-variant">
+
+                <button
+                    type="button"
+                    class="remove-international-fee text-red-600"
+                >
+                    Remove Currency
+                </button>
+
+            </div>
+
+        </div>
+        `;
+
+        wrapper.insertAdjacentHTML('beforeend', html);
+    });
+
+    // =====================================
+    // REMOVE CURRENCY CARD
+    // =====================================
+
+    document.addEventListener('click', function (e)
+    {
+        const btn =
+            e.target.closest('.remove-international-fee');
+
+        if (!btn) return;
+
+        const cards =
+            document.querySelectorAll('.international-fee-item');
+
+        if (cards.length <= 1)
+        {
+            alert('At least one currency is required');
+            return;
+        }
+
+        btn.closest('.international-fee-item').remove();
+    });
+
+});
+
+</script>
+<script>
+    let indianOfferIndex =
+    document.querySelectorAll('#indian-offers-wrapper .offer-row').length;
+
+document
+    .getElementById('add-indian-offer')
+    .addEventListener('click', function () {
+
+        const template =
+            document.getElementById('indian-offer-template').content.cloneNode(true);
+
+        const select = template.querySelector('.offer-select');
+
+        select.name =
+            `indian_offers[${indianOfferIndex}][offer_id]`;
+
+        indianOfferIndex++;
+
+        document
+            .getElementById('indian-offers-wrapper')
+            .appendChild(template);
+    });
+
+document.addEventListener('click', function (e) {
+
+    if (e.target.classList.contains('remove-offer-row')) {
+
+        e.target.closest('.offer-row').remove();
+    }
+
+});
+</script>
+<script>
+
+function calculateOfferRow(row)
+{
+    const priceInput = document.getElementById('price');
+
+    const basePrice = parseFloat(priceInput?.value || 0);
+
+    const offerSelect = row.querySelector('.offer-select');
+
+    const discountBox = row.querySelector('.discount-display');
+
+    const finalBox = row.querySelector('.final-display');
+
+    if (!offerSelect || !discountBox || !finalBox)
+        return;
+
+    const selected =
+        offerSelect.options[offerSelect.selectedIndex];
+
+    if (!selected || !selected.value)
+    {
+        discountBox.innerHTML = '₹0';
+        finalBox.innerHTML = '₹' + basePrice.toFixed(2);
+        return;
+    }
+
+    const type =
+        selected.dataset.type;
+
+    const value =
+        parseFloat(selected.dataset.value || 0);
+
+    let discount = 0;
+
+    if (type === 'percentage')
+    {
+        discount = (basePrice * value) / 100;
+    }
+    else
+    {
+        discount = value;
+    }
+
+    const finalPrice =
+        Math.max(basePrice - discount, 0);
+
+    discountBox.innerHTML =
+        '₹' + discount.toFixed(2);
+
+    finalBox.innerHTML =
+        '₹' + finalPrice.toFixed(2);
+}
+
+function refreshIndianOffers()
+{
+    document
+        .querySelectorAll('.offer-row')
+        .forEach(row => calculateOfferRow(row));
+}
+
+document.addEventListener('change', function(e)
+{
+    if (
+        e.target.classList.contains('offer-select')
+    )
+    {
+        calculateOfferRow(
+            e.target.closest('.offer-row')
+        );
+    }
+});
+
+document
+    .getElementById('price')
+    ?.addEventListener('input', refreshIndianOffers);
+
+document.addEventListener('DOMContentLoaded', function()
+{
+    refreshIndianOffers();
+});
 
 </script>
 </form>

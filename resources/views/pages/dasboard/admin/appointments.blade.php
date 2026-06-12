@@ -19,14 +19,25 @@
 <!-- <h2 class="font-headline text-5xl text-primary font-bold mb-4">Schedule New Clinical Session</h2> -->
 
 </header>
-<form 
-    action="{{ auth()->check() 
-        ? (isset($appointment) ? route('appointment.update',$appointment->id) : route('appointment.store')) 
+<form
+    action="{{ auth()->check()
+        ? (
+            isset($appointment) && !isset($review_of)
+                ? route('appointment.update', $appointment->id)
+                : route('appointment.store')
+          )
         : route('appointment.store.guest') }}"
     method="POST"
 >
-@csrf
-@if(isset($appointment)) @method('PUT') @endif
+    @csrf
+
+    @if(isset($appointment) && !isset($review_of))
+        @method('PUT')
+    @endif
+
+    @if(isset($review_of))
+        <input type="hidden" name="review_of" value="{{ $review_of }}">
+    @endif
 <!-- Section 1: Patient Details (Bento-style Grid) -->
 <section class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
  

@@ -4,29 +4,45 @@
 <div class="pt-28 px-8 pb-12 space-y-12">
 <!-- Page Title Section -->
 <section class="mb-16">
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-4">
-        <h2 class="text-5xl font-bold text-primary leading-tight">Curriculum Management</h2>
-        <a href="{{ route('admin.courses.add') }}"
-         class="flex flex-row items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-primary-container text-white rounded-xl text-sm font-medium shadow-lg shadow-primary/10 hover:scale-[1.02] transition-all active:opacity-80">
-            <span class="material-symbols-outlined text-sm" data-icon="add">add</span>
-            <span>Create New Course</span>
-        </a>
-    </div>
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-        <p class="text-on-surface-variant text-lg leading-relaxed font-body mb-2 md:mb-0">
-            Refine the academic excellence of Anandham Mindcare. Organize restorative mindfulness paths and advanced clinical foundations with editorial precision.
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
+
+    <div>
+        <h1 class="text-4xl lg:text-5xl font-black text-primary leading-tight">
+            Curriculum Management
+        </h1>
+
+        <p class="mt-2 text-sm text-on-surface-variant">
+            Create, organize and manage courses, pricing and offers.
         </p>
-        <!-- <div class="flex gap-4">
-            <div class="flex bg-surface-container-high rounded-xl p-1">
-                <button class="px-4 py-2 bg-white shadow-sm rounded-lg text-primary">
-                    <span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
-                </button>
-                <button class="px-4 py-2 text-outline hover:text-primary transition-colors">
-                    <span class="material-symbols-outlined" data-icon="list">list</span>
-                </button>
-            </div>
-        </div> -->
     </div>
+
+    <div class="flex flex-wrap gap-3">
+
+        <a href="{{ route('admin.courses.add') }}"
+           class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-semibold shadow-md hover:shadow-lg transition-all">
+
+            <span class="material-symbols-outlined">
+                add
+            </span>
+
+            Create Course
+
+        </a>
+
+        <a href="{{ route('admin.offers.index') }}"
+           class="inline-flex items-center gap-2 px-6 py-3 border-2 border-secondary text-secondary rounded-xl font-semibold hover:bg-secondary hover:text-white transition-all">
+
+            <span class="material-symbols-outlined">
+                local_offer
+            </span>
+
+            Offers
+
+        </a>
+
+    </div>
+
+</div>
 </section>
 <!-- Perspective Quote Component
 <div class="mb-16 perspective-quote bg-surface-container-lowest p-8 rounded-xl max-w-4xl">

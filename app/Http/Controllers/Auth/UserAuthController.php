@@ -11,9 +11,16 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Group;
+use App\Models\Tag;
 
 class UserAuthController extends Controller
 {
+    public function registerForm()
+    {
+        $tags = Tag::orderBy('name')->get();
+        return view('pages.auth.register', compact('tags'));
+    }
+
     // 🔹 Register
     public function register(Request $request)
 {
@@ -27,6 +34,7 @@ class UserAuthController extends Controller
         'name' => 'required|string|max:255',
         'email' => 'required|email|unique:users',
         'phone' => 'required',
+        'role' => 'required',
         'password' => 'required|min:6|confirmed',
         'terms' => 'required',
     ]);
@@ -43,6 +51,7 @@ class UserAuthController extends Controller
         'name' => $request->name,
         'email' => $request->email,
         'phone' => $request->phone,
+        'role' => $request->role,
         'password' => Hash::make($request->password),
     ]);
 
@@ -110,10 +119,54 @@ public function show($id)
 
     return view('pages.dasboard.admin.users_show', compact('user'));
 }
+public function addUser()
+{
+    $tags = Tag::orderBy('name')->get();
+    return view('pages.dasboard.admin.add_user', compact('tags'));
+}
+
+public function addUserTag()
+{
+    $tags = Tag::orderBy('name')->get();
+    return view('pages.dasboard.admin.add_user_tag', compact('tags'));
+}
+public function storeTag(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string|max:255|unique:tags,name',
+    ]);
+
+    Tag::create([
+        'name' => $request->name,
+    ]);
+
+    return back()->with('success', 'Tag created successfully.');
+}
+
+public function updateTag(Request $request, Tag $tag)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+    ]);
+
+    $tag->update([
+        'name' => $request->name,
+    ]);
+
+    return back()->with('success', 'Tag updated successfully.');
+}
+
+public function destroyTag(Tag $tag)
+{
+    $tag->delete();
+
+    return back()->with('success', 'Tag deleted successfully.');
+}
 public function edit($id)
 {
     $user = User::findOrFail($id);
-    return view('pages.dasboard.admin.add_user', compact('user'));
+    $tags = Tag::orderBy('name')->get();
+    return view('pages.dasboard.admin.add_user', compact('user', 'tags'));
 }
 
 

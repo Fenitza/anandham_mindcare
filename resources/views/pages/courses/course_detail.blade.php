@@ -189,89 +189,281 @@ function toggleModule(index) {
         </p>
 
         <!-- SUMMARY CARDS -->
-<div class="opacity-0 animate-fade-in-up delay-300 grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl mx-auto mb-10">
+<div class="opacity-0 animate-fade-in-up delay-300 flex flex-col gap-5 max-w-3xl mx-auto mb-10">
+{{-- =========================
+FEES
+========================== --}}
 
-    {{-- =========================
-        FEES
-    ========================== --}}
-    <div class="hero-glass p-5 rounded-2xl text-white">
+<div class="hero-glass p-5 rounded-2xl text-white">
 
-        <div class="flex items-center gap-3 mb-4">
 
-            <div class="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center">
-                <span class="material-symbols-outlined text-secondary-container text-2xl">
-                    payments
+<div class="flex items-center gap-3 mb-5">
+
+    <div class="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center">
+        <span class="material-symbols-outlined text-secondary-container text-2xl">
+            payments
+        </span>
+    </div>
+
+    <div>
+        <p class="text-[10px] uppercase tracking-widest opacity-60">
+            Course Fees
+        </p>
+
+        <h3 class="text-lg font-bold font-headline">
+            Pricing
+        </h3>
+    </div>
+
+</div>
+
+@php
+
+    $indianPricing = is_array($course->indian_pricing)
+        ? $course->indian_pricing
+        : json_decode($course->indian_pricing, true);
+
+    $indianBaseFee =
+        $indianPricing['base_fee']
+        ?? $course->fee
+        ?? 0;
+
+    $internationalFees = is_array($course->international_pricing)
+        ? $course->international_pricing
+        : json_decode($course->international_pricing, true);
+
+    $symbols = [
+        'USD' => '$',
+        'EUR' => '€',
+        'GBP' => '£',
+        'AUD' => 'A$',
+        'CAD' => 'C$',
+        'SGD' => 'S$',
+        'AED' => 'د.إ',
+    ];
+
+@endphp
+
+<div class="max-h-[420px] overflow-y-auto space-y-5 pr-2">
+
+    {{-- INDIA --}}
+    <div>
+
+        <div class="bg-white/10 rounded-2xl p-4">
+
+            <div class="flex justify-between items-center">
+
+                <div>
+
+                    <p class="text-xs uppercase tracking-widest opacity-60">
+                        India
+                    </p>
+
+                    <h4 class="text-2xl font-bold text-secondary-container mt-1">
+                        ₹{{ number_format($indianBaseFee) }}
+                    </h4>
+
+                </div>
+
+                <span class="text-3xl">
+                    🇮🇳
                 </span>
-            </div>
 
-            <div>
-                <p class="text-[10px] uppercase tracking-widest opacity-60">
-                    Course Fees
-                </p>
-
-                <h3 class="text-lg font-bold font-headline">
-                    Pricing
-                </h3>
             </div>
 
         </div>
 
-        {{-- Indian Fee --}}
-        <div class="flex items-center justify-between py-2 border-b border-white/10">
+        @if(!empty($indianPricing['offers']))
 
-            <span class="text-sm opacity-80">
-                India
-            </span>
+            <div class="mt-3 ml-3 space-y-2">
 
-            <span class="text-lg font-bold">
-                {{ $course->fee > 0 ? '₹'.number_format($course->fee) : 'Free' }}
-            </span>
+                @foreach($indianPricing['offers'] as $savedOffer)
 
-        </div>
+                    @php
 
-        {{-- International --}}
-        @php
-            $internationalFees = is_array($course->international_pricing)
-                ? $course->international_pricing
-                : json_decode($course->international_pricing, true);
+                        $offer =
+                            \App\Models\Offer::find(
+                                $savedOffer['offer_id'] ?? null
+                            );
 
-            $symbols = [
-                'USD' => '$',
-                'EUR' => '€',
-                'GBP' => '£',
-                'AUD' => 'A$',
-                'CAD' => 'C$',
-                'SGD' => 'S$',
-                'AED' => 'د.إ',
-            ];
-        @endphp
+                    @endphp
 
-        @if(!empty($internationalFees))
+                    @if($offer)
 
-            @foreach($internationalFees as $fee)
+                        @php
 
-                @if(!empty($fee['fee']) && $fee['fee'] > 0)
+                            $discount =
+                                $offer->discount_type === 'percentage'
+                                ? ($indianBaseFee * $offer->discount_value) / 100
+                                : $offer->discount_value;
 
-                    <div class="flex items-center justify-between py-2 border-b border-white/10">
+                            $finalPrice =
+                                max($indianBaseFee - $discount, 0);
 
-                        <span class="text-sm opacity-80">
-                            {{ $fee['currency'] }}
-                        </span>
+                        @endphp
 
-                        <span class="font-semibold">
-                            {{ $symbols[$fee['currency']] ?? '' }}
-                            {{ number_format($fee['fee']) }}
-                        </span>
+                        <div class="bg-green-500/10 border border-green-400/20 rounded-xl p-3">
 
-                    </div>
+                            <div class="flex justify-between items-center">
 
-                @endif
+                                <div>
 
-            @endforeach
+                                    <p class="font-semibold">
+                                        {{ $offer->name }}
+                                    </p>
+
+                                    <p class="text-xs text-green-300">
+
+                                        @if($offer->discount_type === 'percentage')
+                                            Save {{ $offer->discount_value }}%
+                                        @else
+                                            Save ₹{{ number_format($discount) }}
+                                        @endif
+
+                                    </p>
+
+                                </div>
+
+                                <div class="text-xl font-bold text-green-300">
+                                    ₹{{ number_format($finalPrice) }}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    @endif
+
+                @endforeach
+
+            </div>
 
         @endif
 
     </div>
+
+    {{-- INTERNATIONAL --}}
+    @if(!empty($internationalFees))
+
+        @foreach($internationalFees as $fee)
+
+            @if(!empty($fee['currency']) && !empty($fee['fee']))
+
+                @php
+
+                    $basePrice = (float) $fee['fee'];
+
+                    $symbol =
+                        $symbols[$fee['currency']]
+                        ?? '';
+
+                @endphp
+
+                <div>
+
+                    <div class="bg-white/10 rounded-2xl p-4">
+
+                        <div class="flex justify-between items-center">
+
+                            <div>
+
+                                <p class="text-xs uppercase tracking-widest opacity-60">
+                                    {{ $fee['currency'] }}
+                                </p>
+
+                                <h4 class="text-2xl font-bold text-secondary-container mt-1">
+                                    {{ $symbol }}{{ number_format($basePrice) }}
+                                </h4>
+
+                            </div>
+
+                            <span class="text-lg font-bold">
+                                {{ $fee['currency'] }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    @if(!empty($fee['offers']))
+
+                        <div class="mt-3 ml-3 space-y-2">
+
+                            @foreach($fee['offers'] as $savedOffer)
+
+                                @php
+
+                                    $offer =
+                                        \App\Models\Offer::find(
+                                            $savedOffer['offer_id'] ?? null
+                                        );
+
+                                @endphp
+
+                                @if($offer)
+
+                                    @php
+
+                                        $discount =
+                                            $offer->discount_type === 'percentage'
+                                            ? ($basePrice * $offer->discount_value) / 100
+                                            : $offer->discount_value;
+
+                                        $finalPrice =
+                                            max($basePrice - $discount, 0);
+
+                                    @endphp
+
+                                    <div class="bg-blue-500/10 border border-blue-400/20 rounded-xl p-3">
+
+                                        <div class="flex justify-between items-center">
+
+                                            <div>
+
+                                                <p class="font-semibold">
+                                                    {{ $offer->name }}
+                                                </p>
+
+                                                <p class="text-xs text-blue-300">
+
+                                                    @if($offer->discount_type === 'percentage')
+                                                        Save {{ $offer->discount_value }}%
+                                                    @else
+                                                        Save {{ $symbol }}{{ number_format($discount) }}
+                                                    @endif
+
+                                                </p>
+
+                                            </div>
+
+                                            <div class="text-xl font-bold text-blue-300">
+                                                {{ $symbol }}{{ number_format($finalPrice) }}
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                @endif
+
+                            @endforeach
+
+                        </div>
+
+                    @endif
+
+                </div>
+
+            @endif
+
+        @endforeach
+
+    @endif
+
+</div>
+
+
+</div>
 
 
     {{-- =========================
@@ -671,7 +863,7 @@ function toggleModule(index) {
         <!-- Section Header -->
         <div class="text-center mb-16">
             <h2 class="text-4xl md:text-5xl font-bold text-primary mb-4">
-                {{ $course->duration ?? 'Course' }} Curriculum
+                {{ $course->duration ?? 'Course' }} Syllabus
             </h2>
 
             <p class="text-on-surface-variant text-lg">
@@ -1062,9 +1254,9 @@ function toggleModule(index) {
                     </p>
                 @endif
 
-                <p class="text-primary font-bold text-2xl">
+                <!-- <p class="text-primary font-bold text-2xl">
                     {{ $course->fee > 0 ? '₹'.number_format($course->fee) : 'Free' }}
-                </p>
+                </p> -->
             </div>
 
             <!-- CTA Button -->

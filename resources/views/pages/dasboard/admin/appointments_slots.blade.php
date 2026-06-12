@@ -132,58 +132,105 @@
                             @endif
                         </td>
 
-                        <!-- ⚡ Action -->
-                        <td class="p-4 text-right">
-                        <div class="flex flex-col items-end gap-2">
+                       
+<!-- ⚡ Action -->
+<td class="p-4 text-right">
+    <div class="flex flex-col items-end gap-2">
 
-                            @if($slotAppointments->count())
+        @if($slotAppointments->count())
 
-                                @foreach($slotAppointments as $appointment)
+            @foreach($slotAppointments as $appointment)
+            <pre>
 
-                                    <div class="flex gap-2">
+</pre>
 
-                                        <a href="{{ route('appointment.edit', $appointment->id) }}"
-                                        class="px-2 py-1 text-xs bg-blue-100 text-blue-600 rounded">
-                                            Edit
-                                        </a>
+                @php
+                    $status = trim(strtolower($appointment->status));
+                    $followup = $appointment->reviewAppointments()
+                        ->orderBy('date')
+                        ->first();
+                @endphp
 
-                                        <form action="{{ route('appointment.destroy', $appointment->id) }}"
-                                            method="POST"
-                                            onsubmit="return confirm('Delete?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="px-2 py-1 text-xs bg-red-100 text-red-600 rounded">
-                                                Delete
-                                            </button>
-                                        </form>
 
-                                    </div>
+                <div class="flex gap-2 items-center flex-wrap">
 
-                                @endforeach
+                    {{-- COMPLETED APPOINTMENT --}}
+                    @if($status === 'completed')
 
-                                <!-- Add more -->
-                                <a href="{{ route('appointment.create', [
-                                    'date' => $selectedDate,
-                                    'time' => $slot['start']
-                                ]) }}"
-                                class="text-xs text-purple-600 mt-1">
-                                    + Add More
-                                </a>
+                        {{-- Follow-up already scheduled --}}
+                        @if($followup)
 
-                            @else
+                            <div class="px-3 py-2 text-xs bg-green-100 text-green-700 rounded text-left">
+                                <strong>Follow-up Scheduled</strong>
+                                <br>
+                                {{ \Carbon\Carbon::parse($followup->date)->format('d M Y') }}
+                                <br>
+                                {{ \Carbon\Carbon::parse($followup->start_time)->format('h:i A') }}
+                            </div>
 
-                                <a href="{{ route('appointment.create', [
-                                    'date' => $selectedDate,
-                                    'time' => $slot['start']
-                                ]) }}"
-                                class="px-3 py-1.5 text-xs bg-green-100 text-green-600 rounded-md">
-                                    + Book Slot
-                                </a>
+                        {{-- No follow-up yet --}}
+                        @else
 
+                            <a href="{{ route('appointment.create', [
+                                'review_of' => $appointment->id
+                            ]) }}"
+                            class="px-2 py-1 text-xs bg-green-100 text-green-600 rounded">
+                                Schedule Review
+                            </a>
+                            @if(isset($review_of))
+                                <input type="hidden" name="review_of" value="{{ $review_of }}">
                             @endif
 
-                        </div>
-                    </td>
+                        @endif
+
+                    {{-- ALL OTHER STATUSES --}}
+                    @else
+
+                        <a href="{{ route('appointment.edit', $appointment->id) }}"
+                        class="px-2 py-1 text-xs bg-blue-100 text-blue-600 rounded">
+                            Edit
+                        </a>
+
+                        <form action="{{ route('appointment.destroy', $appointment->id) }}"
+                            method="POST"
+                            onsubmit="return confirm('Delete this appointment?')">
+                            @csrf
+                            @method('DELETE')
+
+                            <button class="px-2 py-1 text-xs bg-red-100 text-red-600 rounded">
+                                Delete
+                            </button>
+                        </form>
+
+                    @endif
+
+                </div>
+
+            @endforeach
+
+            <!-- Add more appointment in same slot -->
+            <a href="{{ route('appointment.create', [
+                'date' => $selectedDate,
+                'time' => $slot['start']
+            ]) }}"
+            class="text-xs text-purple-600 mt-1">
+                + Add More
+            </a>
+
+        @else
+
+            <a href="{{ route('appointment.create', [
+                'date' => $selectedDate,
+                'time' => $slot['start']
+            ]) }}"
+            class="px-3 py-1.5 text-xs bg-green-100 text-green-600 rounded-md">
+                + Book Slot
+            </a>
+
+        @endif
+
+    </div>
+</td>
 
                     </tr>
 

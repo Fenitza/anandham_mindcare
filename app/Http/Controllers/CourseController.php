@@ -11,6 +11,7 @@ use App\Models\Topic;
 use App\Models\Bonus;
 use App\Models\Mentor;
 use App\Models\Tag;
+use App\Models\Offer;
 use Illuminate\Support\Facades\DB;
 
 class CourseController extends Controller
@@ -18,19 +19,83 @@ class CourseController extends Controller
     public function index()
     {
         $courses = Course::latest()->get(); // or with relations if needed
+        
         return view('pages.dasboard.admin.courses', compact('courses'));
+    }
+
+    public function create()
+    {
+        
+        $tags = Tag::orderBy('name')->get();
+         $offers = Offer::where('status', 1)
+        ->orderBy('name')
+        ->get();
+        return view('pages.dasboard.admin.add_course', compact('tags', 'offers'));
     }
 
     public function edit($id)
     {
         $course = Course::with(['modules.topics', 'bonuses', 'mentors'])
                         ->findOrFail($id);
+         $offers = Offer::where('status', 1)
+            ->orderBy('name')
+            ->get();
 
-        return view('pages.dasboard.admin.add_course', compact('course'));
+        $tags = Tag::orderBy('name')->get();                
+
+        return view('pages.dasboard.admin.add_course', compact('course', 'tags', 'offers'));
     }
 
     public function store(Request $request)
     {
+        $request->validate([
+        'title' => 'required|string|max:255',
+        'course_type' => 'required',
+        'specialisation' => 'required',
+        'organised_by' => 'required',
+        'mode' => 'required',
+        'duration' => 'required',
+        'description' => 'required',
+        'course_image' => 'required|image|max:2048',
+        'enrollment_status' => 'required',
+        'schedule_type' => 'required',
+
+        
+
+        'price' => 'nullable|numeric|min:0',
+
+        'capacity' => 'nullable|integer|min:1',
+
+        'zoom_link' => 'nullable|url',
+        'mentors' => 'required|array|min:1', // ✅ at least 1 mentor
+
+    'mentors.*.name' => 'required|string|max:255', // ✅ mandatory
+
+    'mentors.*.qualification' => 'nullable|string|max:255',
+
+    'mentors.*.bio' => 'nullable|string',
+
+    'mentors.*.image' => 'nullable|image|max:2048',
+], [
+    'mentors.required' => 'At least one mentor is required.',
+    'mentors.*.name.required' => 'Mentor name is required.',
+],
+        
+        [
+        'bonuses.*.title.required_with' =>
+            'Certification title is required.',
+    ],
+    [
+        'bonuses.*.title' => 'Certification Title',
+        'bonuses.*.value' => 'Certification Value',
+        'bonuses.*.description' => 'Certification Description',
+    ],
+         [
+        'title.required' => 'Course title is required.',
+        'specialisation.required' => 'Please select a specialization.',
+        'course_type.required' => 'Please select course type.',
+        'description.required' => 'Course description is required.',
+    ]);
         DB::beginTransaction();
 
         try {
@@ -48,6 +113,7 @@ class CourseController extends Controller
                 'venue' => $request->venue,
                 'duration' => $request->duration,
                 'fee' => $request->price,
+                'offer_id' => $request->offer_id,
                 'early_bird_fee' => $request->early_bird_fee,
                 'international_pricing' => $request->international_fees
                     ? json_encode($request->international_fees)
@@ -80,32 +146,13 @@ class CourseController extends Controller
             ]);
 
             // ✅ Handle Tags (many-to-many)
-            if ($request->tags) {
+            $course->tags()->sync($request->tags ?? []);
 
-                // If tags come as comma string → convert to array
-                $tagNames = is_array($request->tags)
-                    ? $request->tags
-                    : explode(',', $request->tags);
-
-                $tagIds = [];
-
-                foreach ($tagNames as $tagName) {
-
-                    $tagName = trim($tagName);
-
-                    if (!$tagName) continue;
-
-                    // 🔥 Create or get existing tag
-                    $tag = Tag::firstOrCreate([
-                        'name' => $tagName
-                    ]);
-
-                    $tagIds[] = $tag->id;
-                }
-
-                // 🔥 Attach to pivot table
-                $course->tags()->sync($tagIds);
-            }
+            //Handle Offers (many-to-many)
+            $course->offers()->sync(
+                $request->offer_ids ?? []
+            );
+            
             // dd($request->all());
             // ✅ 2. Save Modules + Topics
             if ($request->modules) {
@@ -135,15 +182,20 @@ class CourseController extends Controller
 
             // ✅ 3. Save Bonuses
             if ($request->bonuses) {
-                foreach ($request->bonuses as $bonusData) {
-                    Bonus::create([
-                        'course_id' => $course->id,
-                        'title' => $bonusData['title'] ?? null,
-                        'value' => $bonusData['value'] ?? 0,
-                        'description' => $bonusData['description'] ?? null,
-                    ]);
-                }
-            }
+    foreach ($request->bonuses as $bonusData) {
+
+        if (empty($bonusData['title'])) {
+            continue; // skip empty rows
+        }
+
+        Bonus::create([
+            'course_id' => $course->id,
+            'title' => $bonusData['title'],
+            'value' => $bonusData['value'] ?? 0,
+            'description' => $bonusData['description'] ?? null,
+        ]);
+    }
+}
 
            /*
 |--------------------------------------------------------------------------
@@ -207,6 +259,53 @@ if ($request->has('mentors')) {
 
     try {
 // dd($request->modules);
+$request->validate([
+        'title' => 'required|string|max:255',
+        'course_type' => 'required',
+        'specialisation' => 'required',
+        'organised_by' => 'required',
+        'mode' => 'required',
+        'duration' => 'required',
+        'description' => 'required',
+        'course_image' => 'nullable|image|max:2048',
+        'enrollment_status' => 'required',
+        'schedule_type' => 'required',
+
+        
+
+        'price' => 'nullable|numeric|min:0',
+
+        'capacity' => 'nullable|integer|min:1',
+
+        'zoom_link' => 'nullable|url',
+        'mentors' => 'required|array|min:1', // ✅ at least 1 mentor
+
+    'mentors.*.name' => 'required|string|max:255', // ✅ mandatory
+
+    'mentors.*.qualification' => 'nullable|string|max:255',
+
+    'mentors.*.bio' => 'nullable|string',
+
+    'mentors.*.image' => 'nullable|image|max:2048',
+], [
+    'mentors.required' => 'At least one mentor is required.',
+    'mentors.*.name.required' => 'Mentor name is required.',
+],
+        [
+        'bonuses.*.title.required_with' =>
+            'Certification title is required.',
+    ],
+    [
+        'bonuses.*.title' => 'Certification Title',
+        'bonuses.*.value' => 'Certification Value',
+        'bonuses.*.description' => 'Certification Description',
+    ],
+         [
+        'title.required' => 'Course title is required.',
+        'specialisation.required' => 'Please select a specialization.',
+        'course_type.required' => 'Please select course type.',
+        'description.required' => 'Course description is required.',
+    ]);
         $course = Course::findOrFail($id);
 
         /*
@@ -281,6 +380,66 @@ if ($request->has('mentors')) {
         }
 
         /*
+|--------------------------------------------------------------------------
+| INDIAN PRICING OFFERS
+|--------------------------------------------------------------------------
+*/
+
+$indianPricing = [];
+
+if ($request->indian_offers) {
+
+    foreach ($request->indian_offers as $offer) {
+
+        if (!empty($offer['offer_id'])) {
+
+            $indianPricing[] = [
+                'offer_id' => $offer['offer_id']
+            ];
+        }
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| INTERNATIONAL PRICING
+|--------------------------------------------------------------------------
+*/
+
+$internationalPricing = [];
+
+if ($request->international_fees) {
+
+    foreach ($request->international_fees as $feeData) {
+
+        if (empty($feeData['currency'])) {
+            continue;
+        }
+
+        $offers = [];
+
+        if (!empty($feeData['offers'])) {
+
+            foreach ($feeData['offers'] as $offer) {
+
+                if (!empty($offer['offer_id'])) {
+
+                    $offers[] = [
+                        'offer_id' => $offer['offer_id']
+                    ];
+                }
+            }
+        }
+
+        $internationalPricing[] = [
+            'currency' => $feeData['currency'],
+            'fee'      => $feeData['fee'] ?? 0,
+            'offers'   => $offers
+        ];
+    }
+}
+
+        /*
         |--------------------------------------------------------------------------
         | 2. UPDATE COURSE
         |--------------------------------------------------------------------------
@@ -295,10 +454,12 @@ if ($request->has('mentors')) {
             'registration_contact' => $request->registration_contact,
             'duration' => $request->duration,
             'fee' => $request->price,
-            'early_bird_fee' => $request->early_bird_fee,
-            'international_pricing' => $request->international_fees
-                ? json_encode($request->international_fees)
-                : null,
+            'indian_pricing' => json_encode([
+                'fee' => $request->price,
+                'offers' => $indianPricing
+            ]),
+
+            'international_pricing' => json_encode($internationalPricing),
             'capacity' => $request->capacity,
             'marquee_text' => $request->marquee_text,
             'status' => $request->enrollment_status,
@@ -320,41 +481,13 @@ if ($request->has('mentors')) {
             'registration_contact' => $request->registration_contact,
         ]);
 
+
         /*
         |--------------------------------------------------------------------------
         | 2.1 SYNC TAGS (IMPORTANT)
         |--------------------------------------------------------------------------
         */
-        if ($request->tags !== null) {
-
-            $tagNames = is_array($request->tags)
-                ? $request->tags
-                : explode(',', $request->tags);
-
-            $tagIds = [];
-
-            foreach ($tagNames as $tagName) {
-
-                $tagName = trim($tagName);
-                if (!$tagName) continue;
-
-                // normalize (optional but recommended)
-                $tagName = strtolower($tagName);
-
-                $tag = Tag::firstOrCreate([
-                    'name' => $tagName
-                ]);
-
-                $tagIds[] = $tag->id;
-            }
-
-            // 🔥 sync replaces old + adds new
-            $course->tags()->sync($tagIds);
-
-        } else {
-            // if no tags sent → remove all
-            $course->tags()->detach();
-        }
+        $course->tags()->sync($request->tags ?? []);
         // dd($request->all());
 
         /*
@@ -408,15 +541,20 @@ if ($request->has('mentors')) {
         |--------------------------------------------------------------------------
         */
         if ($request->bonuses) {
-            foreach ($request->bonuses as $bonusData) {
-                Bonus::create([
-                    'course_id' => $course->id,
-                    'title' => $bonusData['title'] ?? null,
-                    'value' => $bonusData['value'] ?? 0,
-                    'description' => $bonusData['description'] ?? null,
-                ]);
-            }
+    foreach ($request->bonuses as $bonusData) {
+
+        if (empty($bonusData['title'])) {
+            continue; // skip empty rows
         }
+
+        Bonus::create([
+            'course_id' => $course->id,
+            'title' => $bonusData['title'],
+            'value' => $bonusData['value'] ?? 0,
+            'description' => $bonusData['description'] ?? null,
+        ]);
+    }
+}
 
         /*
 |--------------------------------------------------------------------------
@@ -440,43 +578,32 @@ $course->mentors()->delete();
 | SAVE NEW MENTORS
 |--------------------------------------------------------------------------
 */
+$mentors = collect($request->mentors ?? [])
+    ->filter(function ($mentor) {
+        return !empty($mentor['name']);
+    })
+    ->values();
 
 if ($request->mentors) {
 
-    foreach ($request->mentors as $index => $mentorData) {
+    foreach ($mentors as $index => $mentorData) {
 
-        // preserve old image
-        $mentorImagePath = $mentorData['existing_image'] ?? null;
+    $mentorImagePath = null;
 
-        // upload new image if selected
-        if ($request->hasFile("mentors.$index.image")) {
-
-            // delete old image
-            if (!empty($mentorData['existing_image'])) {
-
-                \Storage::disk('public')
-                    ->delete($mentorData['existing_image']);
-            }
-
-            $mentorImagePath = $request
-                ->file("mentors.$index.image")
-                ->store('mentors', 'public');
-        }
-
-        Mentor::create([
-
-            'course_id' => $course->id,
-
-            'name' => $mentorData['name'] ?? null,
-
-            'qualification' => $mentorData['qualification'] ?? null,
-
-            'bio' => $mentorData['bio'] ?? null,
-
-            'image' => $mentorImagePath,
-
-        ]);
+    if ($request->hasFile("mentors.$index.image")) {
+        $mentorImagePath = $request
+            ->file("mentors.$index.image")
+            ->store('mentors', 'public');
     }
+
+    Mentor::create([
+        'course_id' => $course->id,
+        'name' => $mentorData['name'], // ✅ SAFE NOW
+        'qualification' => $mentorData['qualification'] ?? null,
+        'bio' => $mentorData['bio'] ?? null,
+        'image' => $mentorImagePath,
+    ]);
+}
 }
 
         DB::commit();
@@ -485,9 +612,15 @@ if ($request->mentors) {
             ->with('success', 'Course Updated Successfully ✅');
 
     } catch (\Exception $e) {
-        DB::rollback();
-        dd($e->getMessage());
-    }
+    DB::rollback();
+
+    return redirect()
+        ->back()
+        ->withInput()
+        ->withErrors([
+            'error' => $e->getMessage()
+        ]);
+}
 }
 
     public function destroy($id)
@@ -630,99 +763,92 @@ if (!empty($selectedStatus)) {
     |--------------------------------------------------------------------------
     */
 
-    $timelineGroups = $courses
-    ->groupBy(function ($course) {
+    /*
+|--------------------------------------------------------------------------
+| TIMELINE GROUPS
+|--------------------------------------------------------------------------
+*/
 
-        switch ($course->schedule_type) {
+$timelineGroups = $courses->map(function ($course) {
 
-            case 'dates':
+    switch ($course->schedule_type) {
+
+        case 'dates':
 
             $dates = $course->course_dates;
 
-            // decode if json string
             if (is_string($dates)) {
                 $dates = json_decode($dates, true);
-            }
-
-            // ensure array
-            if (!is_array($dates) || empty($dates)) {
-                return 'Schedule';
             }
 
             $firstDate = collect($dates)
                 ->filter(fn($date) => !empty($date))
                 ->first();
 
-            return $firstDate
+            $timelineLabel = $firstDate
                 ? Carbon::parse($firstDate)->format('M Y')
                 : 'Schedule';
 
-            case 'month_range':
+            break;
 
-                return Carbon::parse($course->month_start)
-                    ->format('M Y');
+        case 'month_range':
 
-            case 'weekend_range':
+            $timelineLabel = Carbon::parse(
+                $course->month_start
+            )->format('M Y');
 
-            $start = Carbon::parse($course->weekend_start ?? null);
-            $end   = Carbon::parse($course->weekend_end ?? null);
+            break;
 
-            $startMonth = $start->format('M, Y');
-            $endMonth   = $end->format('M, Y');
+        case 'weekend_range':
 
-            return $startMonth . ' - ' . $endMonth;
+            $start = Carbon::parse($course->weekend_start);
+            $end   = Carbon::parse($course->weekend_end);
 
-            default:
+            $timelineLabel =
+                $start->format('M Y') . ' - ' .
+                $end->format('M Y');
 
-                return 'Other';
-        }
-    })
-        ->map(function ($group, $key) {
+            break;
 
-            return [
+        default:
 
-                'label' => $key,
+            $timelineLabel = 'Other';
+    }
 
-                'title' => $key,
+    return [
 
-                'courses' => $group->map(fn ($course) => (object)[
+        'label' => $timelineLabel,
 
-                    'id' => $course->id,
+        'title' => $timelineLabel,
 
-                    'title' => $course->title,
+        'courses' => collect([
+            (object)[
+                'id' => $course->id,
+                'title' => $course->title,
+                'price' => $course->fee > 0
+                    ? '₹' . number_format($course->fee)
+                    : 'Free',
+                'international_fees' => $course->international_pricing ?? [],
+                'international_pricing' => $course->international_pricing ?? [],
+                'indian_pricing' => $course->indian_pricing ?? [],
+                'description' => $course->description,
+                'image' => $course->course_image,
+                'duration' => $course->duration ?? $course->course_time,
+                'category' => ucfirst($course->specialisation),
 
-                    'price' => $course->fee > 0
-                        ? '₹' . number_format($course->fee)
-                        : 'Free',
+                'type' => match ($course->course_type) {
+                    'free' => 'Free',
+                    'premium' => 'Premium',
+                    'specialised' => 'Specialised',
+                    default => 'Unknown'
+                },
 
-                    'international_fees' => $course->international_pricing ?? [],
+                'tags' => $course->tags->pluck('name')->toArray()
+            ]
+        ])
+    ];
 
-                    'description' => $course->description,
-
-                    'image' => $course->course_image,
-
-                    'duration' => $course->duration ?? $course->course_time,
-
-                    'category' => ucfirst($course->specialisation),
-
-                    'type' => match ($course->course_type) {
-
-                        'free' => 'Free',
-
-                        'premium' => 'Premium',
-
-                        'specialised' => 'Specialised',
-
-                        default => 'Unknown'
-                    },
-
-                    'tags' => $course->tags->pluck('name')->toArray()
-
-                ])->values()
-
-            ];
-        })
-        ->values();
+})->values();
 
     return view('pages.courses.course_list', compact(
 
@@ -780,7 +906,7 @@ private function getTagIcon($tagName)
 }
 public function detail($id)
 {
-    $course = Course::with(['modules.topics', 'bonuses', 'mentors'])
+    $course = Course::with(['modules.topics', 'bonuses', 'mentors', 'offer', 'tags'])
                     ->findOrFail($id);
 
     return view('pages.courses.course_detail', compact('course'));
@@ -789,8 +915,14 @@ public function detail($id)
 public function reserve($id)
 {
     $course = Course::findOrFail($id);
-    return view('pages.courses.course_enroll', compact('course'));
+    $courseTagNames = $course->tags->pluck('name')
+    ->map(fn($tag) => strtolower(trim($tag)))
+    ->toArray();
+
+$userRole = strtolower(trim(auth()->user()->role ?? ''));
+
+$isEligible = in_array($userRole, $courseTagNames);
+    return view('pages.courses.course_enroll', compact('course', 'isEligible', 'courseTagNames'));
 }
 
-    
 }

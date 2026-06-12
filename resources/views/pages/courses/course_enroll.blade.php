@@ -124,67 +124,84 @@ h1, h2, h3 { font-family: 'Newsreader', serif; }
 
             <div class="mb-6">
 
-                <label
-                    for="tagConfirm"
-                    class="flex items-start gap-4 p-5 rounded-2xl border border-primary/10 bg-primary/[0.03] hover:bg-primary/[0.05] transition-all cursor-pointer"
-                >
-
-                    <!-- CHECKBOX -->
-                    <div class="pt-1">
-
-                        <input
-                            type="checkbox"
-                            id="tagConfirm"
-                            class="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary"
-                        >
-
-                    </div>
+                
 
                     <!-- CONTENT -->
-                    <div class="flex-1">
+                    @if($isEligible)
 
-                        <!-- TITLE -->
-                        <div class="flex items-center gap-2 mb-2">
-
-                            <span class="material-symbols-outlined text-secondary text-lg">
+                        <div class="bg-green-50 border border-green-200 rounded-xl p-5 flex gap-4">
+                            <span class="material-symbols-outlined text-green-600 text-3xl">
                                 verified
                             </span>
 
-                            <h4 class="text-sm font-bold text-primary tracking-wide">
-                                Eligibility Confirmation
-                            </h4>
+                            <div>
+                                <h4 class="font-semibold text-green-800">
+                                    You are eligible for this course
+                                </h4>
 
+                                <p class="text-green-700 text-sm mt-1">
+                                    Your profile category matches the eligibility criteria for this course.
+                                </p>
+
+                                <div class="mt-3 inline-flex items-center gap-2 bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium">
+                                    <span class="material-symbols-outlined text-base">check_circle</span>
+                                    {{ ucfirst(auth()->user()->role) }}
+                                </div>
+                            </div>
                         </div>
-
-                        <!-- DESCRIPTION -->
-                        @if(count($tagNames))
-
-                            <p class="text-sm leading-7 text-gray-700">
-
-                                I confirm that I belong to the following professional category:
-
-                                <span class="block mt-3 font-semibold text-primary leading-7">
-                                    {{ implode(' • ', array_map('ucfirst', $tagNames)) }}
-                                </span>
-
-                            </p>
 
                         @else
 
-                            <p class="text-sm leading-7 text-gray-700">
-                                I confirm that I meet the eligibility criteria for this course.
-                            </p>
+                        <div class="bg-red-50 border border-red-200 rounded-xl p-5 flex gap-4">
+                            <span class="material-symbols-outlined text-red-600 text-3xl">
+                                cancel
+                            </span>
+
+                            <div>
+                                <h4 class="font-semibold text-red-800">
+                                    You are not eligible for this course
+                                </h4>
+
+                                <p class="text-red-700 text-sm mt-1">
+                                    Your current profile category does not match the course eligibility requirements.
+                                </p>
+
+                                <div class="mt-3 text-sm">
+                                    <span class="font-medium text-gray-700">
+                                        Required:
+                                    </span>
+
+                                    <span class="text-primary">
+                                        {{ implode(', ', array_map('ucfirst', $courseTagNames)) }}
+                                    </span>
+                                </div>
+
+                                <div class="mt-2 text-sm">
+                                    <span class="font-medium text-gray-700">
+                                        Your Role:
+                                    </span>
+
+                                    <span class="text-red-700">
+                                        {{ ucfirst(auth()->user()->role) }}
+                                    </span>
+                                </div>
+
+                                <div class="mt-4 text-sm text-gray-600">
+                                    Kindly contact the administrator or support team if you believe this is incorrect.
+                                </div>
+                            </div>
+                        </div>
 
                         @endif
 
-                    </div>
-
-                </label>
+                
 
             </div>
 
             <!-- QR + PAYMENT CARD -->
-<div id="qrSection" class="hidden mb-8">
+@if($isEligible)
+
+<div id="qrSection" class="mb-8">
 
     @php
 
@@ -263,36 +280,118 @@ h1, h2, h3 { font-family: 'Newsreader', serif; }
                 </div>
 
                 <!-- PRICING -->
-                <div class="space-y-4">
+               
+@php
 
-                    {{-- Indian Pricing --}}
-                    @if(($course->fee ?? 0) > 0)
+$indianPricing = is_array($course->indian_pricing)
+    ? $course->indian_pricing
+    : json_decode($course->indian_pricing, true);
 
-                    <div class="bg-white/5 border border-white/10 rounded-2xl px-5 py-4 flex items-center justify-between">
+$baseFee = $indianPricing['base_fee'] ?? $course->fee ?? 0;
 
-                        <div>
+$internationalFees = is_array($course->international_pricing)
+    ? $course->international_pricing
+    : json_decode($course->international_pricing, true);
 
-                            <p class="text-sm text-white/60 mb-1">
-                                Indian Registration
-                            </p>
+$symbols = [
+    'USD' => '$',
+    'EUR' => '€',
+    'GBP' => '£',
+    'AUD' => 'A$',
+    'CAD' => 'C$',
+    'SGD' => 'S$',
+    'AED' => 'د.إ',
+];
 
-                            <h4 class="font-semibold text-lg">
-                                INR Pricing
-                            </h4>
+@endphp
 
+<div class="space-y-3">
+
+    <h4 class="text-base font-semibold text-white">
+        Select Pricing Option
+    </h4>
+
+    {{-- INDIA REGULAR --}}
+    <label
+        class="offer-card block cursor-pointer rounded-xl border border-white/10 bg-white/5 p-4 hover:bg-white/10 transition"
+    >
+        <div class="flex justify-between items-center">
+
+            <div>
+                <div class="font-medium text-sm">
+                    🇮🇳 India
+                </div>
+
+                <div class="text-xs text-white/60">
+                    Standard Registration
+                </div>
+            </div>
+
+            <div class="text-right">
+
+                <div class="text-lg font-bold">
+                    ₹{{ number_format($baseFee) }}
+                </div>
+
+            </div>
+
+        </div>
+
+        <input
+            type="radio"
+            name="selected_offer"
+            value="india_regular"
+            data-price="{{ $baseFee }}"
+            data-currency="₹"
+            class="offer-radio hidden"
+            checked
+        >
+    </label>
+
+    {{-- INDIA OFFERS --}}
+    @if(!empty($indianPricing['offers']))
+
+        @foreach($indianPricing['offers'] as $savedOffer)
+
+            @php
+
+                $offer = \App\Models\Offer::find(
+                    $savedOffer['offer_id'] ?? null
+                );
+
+                if(!$offer) continue;
+
+                $discount =
+                    $offer->discount_type === 'percentage'
+                    ? ($baseFee * $offer->discount_value) / 100
+                    : $offer->discount_value;
+
+                $finalPrice =
+                    max($baseFee - $discount, 0);
+
+            @endphp
+
+            <label
+                class="offer-card block cursor-pointer rounded-xl border border-green-500/30 bg-green-500/10 p-4 hover:bg-green-500/15 transition"
+            >
+
+                <div class="flex justify-between items-center">
+
+                    <div>
+
+                        <div class="font-medium text-sm">
+                            🇮🇳 {{ $offer->name }}
                         </div>
 
-                        <div class="text-right">
+                        <div class="text-xs text-green-300">
 
-                            <p class="text-2xl font-bold">
-                                ₹{{ number_format($course->fee) }}
-                            </p>
+                            @if($offer->discount_type === 'percentage')
 
-                            @if(($course->early_bird_fee ?? 0) > 0)
+                                Save {{ $offer->discount_value }}%
 
-                                <p class="text-xs text-secondary-container mt-1">
-                                    Early Bird ₹{{ number_format($course->early_bird_fee) }}
-                                </p>
+                            @else
+
+                                Save ₹{{ number_format($discount) }}
 
                             @endif
 
@@ -300,61 +399,266 @@ h1, h2, h3 { font-family: 'Newsreader', serif; }
 
                     </div>
 
-                    @endif
+                    <div class="text-right">
 
-                    {{-- International Pricing --}}
-                    @if(!empty($internationalFees))
+                        <div class="line-through text-xs text-white/50">
+                            ₹{{ number_format($baseFee) }}
+                        </div>
 
-                        @foreach($internationalFees as $fee)
+                        <div class="text-lg font-bold text-green-300">
+                            ₹{{ number_format($finalPrice) }}
+                        </div>
 
-                            @if(!empty($fee['fee']) && $fee['fee'] > 0)
+                    </div>
 
-                            <div class="bg-white/5 border border-white/10 rounded-2xl px-5 py-4 flex items-center justify-between">
+                </div>
+
+                <input
+                    type="radio"
+                    name="selected_offer"
+                    value="{{ $offer->id }}"
+                    data-price="{{ $finalPrice }}"
+                    data-currency="₹"
+                    class="offer-radio hidden"
+                >
+
+            </label>
+
+        @endforeach
+
+    @endif
+
+
+    {{-- INTERNATIONAL --}}
+   @if(!empty($internationalFees))
+
+    @foreach($internationalFees as $fee)
+
+        @php
+
+            $basePrice = (float) ($fee['fee'] ?? 0);
+
+            $symbol =
+                $symbols[$fee['currency']]
+                ?? $fee['currency'];
+
+        @endphp
+
+        @if($basePrice > 0)
+
+            {{-- Base Price --}}
+            <label
+                class="offer-card block cursor-pointer rounded-xl border border-white/10 bg-white/5 p-4 hover:bg-white/10 transition"
+            >
+
+                <div class="flex justify-between items-center">
+
+                    <div>
+
+                        <div class="font-medium text-sm">
+                            🌍 {{ $fee['currency'] }} Regular
+                        </div>
+
+                        <div class="text-xs text-white/60">
+                            International Registration
+                        </div>
+
+                    </div>
+
+                    <div class="text-lg font-bold">
+                        {{ $symbol }}{{ number_format($basePrice) }}
+                    </div>
+
+                </div>
+
+                <input
+                    type="radio"
+                    name="selected_offer"
+                    value="international_{{ $fee['currency'] }}"
+                    data-price="{{ $basePrice }}"
+                    data-currency="{{ $symbol }}"
+                    class="offer-radio hidden"
+                >
+
+            </label>
+
+            {{-- International Offers --}}
+            @if(!empty($fee['offers']))
+
+                @foreach($fee['offers'] as $savedOffer)
+
+                    @php
+
+                        $offer = \App\Models\Offer::find(
+                            $savedOffer['offer_id'] ?? null
+                        );
+
+                    @endphp
+
+                    @if($offer)
+
+                        @php
+
+                            $discount =
+                                $offer->discount_type === 'percentage'
+                                ? ($basePrice * $offer->discount_value) / 100
+                                : $offer->discount_value;
+
+                            $finalPrice =
+                                max($basePrice - $discount, 0);
+
+                        @endphp
+
+                        <label
+                            class="offer-card block cursor-pointer rounded-xl border border-purple-500/30 bg-purple-500/10 p-4 hover:bg-purple-500/15 transition"
+                        >
+
+                            <div class="flex justify-between items-center">
 
                                 <div>
 
-                                    <p class="text-sm text-white/60 mb-1">
-                                        Abroad Registration
-                                    </p>
+                                    <div class="font-medium text-sm">
+                                        🌍 {{ $fee['currency'] }} - {{ $offer->name }}
+                                    </div>
 
-                                    <h4 class="font-semibold text-lg">
-                                        {{ $fee['currency'] }} Pricing
-                                    </h4>
+                                    <div class="text-xs text-purple-300">
+
+                                        @if($offer->discount_type === 'percentage')
+
+                                            Save {{ $offer->discount_value }}%
+
+                                        @else
+
+                                            Save {{ $symbol }}{{ number_format($discount) }}
+
+                                        @endif
+
+                                    </div>
 
                                 </div>
 
                                 <div class="text-right">
 
-                                    <p class="text-2xl font-bold">
+                                    <div class="line-through text-xs text-white/50">
+                                        {{ $symbol }}{{ number_format($basePrice) }}
+                                    </div>
 
-                                        {{ $symbols[$fee['currency']] ?? $fee['currency'] }}
-                                        {{ number_format($fee['fee']) }}
-
-                                    </p>
-
-                                    @if(!empty($fee['early_bird_fee']) && $fee['early_bird_fee'] > 0)
-
-                                        <p class="text-xs text-secondary-container mt-1">
-
-                                            Early Bird
-                                            {{ $symbols[$fee['currency']] ?? $fee['currency'] }}
-                                            {{ number_format($fee['early_bird_fee']) }}
-
-                                        </p>
-
-                                    @endif
+                                    <div class="text-lg font-bold text-purple-300">
+                                        {{ $symbol }}{{ number_format($finalPrice) }}
+                                    </div>
 
                                 </div>
 
                             </div>
 
-                            @endif
+                            <input
+                                type="radio"
+                                name="selected_offer"
+                                value="{{ $offer->id }}_{{ $fee['currency'] }}"
+                                data-price="{{ $finalPrice }}"
+                                data-currency="{{ $symbol }}"
+                                class="offer-radio hidden"
+                            >
 
-                        @endforeach
+                        </label>
 
                     @endif
 
-                </div>
+                @endforeach
+
+            @endif
+
+        @endif
+
+    @endforeach
+
+@endif
+
+</div>
+
+{{-- PAYMENT SUMMARY --}}
+<div
+    class="mt-6 bg-black/20 border border-white/10 rounded-2xl p-5"
+>
+
+    <div class="text-xs uppercase tracking-widest text-white/50 mb-3">
+        Payment Summary
+    </div>
+
+    <div class="flex justify-between text-sm mb-2">
+
+        <span>
+            Amount To Pay
+        </span>
+
+        <span
+            id="finalAmount"
+            class="font-bold text-2xl text-green-300"
+        >
+            ₹{{ number_format($baseFee) }}
+        </span>
+
+    </div>
+
+    <input
+        type="hidden"
+        name="payable_amount"
+        id="payableAmount"
+        value="{{ $baseFee }}"
+    >
+
+</div>
+
+<script>
+
+document.querySelectorAll('.offer-radio')
+.forEach(radio => {
+
+    radio.addEventListener('change', function() {
+
+        const amount =
+            this.dataset.price;
+
+        const currency =
+            this.dataset.currency;
+
+        document
+            .getElementById('finalAmount')
+            .innerText =
+            currency +
+            Number(amount).toLocaleString();
+
+        document
+            .getElementById('payableAmount')
+            .value =
+            amount;
+
+        document
+            .querySelectorAll('.offer-card')
+            .forEach(card => {
+                card.classList.remove(
+                    'ring-2',
+                    'ring-secondary'
+                );
+            });
+
+        this.closest('.offer-card')
+            .classList.add(
+                'ring-2',
+                'ring-secondary'
+            );
+
+    });
+
+});
+
+document
+    .querySelector('.offer-radio')
+    .dispatchEvent(new Event('change'));
+
+</script>
+
+
 
             </div>
 
@@ -364,29 +668,59 @@ h1, h2, h3 { font-family: 'Newsreader', serif; }
 
 </div>
 
-            <!-- ERROR -->
-            @error('payment_screenshot')
-                <p class="text-red-500 text-sm mb-4">{{ $message }}</p>
-            @enderror
+@endif
 
-            <!-- UPLOAD -->
-            <div class="mb-6">
-                <label class="text-sm font-semibold text-primary block mb-2">
-                    Upload Payment Screenshot
-                </label>
+            @if($isEligible)
 
-                <input type="file" name="payment_screenshot" id="paymentInput"
-                    class="text-sm w-full border rounded-lg p-3" required>
+    @error('payment_screenshot')
+        <p class="text-red-500 text-sm mb-4">{{ $message }}</p>
+    @enderror
 
-                <img id="previewImage" class="mt-4 hidden rounded-lg max-h-36">
-            </div>
+    <div class="mb-6">
+        <label class="text-sm font-semibold text-primary block mb-2">
+            Upload Payment Screenshot
+        </label>
 
-            <!-- CTA -->
-            <button type="submit"
-                onclick="return validateCheckbox()"
-                class="w-full bg-primary text-white py-4 rounded-lg text-sm font-bold uppercase hover:opacity-90">
-                Confirm Payment
-            </button>
+        <input
+            type="file"
+            name="payment_screenshot"
+            id="paymentInput"
+            class="text-sm w-full border rounded-lg p-3"
+            required
+        >
+
+        <img
+            id="previewImage"
+            class="mt-4 hidden rounded-lg max-h-36"
+        >
+    </div>
+
+    <button
+        type="submit"
+        class="w-full bg-primary text-white py-4 rounded-lg text-sm font-bold uppercase hover:opacity-90"
+    >
+        Confirm Payment
+    </button>
+
+@else
+
+    <div class="bg-red-50 border border-red-200 rounded-xl p-5 text-center">
+        <span class="material-symbols-outlined text-red-600 text-4xl mb-3">
+            block
+        </span>
+
+        <h4 class="font-semibold text-red-800 mb-2">
+            Enrollment Restricted
+        </h4>
+
+        <p class="text-sm text-red-700">
+            You are currently not eligible for this course.
+            Please contact the administrator or support team.
+        </p>
+    </div>
+
+@endif
+
 
         </div>
         </form>

@@ -49,6 +49,14 @@
 
 </a>
 
+<a href="{{ route('admin.users.tag.add') }}"
+   class="bg-primary hover:bg-primary-container text-white px-6 py-2.5 rounded-lg flex items-center gap-2 transition-all font-medium text-sm">
+    
+    <span class="material-symbols-outlined text-lg">person_add</span>
+    Add New User Tag
+
+</a>
+
 <a href="{{ route('admin.users.assign') }}"
    class="bg-primary hover:bg-primary-container text-white px-6 py-2.5 rounded-lg flex items-center gap-2 transition-all font-medium text-sm">
     

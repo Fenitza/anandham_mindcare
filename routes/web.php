@@ -11,6 +11,7 @@ use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\OfferController;
 
 Route::get('/', function () {
     return view('pages.home');
@@ -54,6 +55,7 @@ Route::get('/register', function () {
     return view('pages.auth.register');
 })->name('register');
 
+Route::get('/register',[UserAuthController::class, 'registerForm'])->name('register');
 Route::get('/email/verify', function () {
     return view('pages.auth.verify_email');
 })->name('verification.notice');
@@ -117,7 +119,11 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::view('/dashboard', 'pages.dasboard.admin.dashboard')->name('admin.dashboard');
     
     Route::get('/users', [UserAuthController::class, 'usersIndex'])->name('admin.users');
-    Route::view('/users/add', 'pages.dasboard.admin.add_user')->name('admin.users.add');
+    Route::get('/users/add', [UserAuthController::class, 'addUser'])->name('admin.users.add');
+    Route::get('/users/tags/add', [UserAuthController:: class, 'addUserTag'])->name('admin.users.tag.add');
+    Route::post('/users/tags/store', [UserAuthController::class, 'storeTag'])->name('admin.tags.store');
+    Route::put('/tags/{tag}', [UserAuthController::class, 'updateTag'])->name('admin.tags.update');
+    Route::delete('/tags/{tag}', [UserAuthController::class, 'destroyTag'])->name('admin.tags.destroy');
     Route::get('/users/{id}/edit', [UserAuthController::class, 'edit'])->name('admin.users.edit');
     Route::post('/users/{id}/update', [UserAuthController::class, 'update'])->name('admin.users.update');
     Route::post('/users/store', [UserAuthController::class, 'storeUser'])->name('users.store');
@@ -163,11 +169,17 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
 
 
     Route::get('/courses', [CourseController::class, 'index'])->name('admin.courses');
-    Route::view('/courses/add', 'pages.dasboard.admin.add_course')->name('admin.courses.add');
+    Route::get('/courses/add', [CourseController::class, 'create'])->name('admin.courses.add');
+    
     Route::post('/courses/store', [CourseController::class, 'store'])->name('courses.store');
     Route::get('/courses/{id}/edit', [CourseController::class, 'edit'])->name('courses.edit'); 
     Route::put('/courses/{id}', [CourseController::class, 'update'])->name('courses.update');
     Route::delete('/admin/courses/{id}', [CourseController::class, 'destroy'])->name('courses.destroy');
+
+    Route::get('/offers', [OfferController::class,'index'])->name('admin.offers.index');
+    Route::post('/offers', [OfferController::class,'store'])->name('admin.offers.store');
+    Route::put('/offers/{offer}', [OfferController::class,'update'])->name('admin.offers.update');
+    Route::delete('/offers/{offer}', [OfferController::class,'destroy'])->name('admin.offers.destroy');
 
     Route::get('/gallery', [GalleryController::class,'index'])->name('admin.gallery');
     Route::view('/gallery/add', 'pages.dasboard.admin.add_gallery')->name('admin.gallery.add');
@@ -193,6 +205,9 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('appointment.create');
     Route::post('/appointments/store', [AppointmentController::class, 'adminStore'])->name('appointment.admin.store');
     Route::delete('/appointments/{id}', [AppointmentController::class, 'destroy'])->name('appointment.destroy');
+
+    Route::get('/review/{appointment}',[ReviewController::class, 'create'])->name('review.create');
+    Route::post('/review',[ReviewController::class, 'store'])->name('review.store');
     
 
     Route::get('/payments', [EnrollmentController::class, 'paymentVerifications'])->name('admin.payments');
