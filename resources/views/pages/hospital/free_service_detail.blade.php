@@ -1,0 +1,715 @@
+@extends('layouts.hosp')
+
+@section('content')
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#f7f9fc",
+                        "on-primary-fixed-variant": "#28467b",
+                        "inverse-primary": "#acc7ff",
+                        "tertiary-fixed": "#cae7f6",
+                        "on-tertiary-container": "#8fabba",
+                        "tertiary-container": "#25404c",
+                        "surface-container": "#eceef1",
+                        "surface-bright": "#f7f9fc",
+                        "inverse-surface": "#2d3133",
+                        "secondary-container": "#fccc38",
+                        "outline": "#747780",
+                        "primary": "#002555",
+                        "inverse-on-surface": "#eff1f4",
+                        "secondary-fixed-dim": "#f0c12c",
+                        "primary-fixed-dim": "#acc7ff",
+                        "surface-variant": "#e0e3e6",
+                        "on-surface": "#191c1e",
+                        "surface-container-highest": "#e0e3e6",
+                        "surface-tint": "#415e94",
+                        "outline-variant": "#c4c6d1",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-container": "#6f5600",
+                        "tertiary-fixed-dim": "#aecbda",
+                        "surface-container-low": "#f2f4f7",
+                        "primary-fixed": "#d8e2ff",
+                        "on-primary": "#ffffff",
+                        "on-background": "#191c1e",
+                        "on-primary-fixed": "#001a41",
+                        "on-secondary-fixed": "#241a00",
+                        "on-surface-variant": "#43474f",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#d8dadd",
+                        "background": "#f7f9fc",
+                        "secondary-fixed": "#ffdf90",
+                        "surface-container-high": "#e6e8eb",
+                        "on-secondary-fixed-variant": "#584400",
+                        "on-tertiary-fixed": "#001f2a",
+                        "tertiary": "#0c2a35",
+                        "error": "#ba1a1a",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#2f4a57",
+                        "secondary": "#755b00",
+                        "primary-container": "#1b3b6f",
+                        "on-primary-container": "#8aa7e1",
+                        "on-tertiary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Newsreader"],
+                        "body": ["Work Sans"],
+                        "label": ["Work Sans"]
+                    },
+                                animation: {
+                marquee: "marquee 20s linear infinite",
+                "fade-in-up": "fadeInUp 0.8s ease-out forwards",
+                "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+                pop: "pop 2s ease-in-out infinite"
+            },
+
+            keyframes: {
+                
+                marquee: {
+        "0%": { transform: "translateX(0)" },
+        "100%": { transform: "translateX(-100%)" }
+    },
+                fadeInUp: {
+                    "0%": { opacity: "0", transform: "translateY(20px)" },
+                    "100%": { opacity: "1", transform: "translateY(0)" }
+                },
+                pop: {
+                    "0%, 100%": { transform: "scale(1)" },
+                    "50%": { transform: "scale(1.08)" }
+                }
+            }
+        }
+    }
+}
+</script>
+<script>
+function toggleModule(index) {
+    const content = document.getElementById('content-' + index);
+    const icon = document.getElementById('icon-' + index);
+
+    if (content.classList.contains('hidden')) {
+        content.classList.remove('hidden');
+        icon.style.transform = 'rotate(180deg)';
+    } else {
+        content.classList.add('hidden');
+        icon.style.transform = 'rotate(0deg)';
+    }
+}
+</script>
+
+<style>
+        body { font-family: 'Work Sans', sans-serif; background-color: #f7f9fc; color: #191c1e; }
+        h1, h2, h3, h4 { font-family: 'Newsreader', serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); }
+        .editorial-shadow { box-shadow: 0 24px 40px -10px rgba(0, 37, 85, 0.08); }
+        .ghost-border { border: 1px solid rgba(0, 37, 85, 0.1); }
+        .hero-glass { background: rgba(255, 255, 255, 0.12); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15); }
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+        .delay-400 { animation-delay: 400ms; }
+        .delay-500 { animation-delay: 500ms; }
+    </style>
+
+
+
+
+<header class="relative pt-16 md:pt-20 pb-12 md:pb-16 overflow-hidden bg-primary min-h-[55vh] flex items-center">
+    <!-- Background -->
+    <div class="absolute inset-0 z-0">
+        <div class="absolute inset-0 bg-gradient-to-b from-primary/95 via-primary/80 to-primary z-10"></div>
+
+        <img 
+            class="w-full h-full object-cover scale-110 animate-[pulse_10s_ease-in-out_infinite]"
+            src="{{ asset('storage/'.$course->course_image) }}"
+        />
+    </div>
+
+    <div class="max-w-7xl mx-auto px-8 relative z-20 text-center">
+
+        <!-- Badge -->
+        <div class="opacity-0 animate-fade-in-up">
+            <span class="inline-block px-4 py-1.5 mb-6 rounded-full bg-secondary text-primary text-[10px] font-bold tracking-widest uppercase shadow-lg shadow-secondary/20">
+                {{ $course->course_type ?? 'Course' }}
+            </span>
+        </div>
+
+        <!-- Title -->
+        <h1 class="opacity-0 animate-fade-in-up delay-100 text-4xl md:text-5xl font-bold text-white mb-6 leading-[1.15] max-w-4xl mx-auto">
+            {{ $course->title }}
+        </h1>
+
+        <!-- Description -->
+        <p class="opacity-0 animate-fade-in-up delay-200 text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-10 font-light leading-relaxed">
+            {{ $course->description }}
+        </p>
+
+        <!-- SUMMARY CARDS -->
+<div class="opacity-0 animate-fade-in-up delay-300 flex flex-col gap-5 max-w-3xl mx-auto mb-10">
+
+
+    {{-- =========================
+        DURATION / SCHEDULE
+    ========================== --}}
+    <div class="hero-glass p-5 rounded-2xl text-white">
+
+        <div class="flex items-center gap-3 mb-4">
+
+            <div class="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center">
+                <span class="material-symbols-outlined text-secondary-container text-2xl">
+                    calendar_month
+                </span>
+            </div>
+
+            <div>
+                <p class="text-[10px] uppercase tracking-widest opacity-60">
+                    Schedule
+                </p>
+
+                <h3 class="text-lg font-bold font-headline">
+                    Duration
+                </h3>
+            </div>
+
+        </div>
+
+        <div class="space-y-2">
+
+            <div class="flex items-start justify-between gap-3">
+
+                <span class="text-sm opacity-80">
+                    Timeline
+                </span>
+
+                <span class="text-right text-sm font-semibold">
+                    {{ $course->formatted_schedule }}
+                </span>
+
+            </div>
+
+            @if($course->course_time)
+
+                <div class="flex items-start justify-between gap-3">
+
+                    <span class="text-sm opacity-80">
+                        Timing
+                    </span>
+
+                    <span class="text-right text-sm font-semibold">
+                        {{ $course->course_time }}
+                    </span>
+
+                </div>
+
+            @endif
+
+            @if($course->venue)
+
+                <div class="flex items-start justify-between gap-3">
+
+                    <span class="text-sm opacity-80">
+                        Venue
+                    </span>
+
+                    <span class="text-right text-sm font-semibold">
+                        {{ $course->venue }}
+                    </span>
+
+                </div>
+
+            @endif
+
+        </div>
+
+    </div>
+
+
+  
+
+</div>
+
+        <!-- CTA -->
+        <a href="{{ route('course.enroll.handle', $course->id) }}"
+
+            class="bg-secondary text-surface px-8 py-4 rounded-lg font-bold animate-pop hover:scale-110 transition duration-300 shadow-lg hover:shadow-xl inline-block animate-pop">
+                
+                🚀 Reserve Your Seat
+            </a>
+
+    </div>
+</header>
+
+
+
+
+
+
+<!-- Curriculum -->
+<section class="py-20 bg-surface">
+    <div class="max-w-4xl mx-auto px-8">
+
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold text-primary mb-4">
+                {{ $course->duration ?? 'Course' }} Syllabus
+            </h2>
+
+            <p class="text-on-surface-variant text-lg">
+                {{ $course->description ?? 'Structured learning experience designed for excellence.' }}
+            </p>
+        </div>
+
+        <div class="space-y-4">
+
+            @foreach($course->modules->sortBy('module_order') as $index => $module)
+
+                <div class="bg-white rounded-2xl ghost-border p-8 shadow-sm group hover:border-secondary transition-colors">
+
+                    <!-- Header -->
+                    <div class="flex justify-between items-center cursor-pointer"
+                         onclick="toggleModule({{ $index }})">
+
+                        <div class="flex items-center gap-6">
+
+                            <!-- Day Number -->
+                            <span class="w-14 h-14 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-primary/20">
+                                {{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}
+                            </span>
+
+                            <!-- Module Title -->
+                            <h3 class="text-2xl font-bold text-primary">
+                                {{ $module->title }}
+                            </h3>
+                        </div>
+
+                        <!-- Icon -->
+                        <span id="icon-{{ $index }}"
+                              class="material-symbols-outlined text-on-surface-variant group-hover:text-secondary transition-all duration-300">
+                            expand_more
+                        </span>
+                    </div>
+
+                    <!-- Topics -->
+                    <div id="content-{{ $index }}"
+                         class="mt-6 pl-20 space-y-3 text-on-surface-variant border-l-2 border-secondary/20 ml-7 hidden">
+
+                        
+                    {{-- ✅ MODULE DESCRIPTION (ONLY ONCE) --}}
+                    @if($module->description)
+                        <p class="text-base text-on-surface-variant font-medium">
+                            {{ $module->description }}
+                        </p>
+                    @endif
+
+                    {{-- ✅ TOPICS --}}
+                    @foreach($module->topics as $topic)
+                        <p class="flex items-center gap-3">
+                            <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                            {{ $topic->name }}
+                        </p>
+                    @endforeach
+
+                    </div>
+                </div>
+
+            @endforeach
+
+        </div>
+    </div>
+</section>
+<!-- Why These Meetings Are Important -->
+<section class="py-24 bg-primary text-white">
+    <div class="max-w-7xl mx-auto px-8">
+
+        <h2 class="text-4xl md:text-5xl font-bold mb-16 text-center text-white">
+            Why Are These Meetings Important?
+        </h2>
+
+        <div class="
+            grid gap-10
+            {{ $course->bonuses->count() == 1
+                ? 'grid-cols-1 max-w-2xl mx-auto'
+                : 'grid-cols-1 md:grid-cols-2'
+            }}
+        ">
+
+            @foreach($course->bonuses as $bonus)
+
+                <div class="bg-white/5 border border-white/10 p-10 rounded-2xl flex gap-8 hover:bg-white/10 transition-all group">
+
+                    <!-- Icon -->
+                    <div class="w-16 h-16 rounded-full bg-secondary flex items-center justify-center shrink-0 shadow-lg shadow-secondary/10">
+                        <span class="material-symbols-outlined text-3xl text-primary">
+                            redeem
+                        </span>
+                    </div>
+
+                    <!-- Content -->
+                    <div>
+
+                        <h3 class="text-2xl font-bold mb-2 text-secondary">
+                            {{ $bonus->title }}
+                        </h3>
+
+                        @if($bonus->value > 0)
+                            <p class="text-sm text-white/50 mb-2">
+                                Worth ₹{{ number_format($bonus->value) }}
+                            </p>
+                        @endif
+
+                        <p class="text-white/70 leading-relaxed text-lg">
+                            {{ $bonus->description }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+            @endforeach
+
+        </div>
+
+    </div>
+</section>
+
+<!-- Why This Course (Grid) -->
+<section class="py-20 bg-surface relative">
+<div class="max-w-7xl mx-auto px-8">
+<div class="mb-14 text-center">
+<h2 class="text-4xl font-bold text-primary mb-4">Core Educational Pillars</h2>
+<div class="h-1.5 w-16 bg-secondary mx-auto"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Grid Card 01 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl ghost-border editorial-shadow hover:shadow-2xl transition-all duration-300">
+<span class="text-secondary font-bold text-2xl mb-4 block opacity-40">01</span>
+<h3 class="text-xl font-bold mb-3 text-primary">Diagnostic Precision</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed">Bridge the gap between generic symptoms and targeted clinical interventions using our proprietary neuro-mapping tools.</p>
+</div>
+<!-- Grid Card 02 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl ghost-border editorial-shadow hover:shadow-2xl transition-all duration-300">
+<span class="text-secondary font-bold text-2xl mb-4 block opacity-40">02</span>
+<h3 class="text-xl font-bold mb-3 text-primary">Restorative Flow</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed">Implement a seamless workflow that balances pharmacological support with neuro-cognitive restoration techniques.</p>
+</div>
+<!-- Grid Card 03 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl ghost-border editorial-shadow hover:shadow-2xl transition-all duration-300">
+<span class="text-secondary font-bold text-2xl mb-4 block opacity-40">03</span>
+<h3 class="text-xl font-bold mb-3 text-primary">Evidence-Based</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed">Every module is backed by 15+ years of clinical research and published peer-reviewed academic studies.</p>
+</div>
+<!-- Grid Card 04 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl ghost-border editorial-shadow hover:shadow-2xl transition-all duration-300">
+<span class="text-secondary font-bold text-2xl mb-4 block opacity-40">04</span>
+<h3 class="text-xl font-bold mb-3 text-primary">Patient Retention</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed">Learn how to communicate clinical value effectively to increase long-term patient compliance and trust.</p>
+</div>
+<!-- Grid Card 05 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl ghost-border editorial-shadow hover:shadow-2xl transition-all duration-300">
+<span class="text-secondary font-bold text-2xl mb-4 block opacity-40">05</span>
+<h3 class="text-xl font-bold mb-3 text-primary">Ethical Growth</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed">Expand your clinic's therapeutic offerings without compromising the core integrity of patient care.</p>
+</div>
+<!-- Grid Card 06 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl ghost-border editorial-shadow hover:shadow-2xl transition-all duration-300">
+<span class="text-secondary font-bold text-2xl mb-4 block opacity-40">06</span>
+<h3 class="text-xl font-bold mb-3 text-primary">Global Standards</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed">Align your practice with the latest international protocols in restorative mindcare and clinical wellness.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Career Transformation -->
+<!-- <section class="py-24 bg-surface-container-low overflow-hidden">
+<div class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+<div class="order-2 md:order-1 relative">
+<div class="absolute -top-4 -left-4 w-24 h-24 bg-secondary-container/30 rounded-full blur-2xl"></div>
+<img class="rounded-2xl shadow-2xl relative z-10" data-alt="a doctor in a clean white coat looking confidently at a digital medical chart with soft natural window lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPx35c6lQc9fjeskIYos6MFKrq9ZTa3NwKD19jvsgl6SxSxdyDJsoajdy2d5CcQBFVrneiqoXo-jEEdYa67FbVbyha7eDOTo9GxZ-sMpdvndEj1KyasHBljptoPJrObcnh4YcDNT5pxPSwkb_Ykpk6AafjAdfpfek1dbu_Fm-14oYQm8BmlLZ-U31trp1BMv3_Pv9J8FDwRicgXhRulyv17kerwtggOD3Vhmc_IGIkYO8o5xuNBDvWqwR3ur8cwWoklgJIAhS2RcQf"/>
+<div class="absolute -bottom-4 -right-4 w-32 h-32 bg-primary/10 rounded-full blur-3xl"></div>
+</div> -->
+<!-- <div class="order-1 md:order-2">
+<h2 class="text-4xl md:text-5xl font-bold text-primary mb-8">The Professional Shift</h2>
+<div class="space-y-8 text-on-surface-variant text-lg leading-relaxed">
+<p>Transition from a standard practitioner to a recognized authority in restorative mindcare. This course fundamentally shifts how you perceive and treat complex cognitive health.</p>
+<div class="border-l-4 border-secondary pl-8 py-6 bg-white rounded-r-2xl shadow-sm">
+<p class="text-xl italic font-headline text-primary leading-relaxed">"The curriculum provided me with a structured approach I could implement the very next day. My clinical outcomes improved significantly within the first month."</p>
+</div>
+<p>Gain the confidence to handle complex cases, command higher consultation value, and lead your community toward better outcomes.</p>
+</div>
+</div>
+</div> -->
+</section>
+
+<!-- Student Perspectives -->
+
+<!-- =========================
+GOOGLE REVIEWS TESTIMONIALS
+========================= -->
+<section class="py-24 bg-primary-container/10 overflow-hidden">
+
+    <div class="max-w-7xl mx-auto px-8">
+
+        <h2 class="text-4xl md:text-5xl font-bold text-primary mb-6 text-center">
+            Trusted by Learners & Practitioners
+        </h2>
+
+        <p class="text-center text-on-surface-variant text-lg mb-16">
+            Rated <strong>4.9/5</strong> from over
+            <strong>90+ Google Reviews</strong>
+        </p>
+
+        <div class="relative overflow-hidden">
+
+            <div class="flex gap-8 animate-testimonials w-max">
+
+                <!-- TESTIMONIAL 1 -->
+                <div class="min-w-[320px] md:min-w-[420px] max-w-[320px] md:max-w-[420px] bg-white p-10 rounded-2xl ghost-border editorial-shadow">
+                    <p class="italic text-on-surface-variant text-lg mb-10 leading-relaxed">
+                        "The training and the classes were excellent. Classes are interactive and interesting and helpful in improving skills both professionally and personally. The PG Diploma courses support professional development in an excellent manner. Thank you Dr. Helena, the resource persons, and the entire team for the wonderful classes."
+                    </p>
+
+                    <div class="border-t border-outline-variant/10 pt-6">
+                        <p class="font-bold text-primary text-lg">Maha Lakshmi</p>
+                        <p class="text-xs uppercase tracking-widest text-on-surface-variant">
+                            PG Diploma Participant
+                        </p>
+                    </div>
+                </div>
+
+                <!-- TESTIMONIAL 2 -->
+                <div class="min-w-[320px] md:min-w-[420px] max-w-[320px] md:max-w-[420px] bg-white p-10 rounded-2xl ghost-border editorial-shadow">
+                    <p class="italic text-on-surface-variant text-lg mb-10 leading-relaxed">
+                        "A place with compassionate professionals, insightful guidance, and meaningful community impact. Dr. Helena and her team's dedication is truly exceptional. Their commitment to helping people achieve their goals is inspiring."
+                    </p>
+
+                    <div class="border-t border-outline-variant/10 pt-6">
+                        <p class="font-bold text-primary text-lg">Laveena</p>
+                        <p class="text-xs uppercase tracking-widest text-on-surface-variant">
+                            Community Member
+                        </p>
+                    </div>
+                </div>
+
+                <!-- TESTIMONIAL 3 -->
+                <div class="min-w-[320px] md:min-w-[420px] max-w-[320px] md:max-w-[420px] bg-white p-10 rounded-2xl ghost-border editorial-shadow">
+                    <p class="italic text-on-surface-variant text-lg mb-10 leading-relaxed">
+                        "I attended a one-year Trauma Counselling course conducted by Anandham Mind Care and found it incredibly useful. The course was well planned with lectures, practical sessions, and streamlined examinations. Kudos to Dr. Helena and the entire team."
+                    </p>
+
+                    <div class="border-t border-outline-variant/10 pt-6">
+                        <p class="font-bold text-primary text-lg">Vaishni K</p>
+                        <p class="text-xs uppercase tracking-widest text-on-surface-variant">
+                            Trauma Counselling Graduate
+                        </p>
+                    </div>
+                </div>
+
+                <!-- TESTIMONIAL 4 -->
+                <div class="min-w-[320px] md:min-w-[420px] max-w-[320px] md:max-w-[420px] bg-white p-10 rounded-2xl ghost-border editorial-shadow">
+                    <p class="italic text-on-surface-variant text-lg mb-10 leading-relaxed">
+                        "I completed the Trauma Counselling Through Self Psychology course. The faculty and resource persons conducted the sessions exceptionally well. It has been highly beneficial for both my personal life and my counselling practice."
+                    </p>
+
+                    <div class="border-t border-outline-variant/10 pt-6">
+                        <p class="font-bold text-primary text-lg">Joseph Antony</p>
+                        <p class="text-xs uppercase tracking-widest text-on-surface-variant">
+                            Trauma Counselling Learner
+                        </p>
+                    </div>
+                </div>
+
+                <!-- TESTIMONIAL 5 -->
+                <div class="min-w-[320px] md:min-w-[420px] max-w-[320px] md:max-w-[420px] bg-white p-10 rounded-2xl ghost-border editorial-shadow">
+                    <p class="italic text-on-surface-variant text-lg mb-10 leading-relaxed">
+                        "Excellent interactive classes. Teaching and training were marvellous. Doubts were cleared immediately and proper materials were provided. The PG Diploma course is highly useful for professional excellence."
+                    </p>
+
+                    <div class="border-t border-outline-variant/10 pt-6">
+                        <p class="font-bold text-primary text-lg">Joseph Arumai Raj S</p>
+                        <p class="text-xs uppercase tracking-widest text-on-surface-variant">
+                            PG Diploma Participant
+                        </p>
+                    </div>
+                </div>
+
+                <!-- TESTIMONIAL 6 -->
+                <div class="min-w-[320px] md:min-w-[420px] max-w-[320px] md:max-w-[420px] bg-white p-10 rounded-2xl ghost-border editorial-shadow">
+                    <p class="italic text-on-surface-variant text-lg mb-10 leading-relaxed">
+                        "The PG Diploma in Trauma Counselling through Self Psychology and Integrative Therapies is deeply enriching and practical. The program offers strong theoretical insight, compassionate trauma-informed approaches, and valuable therapeutic skills."
+                    </p>
+
+                    <div class="border-t border-outline-variant/10 pt-6">
+                        <p class="font-bold text-primary text-lg">Aravindhan J</p>
+                        <p class="text-xs uppercase tracking-widest text-on-surface-variant">
+                            Mental Health Professional
+                        </p>
+                    </div>
+                </div>
+
+                <!-- DUPLICATE ALL CARDS FOR INFINITE SCROLL -->
+
+                <div class="min-w-[320px] md:min-w-[420px] max-w-[320px] md:max-w-[420px] bg-white p-10 rounded-2xl ghost-border editorial-shadow">
+                    <p class="italic text-on-surface-variant text-lg mb-10 leading-relaxed">
+                        "The training and the classes were excellent. Classes are interactive and interesting and helpful in improving skills both professionally and personally."
+                    </p>
+                    <div class="border-t border-outline-variant/10 pt-6">
+                        <p class="font-bold text-primary text-lg">Maha Lakshmi</p>
+                        <p class="text-xs uppercase tracking-widest text-on-surface-variant">PG Diploma Participant</p>
+                    </div>
+                </div>
+
+                <div class="min-w-[320px] md:min-w-[420px] max-w-[320px] md:max-w-[420px] bg-white p-10 rounded-2xl ghost-border editorial-shadow">
+                    <p class="italic text-on-surface-variant text-lg mb-10 leading-relaxed">
+                        "A place with compassionate professionals, insightful guidance, and meaningful community impact."
+                    </p>
+                    <div class="border-t border-outline-variant/10 pt-6">
+                        <p class="font-bold text-primary text-lg">Laveena</p>
+                        <p class="text-xs uppercase tracking-widest text-on-surface-variant">Community Member</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<style>
+@keyframes testimonialsScroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.animate-testimonials {
+    animation: testimonialsScroll 60s linear infinite;
+}
+
+.animate-testimonials:hover {
+    animation-play-state: paused;
+}
+
+.ghost-border {
+    border: 1px solid rgba(0,0,0,0.06);
+}
+
+.editorial-shadow {
+    box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+}
+</style>
+
+
+<!-- FAQ
+<section class="py-24 bg-white">
+<div class="max-w-3xl mx-auto px-8">
+<h2 class="text-4xl font-bold text-primary mb-16 text-center">Frequently Asked Questions</h2>
+<div class="space-y-6">
+<div class="border-b border-outline-variant/20 pb-6">
+<button class="w-full flex justify-between items-center text-left py-4 focus:outline-none group">
+<span class="font-bold text-primary text-xl group-hover:text-secondary transition-colors">Is this course certified for CPD/CME credits?</span>
+<span class="material-symbols-outlined text-secondary">add</span>
+</button>
+</div>
+<div class="border-b border-outline-variant/20 pb-6">
+<button class="w-full flex justify-between items-center text-left py-4 focus:outline-none group">
+<span class="font-bold text-primary text-xl group-hover:text-secondary transition-colors">Who is the ideal candidate for this Academy?</span>
+<span class="material-symbols-outlined text-secondary">add</span>
+</button>
+</div>
+<div class="border-b border-outline-variant/20 pb-6">
+<button class="w-full flex justify-between items-center text-left py-4 focus:outline-none group">
+<span class="font-bold text-primary text-xl group-hover:text-secondary transition-colors">Are there any prerequisites for enrollment?</span>
+<span class="material-symbols-outlined text-secondary">add</span>
+</button>
+</div>
+<div class="border-b border-outline-variant/20 pb-6">
+<button class="w-full flex justify-between items-center text-left py-4 focus:outline-none group">
+<span class="font-bold text-primary text-xl group-hover:text-secondary transition-colors">What is the post-course support structure?</span>
+<span class="material-symbols-outlined text-secondary">add</span>
+</button>
+</div>
+</div>
+</div>
+</section> -->
+
+<!-- Sticky Footer CTA -->
+<!-- Sticky Footer CTA -->
+<div class="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-xl py-4 px-8 border-t border-outline-variant/20 shadow-[0_-15px_40px_rgba(0,37,85,0.15)] z-[110] transform translate-y-0 transition-transform">
+
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+
+        <!-- Course Info -->
+        <div class="hidden md:block">
+
+            <!-- Title -->
+            <p class="text-primary font-bold text-xl font-headline tracking-tight">
+                {{ $course->title }}
+            </p>
+
+            <!-- Urgency -->
+            <div class="flex items-center gap-2 mt-0.5">
+                <span class="inline-block w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+
+                <p class="text-primary/70 text-[10px] font-bold uppercase tracking-widest">
+                    @if($course->course_date)
+                        Enrollment closing soon • Starts {{ \Carbon\Carbon::parse($course->course_date)->format('M d') }}
+                    @else
+                        Limited seats available • Enroll now
+                    @endif
+
+                    @if($course->capacity)
+                        • Only {{ $course->capacity }} seats
+                    @endif
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Price + CTA -->
+        <div class="flex items-center gap-8">
+
+            <!-- Price -->
+            <div class="text-right hidden sm:block">
+
+                {{-- Optional old price (if you add later) --}}
+                @if(!empty($course->original_price))
+                    <p class="text-slate-400 line-through text-xs">
+                        ₹{{ number_format($course->original_price) }}
+                    </p>
+                @endif
+
+                <!-- <p class="text-primary font-bold text-2xl">
+                    {{ $course->fee > 0 ? '₹'.number_format($course->fee) : 'Free' }}
+                </p> -->
+            </div>
+
+            <!-- CTA Button -->
+            <a href="{{ route('course.enroll.handle', $course->id) }}"
+               class="bg-secondary text-surface px-8 py-4 rounded-lg font-bold animate-pop hover:scale-110 transition duration-300 shadow-lg hover:shadow-xl inline-block animate-pop">
+
+                Secure My Seat
+            </a>
+
+        </div>
+    </div>
+</div>
+
+
+@endsection

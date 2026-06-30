@@ -74,6 +74,7 @@
             },
 
             keyframes: {
+                
                 marquee: {
         "0%": { transform: "translateX(0)" },
         "100%": { transform: "translateX(-100%)" }
@@ -629,6 +630,25 @@ FEES
 </div>
 </div>
 </section>
+
+<section class="py-24 bg-gradient-to-br from-primary to-primary-container text-white relative overflow-hidden">
+
+    <!-- Decorative Blur -->
+    <div class="absolute -top-20 -right-20 w-72 h-72 bg-secondary/20 rounded-full blur-3xl"></div>
+    <div class="absolute -bottom-20 -left-20 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
+
+    <div class="max-w-7xl mx-auto px-8 relative z-10 text-center">
+
+        <h2 class="text-4xl md:text-5xl font-bold mb-6">
+           Speciality-Focused Curriculum
+        </h2>
+
+        <p class="max-w-3xl mx-auto text-white/75 text-lg leading-relaxed">
+            Collaborated with VCVRT Education Council , an autonomous body affiliated with Government of India, New Delhi .Approved Code: TN//CC//25982
+        </p>
+
+    </div>
+</section>
 <!-- Registration & Contact -->
 <section class="py-24 bg-gradient-to-br from-primary to-primary-container text-white relative overflow-hidden">
 
@@ -796,7 +816,7 @@ FEES
                             </p>
 
                             <p class="font-bold text-lg break-all">
-                                admissions@anandhammindcare.org
+                                anandhammindcare@gmail.com
                             </p>
                         </div>
 
@@ -821,7 +841,7 @@ FEES
                             </p>
 
                             <p class="text-sm text-on-surface-variant">
-                                Tamil Nadu, India
+                                140, Railway Station Road, Thudiyalur, Coimbatore - 641034
                             </p>
                         </div>
 
@@ -1108,14 +1128,14 @@ FEES
 </div>
 </section>
 <!-- Career Transformation -->
-<section class="py-24 bg-surface-container-low overflow-hidden">
+<!-- <section class="py-24 bg-surface-container-low overflow-hidden">
 <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
 <div class="order-2 md:order-1 relative">
 <div class="absolute -top-4 -left-4 w-24 h-24 bg-secondary-container/30 rounded-full blur-2xl"></div>
 <img class="rounded-2xl shadow-2xl relative z-10" data-alt="a doctor in a clean white coat looking confidently at a digital medical chart with soft natural window lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPx35c6lQc9fjeskIYos6MFKrq9ZTa3NwKD19jvsgl6SxSxdyDJsoajdy2d5CcQBFVrneiqoXo-jEEdYa67FbVbyha7eDOTo9GxZ-sMpdvndEj1KyasHBljptoPJrObcnh4YcDNT5pxPSwkb_Ykpk6AafjAdfpfek1dbu_Fm-14oYQm8BmlLZ-U31trp1BMv3_Pv9J8FDwRicgXhRulyv17kerwtggOD3Vhmc_IGIkYO8o5xuNBDvWqwR3ur8cwWoklgJIAhS2RcQf"/>
 <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-primary/10 rounded-full blur-3xl"></div>
-</div>
-<div class="order-1 md:order-2">
+</div> -->
+<!-- <div class="order-1 md:order-2">
 <h2 class="text-4xl md:text-5xl font-bold text-primary mb-8">The Professional Shift</h2>
 <div class="space-y-8 text-on-surface-variant text-lg leading-relaxed">
 <p>Transition from a standard practitioner to a recognized authority in restorative mindcare. This course fundamentally shifts how you perceive and treat complex cognitive health.</p>
@@ -1125,57 +1145,175 @@ FEES
 <p>Gain the confidence to handle complex cases, command higher consultation value, and lead your community toward better outcomes.</p>
 </div>
 </div>
-</div>
+</div> -->
 </section>
 
 <!-- Student Perspectives -->
-<section class="py-24 bg-primary-container/10">
-<div class="max-w-7xl mx-auto px-8">
-<h2 class="text-4xl md:text-5xl font-bold text-primary mb-20 text-center">Practitioner Perspectives</h2>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-<!-- Testimonial 1 -->
-<div class="bg-white p-10 rounded-2xl ghost-border editorial-shadow italic hover:-translate-y-2 transition-transform duration-300">
-<p class="text-on-surface-variant text-lg mb-10 leading-relaxed">"The level of clinical depth provided here is unparalleled. It's transformed not just my practice, but my entire philosophy of care. The ROI was immediate."</p>
-<div class="flex items-center gap-5 not-italic border-t border-outline-variant/10 pt-8">
-<div class="w-14 h-14 rounded-full overflow-hidden bg-surface-dim ring-2 ring-secondary/20">
-<img class="w-full h-full object-cover" data-alt="profile photo of a smiling professional man in a business casual shirt, clean studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFVcImVJGXMSIoUzs0cZlAjfBHlVLtNUvtv2Rb6W-NyM4Cy2F64lMlZtk5ms9sMkZY8jtJgR2a3fvyn9yD_48koquG514kym1oy-4vTw4ZTq5vYF_ff-HhsdTYEoXxEKZRPrio-ypFHFljGQnW3z90_fFYb87TH8QvS6vvrWobqt9-xFmpoGajlVS3z2w0QmV5RG7_B5cS-waLF_7HkqaLTOsaIhsbiEv5I87KO009IS3KDVVF8EcSIdDBVf0xXgLkVnnxoPAV8zA7"/>
-</div>
-<div>
-<p class="font-bold text-primary text-lg">Dr. Rajesh Kumar</p>
-<p class="text-xs text-on-surface-variant uppercase tracking-widest font-semibold">Clinical Psychologist</p>
-</div>
-</div>
-</div>
-<!-- Testimonial 2 -->
-<div class="bg-white p-10 rounded-2xl ghost-border editorial-shadow italic hover:-translate-y-2 transition-transform duration-300">
-<p class="text-on-surface-variant text-lg mb-10 leading-relaxed">"Finally, a course that respects the clinical reality of our daily work while pushing us toward better standards. Truly world-class instruction."</p>
-<div class="flex items-center gap-5 not-italic border-t border-outline-variant/10 pt-8">
-<div class="w-14 h-14 rounded-full overflow-hidden bg-surface-dim ring-2 ring-secondary/20">
-<img class="w-full h-full object-cover" data-alt="profile photo of a confident woman in medical scrubs, professional environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuClHTH_exxhFOlmVhvTJUCg2dVViz4aUewFZ8DUR0YCGkWVF1bUCI6jyOTlegWisgsJNBFRHGGA0Kw7YpnnMdqSgojVggiQN28gEnqt4AsTRmMEWuf5b5fjP_ujWfN8UQG-ctkN19U0ENoEsXMLxPfv6DaZM80zB_Qei8nDh6RY1rLz62XYxjVLV9AK3GBr1rIaIeHv5eTWpIcASELmFHaXj4gieEb6u6Vr89E3d0nZTvJ_mAu6124rzy5h7QJjeUTZgQF01dOfKP3n"/>
-</div>
-<div>
-<p class="font-bold text-primary text-lg">Dr. Sarah Thompson</p>
-<p class="text-xs text-on-surface-variant uppercase tracking-widest font-semibold">General Practitioner</p>
-</div>
-</div>
-</div>
-<!-- Testimonial 3 -->
-<div class="bg-white p-10 rounded-2xl ghost-border editorial-shadow italic hover:-translate-y-2 transition-transform duration-300">
-<p class="text-on-surface-variant text-lg mb-10 leading-relaxed">"The 4-day intensive format was perfect. Dense, useful, and immediately applicable. Dr. Selvakodi is a visionary in neuro-rehabilitation."</p>
-<div class="flex items-center gap-5 not-italic border-t border-outline-variant/10 pt-8">
-<div class="w-14 h-14 rounded-full overflow-hidden bg-surface-dim ring-2 ring-secondary/20">
-<img class="w-full h-full object-cover" data-alt="profile photo of a man in an academic suit, thoughtful expression, library background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtczi0eVVztanYGxaIoRzseoAEKWh4W9L2QH3c30vEG4_Girm4SJouiazuho2UTs8iygc1HQPNInk_MFJvYBHpc3in9kXceG7UHTLwgJGkjWpaQSt3w2bHQLqZ3-j262jcHxYIfMFW6ATHc5YE9WPKTJnpA9UL3nAsDOIma73H_g6nYAk8R5cifM4IiwJRRGSUIZAbCurO1SUsuW8aSwMkx_qyFC6ZivbAAtoEa2OuZujKINe6dGcC_L002HJEP_EwmUJFc7nDbyMq"/>
-</div>
-<div>
-<p class="font-bold text-primary text-lg">Prof. Anil Mehta</p>
-<p class="text-xs text-on-surface-variant uppercase tracking-widest font-semibold">Neurology Researcher</p>
-</div>
-</div>
-</div>
-</div>
-</div>
+
+<!-- =========================
+GOOGLE REVIEWS TESTIMONIALS
+========================= -->
+<section class="py-24 bg-primary-container/10 overflow-hidden">
+
+    <div class="max-w-7xl mx-auto px-8">
+
+        <h2 class="text-4xl md:text-5xl font-bold text-primary mb-6 text-center">
+            Trusted by Learners & Practitioners
+        </h2>
+
+        <p class="text-center text-on-surface-variant text-lg mb-16">
+            Rated <strong>4.9/5</strong> from over
+            <strong>90+ Google Reviews</strong>
+        </p>
+
+        <div class="relative overflow-hidden">
+
+            <div class="flex gap-8 animate-testimonials w-max">
+
+                <!-- TESTIMONIAL 1 -->
+                <div class="min-w-[320px] md:min-w-[420px] max-w-[320px] md:max-w-[420px] bg-white p-10 rounded-2xl ghost-border editorial-shadow">
+                    <p class="italic text-on-surface-variant text-lg mb-10 leading-relaxed">
+                        "The training and the classes were excellent. Classes are interactive and interesting and helpful in improving skills both professionally and personally. The PG Diploma courses support professional development in an excellent manner. Thank you Dr. Helena, the resource persons, and the entire team for the wonderful classes."
+                    </p>
+
+                    <div class="border-t border-outline-variant/10 pt-6">
+                        <p class="font-bold text-primary text-lg">Maha Lakshmi</p>
+                        <p class="text-xs uppercase tracking-widest text-on-surface-variant">
+                            PG Diploma Participant
+                        </p>
+                    </div>
+                </div>
+
+                <!-- TESTIMONIAL 2 -->
+                <div class="min-w-[320px] md:min-w-[420px] max-w-[320px] md:max-w-[420px] bg-white p-10 rounded-2xl ghost-border editorial-shadow">
+                    <p class="italic text-on-surface-variant text-lg mb-10 leading-relaxed">
+                        "A place with compassionate professionals, insightful guidance, and meaningful community impact. Dr. Helena and her team's dedication is truly exceptional. Their commitment to helping people achieve their goals is inspiring."
+                    </p>
+
+                    <div class="border-t border-outline-variant/10 pt-6">
+                        <p class="font-bold text-primary text-lg">Laveena</p>
+                        <p class="text-xs uppercase tracking-widest text-on-surface-variant">
+                            Community Member
+                        </p>
+                    </div>
+                </div>
+
+                <!-- TESTIMONIAL 3 -->
+                <div class="min-w-[320px] md:min-w-[420px] max-w-[320px] md:max-w-[420px] bg-white p-10 rounded-2xl ghost-border editorial-shadow">
+                    <p class="italic text-on-surface-variant text-lg mb-10 leading-relaxed">
+                        "I attended a one-year Trauma Counselling course conducted by Anandham Mind Care and found it incredibly useful. The course was well planned with lectures, practical sessions, and streamlined examinations. Kudos to Dr. Helena and the entire team."
+                    </p>
+
+                    <div class="border-t border-outline-variant/10 pt-6">
+                        <p class="font-bold text-primary text-lg">Vaishni K</p>
+                        <p class="text-xs uppercase tracking-widest text-on-surface-variant">
+                            Trauma Counselling Graduate
+                        </p>
+                    </div>
+                </div>
+
+                <!-- TESTIMONIAL 4 -->
+                <div class="min-w-[320px] md:min-w-[420px] max-w-[320px] md:max-w-[420px] bg-white p-10 rounded-2xl ghost-border editorial-shadow">
+                    <p class="italic text-on-surface-variant text-lg mb-10 leading-relaxed">
+                        "I completed the Trauma Counselling Through Self Psychology course. The faculty and resource persons conducted the sessions exceptionally well. It has been highly beneficial for both my personal life and my counselling practice."
+                    </p>
+
+                    <div class="border-t border-outline-variant/10 pt-6">
+                        <p class="font-bold text-primary text-lg">Joseph Antony</p>
+                        <p class="text-xs uppercase tracking-widest text-on-surface-variant">
+                            Trauma Counselling Learner
+                        </p>
+                    </div>
+                </div>
+
+                <!-- TESTIMONIAL 5 -->
+                <div class="min-w-[320px] md:min-w-[420px] max-w-[320px] md:max-w-[420px] bg-white p-10 rounded-2xl ghost-border editorial-shadow">
+                    <p class="italic text-on-surface-variant text-lg mb-10 leading-relaxed">
+                        "Excellent interactive classes. Teaching and training were marvellous. Doubts were cleared immediately and proper materials were provided. The PG Diploma course is highly useful for professional excellence."
+                    </p>
+
+                    <div class="border-t border-outline-variant/10 pt-6">
+                        <p class="font-bold text-primary text-lg">Joseph Arumai Raj S</p>
+                        <p class="text-xs uppercase tracking-widest text-on-surface-variant">
+                            PG Diploma Participant
+                        </p>
+                    </div>
+                </div>
+
+                <!-- TESTIMONIAL 6 -->
+                <div class="min-w-[320px] md:min-w-[420px] max-w-[320px] md:max-w-[420px] bg-white p-10 rounded-2xl ghost-border editorial-shadow">
+                    <p class="italic text-on-surface-variant text-lg mb-10 leading-relaxed">
+                        "The PG Diploma in Trauma Counselling through Self Psychology and Integrative Therapies is deeply enriching and practical. The program offers strong theoretical insight, compassionate trauma-informed approaches, and valuable therapeutic skills."
+                    </p>
+
+                    <div class="border-t border-outline-variant/10 pt-6">
+                        <p class="font-bold text-primary text-lg">Aravindhan J</p>
+                        <p class="text-xs uppercase tracking-widest text-on-surface-variant">
+                            Mental Health Professional
+                        </p>
+                    </div>
+                </div>
+
+                <!-- DUPLICATE ALL CARDS FOR INFINITE SCROLL -->
+
+                <div class="min-w-[320px] md:min-w-[420px] max-w-[320px] md:max-w-[420px] bg-white p-10 rounded-2xl ghost-border editorial-shadow">
+                    <p class="italic text-on-surface-variant text-lg mb-10 leading-relaxed">
+                        "The training and the classes were excellent. Classes are interactive and interesting and helpful in improving skills both professionally and personally."
+                    </p>
+                    <div class="border-t border-outline-variant/10 pt-6">
+                        <p class="font-bold text-primary text-lg">Maha Lakshmi</p>
+                        <p class="text-xs uppercase tracking-widest text-on-surface-variant">PG Diploma Participant</p>
+                    </div>
+                </div>
+
+                <div class="min-w-[320px] md:min-w-[420px] max-w-[320px] md:max-w-[420px] bg-white p-10 rounded-2xl ghost-border editorial-shadow">
+                    <p class="italic text-on-surface-variant text-lg mb-10 leading-relaxed">
+                        "A place with compassionate professionals, insightful guidance, and meaningful community impact."
+                    </p>
+                    <div class="border-t border-outline-variant/10 pt-6">
+                        <p class="font-bold text-primary text-lg">Laveena</p>
+                        <p class="text-xs uppercase tracking-widest text-on-surface-variant">Community Member</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </section>
-<!-- FAQ -->
+
+<style>
+@keyframes testimonialsScroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.animate-testimonials {
+    animation: testimonialsScroll 60s linear infinite;
+}
+
+.animate-testimonials:hover {
+    animation-play-state: paused;
+}
+
+.ghost-border {
+    border: 1px solid rgba(0,0,0,0.06);
+}
+
+.editorial-shadow {
+    box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+}
+</style>
+
+
+<!-- FAQ
 <section class="py-24 bg-white">
 <div class="max-w-3xl mx-auto px-8">
 <h2 class="text-4xl font-bold text-primary mb-16 text-center">Frequently Asked Questions</h2>
@@ -1206,7 +1344,7 @@ FEES
 </div>
 </div>
 </div>
-</section>
+</section> -->
 
 <!-- Sticky Footer CTA -->
 <!-- Sticky Footer CTA -->

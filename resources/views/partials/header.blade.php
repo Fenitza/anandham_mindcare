@@ -157,6 +157,10 @@
                     Services
                 </a>
 
+                <a href="{{ route('free-services') }}" class="hover:text-primary transition">
+                    Free Services
+                </a>
+
                 <a href="{{ route('gallery') }}" class="hover:text-primary transition">
                     Gallery
                 </a>
@@ -234,6 +238,8 @@
             <a href="{{ route('about-us') }}">About</a>
 
             <a href="{{ route('services') }}">Services</a>
+
+            <a href="{{ route('free-services') }}">Free Services</a>
 
             <a href="{{ route('courses.list') }}">Courses</a>
 

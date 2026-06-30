@@ -12,16 +12,19 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OfferController;
+use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\HospitalController;
 
 Route::get('/', function () {
     return view('pages.home');
 });
 
-Route::view('/hospital', 'pages.hospital.home')->name('hospital');
+Route::get('/hospital', [HospitalController::class,'home'])->name('hospital');
 Route::get('/courses', [CourseController::class, 'home'])->name('courses');
 Route::view('/courses/catalog', 'pages.courses.catalog')->name('courses.catalog');
 Route::get('/courses/list', [CourseController::class, 'list'])->name('courses.list');
 Route::get('/courses/{id}', [CourseController::class, 'detail'])->name('courses.detail');
+Route::get('/free-services/{id}', [ServiceController::class, 'freeServiceDetail'])->name('free_service.detail');
 Route::get('/courses/enroll/{id}', [CourseController::class, 'enroll'])->name('courses.enroll');
 Route::get('/courses/reserve/{id}', [CourseController::class, 'reserve'])->middleware('auth')
     ->name('courses.reserve');
@@ -42,6 +45,12 @@ Route::get('/book-appointment', function () {
 
 Route::post('/book-appointment', [AppointmentController::class, 'storeGuest'])
     ->name('appointment.store.guest');
+
+ Route::get('/services/{service}', [ServiceController::class, 'show'])
+    ->name('service.show');
+
+Route::get('/free-services', [ServiceController::class, 'freeServices'])
+    ->name('free-services');
 
 
 /*
@@ -188,6 +197,7 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::put('/gallery/{id}', [GalleryController::class, 'update'])->name('galleries.update');
     Route::delete('/gallery/{id}', [GalleryController::class, 'destroy'])->name('galleries.destroy');
 
+   
 
     Route::get('/blogs',[BlogController::class, 'index'])->name('admin.blogs');
     Route::view('/blogs/add', 'pages.dasboard.admin.add_blog')->name('admin.blogs.add');

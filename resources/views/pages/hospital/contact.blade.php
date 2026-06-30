@@ -169,7 +169,7 @@
 </div>
 <h3 class="font-headline text-2xl text-primary mb-3">Visit the Center</h3>
 <p class="text-on-surface-variant font-body mb-6 text-sm leading-relaxed">Our main psychiatric institute is located in the heart of the medical district.</p>
-<p class="text-secondary font-bold text-lg">123 Wellness Way, Medical Park, TN</p>
+<p class="text-secondary font-bold text-lg">Anandham Mind Care Foundation 140, Railway Station Road, Thudiyalur , Coimbatore - 641034</p>
 </div>
 <!-- Email -->
 <div class="group p-10 bg-surface-container-lowest border border-outline-variant/30 rounded-xl transition-all duration-500 hover:shadow-2xl hover:border-primary/20 hover:-translate-y-2 hover:scale-[1.02] animate-fade-in-up" style="animation-delay: 0.3s;">
@@ -178,7 +178,7 @@
 </div>
 <h3 class="font-headline text-2xl text-primary mb-3">Secure Email</h3>
 <p class="text-on-surface-variant font-body mb-6 text-sm leading-relaxed">Confidential portal for patient records, referrals, and academic collaborations.</p>
-<a class="text-secondary font-bold text-lg hover:text-primary transition-colors inline-block" href="mailto:care@anandham.com">care@anandham.com</a>
+<a class="text-secondary font-bold text-lg hover:text-primary transition-colors inline-block" href="mailto:anandhammindcare@gmail.com">anandhammindcare@gmail.com</a>
 </div>
 </div>
 </section>

@@ -71,12 +71,44 @@
 </div>
 </div>
 <p class="text-on-surface-variant leading-relaxed text-base md:text-lg">
-                        Leading with a balanced approach of modern clinical data and profound empathy, Dr. Selvakodi has established Anandham Mindcare as a cornerstone of mental health innovation. Her work integrates traditional psychiatric care with transcultural psychotherapy.
+•	To gain insight for personal development & for preventing mental illness in the community.
+•	To guide people towards state of inner calmness& inner strength to find their purpose in life, so that along with healing themselves, they contribute to healing the world.
+•	To gain an integrated knowledge of Psychology, Psychiatry & Psychotherapy to provide more efficient treatment to deserving people.
                     </p>
 </div>
 </div>
 </div>
 </section>
+
+<!-- Vision -->
+ <section class="py-16 md:py-24 bg-surface-container-low px-6 md:px-8 reveal">  
+<div class="max-w-5xl mx-auto text-center">
+<span class="text-secondary font-medium tracking-[0.2em] uppercase text-xs mb-3 md:mb-4 block">Our Vision</span>
+<h2 class="text-3xl md:text-5xl font-serif text-primary mb-6 md:mb-8 leading-tight">
+                    A World Where Mental Wellness is Accessible, Compassionate, and Restorative.
+                </h2>
+<p class="text-on-surface-variant leading-relaxed text-base md:text-lg max-w-2xl mx-auto">
+•	To relate to the broader world of Health and Well-being.
+•	To promote Academic Resources and Interactions.
+•	To gain an Academic standard for our course.
+•	 To have mutual support from institutions with similar goals.
+                </p>
+</div>
+</section>
+
+<!-- Mission -->
+ <section class="py-16 md:py-24 bg-surface-container-low px-6 md:px-8 reveal">  
+<div class="max-w-5xl mx-auto text-center">
+<span class="text-secondary font-medium tracking-[0.2em] uppercase text-xs mb-3 md:mb-4 block">Our Mission</span>
+<h2 class="text-3xl md:text-5xl font-serif text-primary mb-6 md:mb-8 leading-tight">
+                    To Provide Compassionate, Evidence-Based Mental Health Care.
+                </h2>
+<p class="text-on-surface-variant leading-relaxed text-base md:text-lg max-w-2xl mx-auto">
+                    Our mission is to deliver high-quality, accessible mental health services that prioritize the well-being of each individual. We strive to create a supportive environment where patients can heal, grow, and thrive.
+                </p>
+</div>
+</section>
+
 <!-- Our Milestones Section - Mobile Optimized Timeline -->
 <section class="py-16 md:py-24 bg-surface-container-low overflow-hidden">
 <div class="max-w-6xl mx-auto px-6 md:px-8">

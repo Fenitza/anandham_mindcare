@@ -65,7 +65,6 @@ class CourseController extends Controller
         'price' => 'nullable|numeric|min:0',
 
         'capacity' => 'nullable|integer|min:1',
-
         'zoom_link' => 'nullable|url',
         'mentors' => 'required|array|min:1', // ✅ at least 1 mentor
 
@@ -667,7 +666,8 @@ if ($request->mentors) {
 
     $today = now()->startOfDay();
 
-    $query = Course::with('tags');
+    $query = Course::with('tags')
+    ->where('course_type', '!=', 'free');
 
     /*
 |--------------------------------------------------------------------------

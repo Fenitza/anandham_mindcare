@@ -37,9 +37,9 @@
 <h4 class="font-headline text-lg italic text-primary mb-6">Contact</h4>
 <div class="bg-surface-container p-6 rounded-round-four border border-outline-variant/10 shadow-sm">
 <p class="text-xs text-on-surface-variant uppercase tracking-widest mb-2">24/7 Crisis Helpline</p>
-<p class="text-2xl font-headline text-primary mb-4">1800-MIND-CARE</p>
+<p class="text-2xl font-headline text-primary mb-4"></p>
 <p class="text-xs text-on-surface-variant mb-1">Email Support</p>
-<p class="text-sm text-primary font-medium">contact@anandham.com</p>
+<p class="text-sm text-primary font-medium">anandhammindcare@gmail.com</p>
 </div>
 </div>
 </div>

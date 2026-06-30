@@ -47,6 +47,7 @@ class Course extends Model
         'weekend_days' => 'array',
         'enable_qr' => 'boolean',
         'international_pricing' => 'array',
+        'indian_pricing' => 'array',
     ];
    
 

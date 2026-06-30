@@ -111,8 +111,16 @@
          onclick="toggleFilter()"
          class="fixed inset-0 bg-black/40 hidden z-40 lg:hidden"></div>
 
+         
     <!-- 🔷 MAIN -->
     <main class="flex-1 p-4 sm:p-6 lg:p-8">
+        <!-- 🔗 External Link -->
+<div class="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+    <a href="https://vcvrt.org/approvedinstitution.php" target="_blank"
+       class="text-blue-700 font-semibold hover:underline">
+        🔗 Anandham Mindcare Foundation is the 161st institution in the VCVRT approved institutions. CHECK HERE!
+    </a>
+</div>
 
         <!-- HEADER -->
 <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-6">
@@ -222,6 +230,7 @@
     <!-- PRICE SECTION -->
 <div class="flex flex-wrap items-center gap-2">
 
+
     @php
 
         $indianPricing = [];
@@ -272,6 +281,7 @@ if (!empty($course->international_pricing)) {
             </span>
 
             <span class="font-bold text-primary">
+                
                 ₹{{ number_format($baseFee) }}
             </span>
         </div>
