@@ -112,6 +112,7 @@
 </div>
 <div class="lg:col-span-7 flex flex-col justify-center animate-fade-in-up" style="animation-delay: 0.6s;">
 <div class="max-w-xl">
+@include('partials.alerts')
 <h2 class="font-headline text-4xl text-primary mb-4">Request a Consultation</h2>
 <p class="font-body text-on-surface-variant mb-12">Submit your enquiry below. Our clinical coordinator will prioritize your request and respond within one business day.</p>
 

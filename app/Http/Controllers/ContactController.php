@@ -16,7 +16,7 @@ class ContactController extends Controller
         ]);
 
         Mail::send('pages.emails.contact', $data, function ($message) use ($data) {
-            $message->to('fms.cool16@gmail.com') // 🔥 your receiving email
+            $message->to('anandhammindcare@gmail.com') // 🔥 your receiving email
                     ->subject('New Contact Enquiry from ' . $data['name']);
         });
 

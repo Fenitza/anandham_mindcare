@@ -229,9 +229,9 @@ h1, h2, h3 { font-family: 'Newsreader', serif; }
             <div class="bg-white/5 backdrop-blur-sm p-6 flex flex-col items-center justify-center border-b lg:border-b-0 lg:border-r border-white/10">
 
                 <div class="bg-white p-4 rounded-2xl shadow-lg mb-4">
-
+                    
                     <img
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-0ufG4JFtGRisSfArbMQAayKgKhFuaAV0saktWrptPqQ85Zz4EX_IfQ861qLmgsuAdt9Ng9sUEtBpVpjsLqN9-IZ8TdvVmYWqH15uMF7K7GG3ItGZ9lmeBj4JnNnKsXPwjaJVM1yIo1pgUxm3TnYPebWhvJkMmgFdmyCujHQUa9RM2jV0cTO0PFzQVA1bayXMGeAlQ2QvRHsCUWNmW2V8zFqiGmpzaRH5UYtfiecgGC0WUVKzpBP23_y8ftvd6cJRYSE1DVxC5k"
+                        src="{{ asset('assets/images/QR.jpeg') }}"
                         class="w-40 h-40 object-contain"
                     >
 
